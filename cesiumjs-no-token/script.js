@@ -1,3 +1,9 @@
+import {
+  MartiniTerrainProvider,
+  DefaultHeightmapResource,
+  WorkerFarmTerrainDecoder,
+} from "https://esm.run/@macrostrat/cesium-martini"
+
 // Set the Cesium Ion token to `null` to avoid warnings
 Cesium.Ion.defaultAccessToken = null;
 
@@ -101,20 +107,48 @@ imageryViewModels.push(new Cesium.ProviderViewModel({
     }
 }));
 imageryViewModels.push(new Cesium.ProviderViewModel({
-    name: 'National Map Satellite',
-    iconUrl: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/4/6/4',
+    name: 'Google Satellite',
+    iconUrl: 'http://mt.google.com/vt/lyrs=s&hl=en&x=15&y=12&z=5',
     creationFunction: function() {
     return new Cesium.UrlTemplateImageryProvider({
-        url: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',
-        credit: 'Tile data from <a href="https://basemap.nationalmap.gov/">USGS</a>',
+        url: 'http://mt.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+        credit: 'Imagery © Google',
         minimumLevel: 0,
         maximumLevel: 16
     });
     }
 }));
 
+
+// ----------------------------------------------------------------------------
+// Create Cesium Martini Terrain Provider
+const terrariumWorker = new Worker(
+  new URL("./mapterhorn.worker", import.meta.url),
+  { type: "module" },
+);
+
+const terrainResource = new DefaultHeightmapResource({
+  url: "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+//   skipOddLevels: true,
+  maxZoom: 12,
+});
+
+// Terrarium format utilises a different encoding scheme to Mapbox Terrain-RGB
+// See also QGIS XYZ-Tiles options
+const terrainDecoder = new WorkerFarmTerrainDecoder({
+  worker: terrariumWorker,
+});
+
+// Construct terrain provider with Mapzen datasource and custom RGB decoding
+const martiniTerrainProvider = new MartiniTerrainProvider({
+  resource: terrainResource,
+  decoder: terrainDecoder,
+});
+
+
+// ----------------------------------------------------------------------------
 // Initialize the viewer - this works without a token!
-viewer = new Cesium.Viewer('cesiumContainer', {
+const viewer = new Cesium.Viewer('cesiumContainer', {
     imageryProviderViewModels: imageryViewModels,
     selectedImageryProviderViewModel: imageryViewModels[1],
     animation: false,
@@ -124,6 +158,10 @@ viewer = new Cesium.Viewer('cesiumContainer', {
     fullscreenButton: false,
     selectionIndicator: false,
 });
+
+// Set the terrain provider to the Martini terrain provider
+console.log(terrainResource)
+viewer.terrainProvider = martiniTerrainProvider;
 
 // Remove the Terrain section of the baseLayerPicker
 viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
