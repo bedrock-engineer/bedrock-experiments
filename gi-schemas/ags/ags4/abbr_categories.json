@@ -1,122 +1,4 @@
 {
-  "WETH_SYS": [
-    {
-      "value": "MASS CLASS",
-      "label": "Rock Mass Weathering Classification"
-    },
-    {
-      "value": "MASS GRADE",
-      "label": "Rock Mass Weathering Grade"
-    },
-    {
-      "value": "MASS ZONE",
-      "label": "Rock Mass Weathering Zone"
-    },
-    {
-      "value": "MAT CLASS",
-      "label": "Material Weathering Classification"
-    },
-    {
-      "value": "MAT GRADE",
-      "label": "Material Weathering Grade"
-    }
-  ],
-  "ELRG_LOCN": [
-    {
-      "value": "FIELDLAB",
-      "label": "Analysis location - field laboratory"
-    },
-    {
-      "value": "LAB",
-      "label": "Analysis location - Laboratory"
-    },
-    {
-      "value": "SITE",
-      "label": "Analysis location - site"
-    }
-  ],
-  "TRIT_MODE": [
-    {
-      "value": "Brittle",
-      "label": "Brittle"
-    }
-  ],
-  "DICT_STAT": [
-    {
-      "value": "DEPRECATED",
-      "label": "Deprecated field"
-    },
-    {
-      "value": "KEY",
-      "label": "Key field"
-    },
-    {
-      "value": "OTHER",
-      "label": "Other field"
-    },
-    {
-      "value": "REQUIRED",
-      "label": "Required field"
-    }
-  ],
-  "LOCA_STAT": [
-    {
-      "value": "DRAFT",
-      "label": "Draft data"
-    },
-    {
-      "value": "FINAL",
-      "label": "Final data"
-    },
-    {
-      "value": "HISTORIC",
-      "label": "Historical data converted from paper records"
-    },
-    {
-      "value": "PRELIM",
-      "label": "Preliminary data"
-    },
-    {
-      "value": "PROPOSED",
-      "label": "Proposed data"
-    }
-  ],
-  "FRST_COND": [
-    {
-      "value": "RECOMPACTION",
-      "label": "Recompacted"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "WGPT_CAS": [
-    {
-      "value": "OH",
-      "label": "Open hole"
-    },
-    {
-      "value": "PVCG",
-      "label": "PVC grouted"
-    },
-    {
-      "value": "PVCU",
-      "label": "PVC ungrouted"
-    },
-    {
-      "value": "SLOT",
-      "label": "Slotted casing"
-    },
-    {
-      "value": "STCG",
-      "label": "Steel cased grouted"
-    },
-    {
-      "value": "STCU",
-      "label": "Steel cased ungrouted"
-    }
-  ],
   "ARTW_TYPE": [
     {
       "value": "DRY",
@@ -125,786 +7,6 @@
     {
       "value": "WET",
       "label": "Wet test"
-    }
-  ],
-  "LUCT_TYPE": [
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "SHBG_TYPE": [
-    {
-      "value": "LARGE RSHEAR",
-      "label": "Large Ring shear"
-    },
-    {
-      "value": "LARGE SBOX",
-      "label": "Large Shearbox"
-    },
-    {
-      "value": "SMALL RSHEAR",
-      "label": "Small Ring shear"
-    },
-    {
-      "value": "SMALL SBOX",
-      "label": "Small Shearbox"
-    }
-  ],
-  "PTST_CELL": [
-    {
-      "value": "CHP",
-      "label": "Constant head permeameter"
-    },
-    {
-      "value": "FHP",
-      "label": "Falling head permeameter"
-    },
-    {
-      "value": "HYDRAULIC CELL",
-      "label": "Hydraulic cell"
-    },
-    {
-      "value": "TRIAXIAL CELL",
-      "label": "Triaxial cell"
-    }
-  ],
-  "TREG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "RESC_CTYP": [
-    {
-      "value": "ISOTROPIC",
-      "label": "Isotropic"
-    }
-  ],
-  "MOND_TYPE": [
-    {
-      "value": "ANGA",
-      "label": "Rotation/Tilt in direction A"
-    },
-    {
-      "value": "ANGB",
-      "label": "Rotation/Tilt in direction B"
-    },
-    {
-      "value": "ANGC",
-      "label": "Rotation in direction C"
-    },
-    {
-      "value": "BAR",
-      "label": "Barometric pressure at time of monitoring"
-    },
-    {
-      "value": "BRG",
-      "label": "Bearing"
-    },
-    {
-      "value": "CURR",
-      "label": "Current"
-    },
-    {
-      "value": "DBSE",
-      "label": "Depth to base of installation on monitoring round"
-    },
-    {
-      "value": "DNAPL",
-      "label": "Dense Nonaqueous Phase Liquid"
-    },
-    {
-      "value": "DO",
-      "label": "Dissolved Oxygen"
-    },
-    {
-      "value": "DOWNTEMP",
-      "label": "Downhole temperature"
-    },
-    {
-      "value": "DSPA",
-      "label": "Displacement in direction A"
-    },
-    {
-      "value": "DSPB",
-      "label": "Displacement in direction B"
-    },
-    {
-      "value": "DSPC",
-      "label": "Displacement in direction C"
-    },
-    {
-      "value": "DSTA",
-      "label": "Distance A from LOCA_ID (slip indicator top rod)"
-    },
-    {
-      "value": "DSTB",
-      "label": "Distance B from LOCA_ID (slip indicator top rod)"
-    },
-    {
-      "value": "DSTL",
-      "label": "Distance"
-    },
-    {
-      "value": "EAST",
-      "label": "Absolute position (Easting)"
-    },
-    {
-      "value": "EC",
-      "label": "Electrical conductivity"
-    },
-    {
-      "value": "ECA",
-      "label": "Actual Conductivity"
-    },
-    {
-      "value": "ECS",
-      "label": "Specific Conductivity"
-    },
-    {
-      "value": "ERAT",
-      "label": "Volume extraction rate"
-    },
-    {
-      "value": "FLOW",
-      "label": "Flow"
-    },
-    {
-      "value": "FORC",
-      "label": "Force"
-    },
-    {
-      "value": "GAMP",
-      "label": "Peak ammonia concentration"
-    },
-    {
-      "value": "GAMS",
-      "label": "Steady ammonia concentration"
-    },
-    {
-      "value": "GAUG",
-      "label": "Gauge length"
-    },
-    {
-      "value": "GCD",
-      "label": "Carbon dioxide concentration"
-    },
-    {
-      "value": "GCDP",
-      "label": "Peak carbon dioxide concentration"
-    },
-    {
-      "value": "GCDS",
-      "label": "Steady carbon dioxide concentration"
-    },
-    {
-      "value": "GCM",
-      "label": "Carbon monoxide concentration"
-    },
-    {
-      "value": "GCMP",
-      "label": "Peak carbon monoxide concentration"
-    },
-    {
-      "value": "GCMS",
-      "label": "Steady carbon monoxide concentration"
-    },
-    {
-      "value": "GFLO",
-      "label": "Gas flow rate"
-    },
-    {
-      "value": "GFLOP",
-      "label": "Peak gas flow rate"
-    },
-    {
-      "value": "GFLOS",
-      "label": "Steady gas flow rate"
-    },
-    {
-      "value": "GHP",
-      "label": "Peak hydrogen concentration"
-    },
-    {
-      "value": "GHS",
-      "label": "Steady hydrogen concentration"
-    },
-    {
-      "value": "GM",
-      "label": "Measured methane as percentage of LEL"
-    },
-    {
-      "value": "GMP",
-      "label": "Peak methane as percentage of LEL"
-    },
-    {
-      "value": "GMS",
-      "label": "Steady methane as percentage of LEL"
-    },
-    {
-      "value": "GNIT",
-      "label": "Nitrogen concentration"
-    },
-    {
-      "value": "GNITP",
-      "label": "Peak nitrogen concentration"
-    },
-    {
-      "value": "GNITS",
-      "label": "Steady nitrogen concentration"
-    },
-    {
-      "value": "GOX",
-      "label": "Oxygen concentration"
-    },
-    {
-      "value": "GOXM",
-      "label": "Minimum oxygen concentration"
-    },
-    {
-      "value": "GOXP",
-      "label": "Steady oxygen concentration"
-    },
-    {
-      "value": "GOXS",
-      "label": "Peak oxygen concentration"
-    },
-    {
-      "value": "GPRS",
-      "label": "Differential Pressure"
-    },
-    {
-      "value": "HYC",
-      "label": "Hydrogen cyanide concentration"
-    },
-    {
-      "value": "HYCP",
-      "label": "Peak hydrogen cyanide concentration"
-    },
-    {
-      "value": "HYCS",
-      "label": "Steady hydrogen cyanide concentration"
-    },
-    {
-      "value": "HYS",
-      "label": "Hydrogen sulphide concentration"
-    },
-    {
-      "value": "HYSP",
-      "label": "Peak hydrogen sulphide concentration"
-    },
-    {
-      "value": "HYSS",
-      "label": "Steady hydrogen sulphide concentration"
-    },
-    {
-      "value": "LEV",
-      "label": "Absolute position (Level)"
-    },
-    {
-      "value": "LNAPL",
-      "label": "Light Nonaqueous Phase Liquid"
-    },
-    {
-      "value": "NRTH",
-      "label": "Absolute position (Northing)"
-    },
-    {
-      "value": "OPP",
-      "label": "Oxygen Partial Pressure"
-    },
-    {
-      "value": "PH",
-      "label": "Potential of Hydrogen (pH)"
-    },
-    {
-      "value": "PID",
-      "label": "Photo Ionisation Detector Reading"
-    },
-    {
-      "value": "PIDP",
-      "label": "Peak Photo Ionisation Detector Reading"
-    },
-    {
-      "value": "PIDS",
-      "label": "Steady Photo Ionisation Detector Reading"
-    },
-    {
-      "value": "PRES",
-      "label": "Pressure"
-    },
-    {
-      "value": "RAD",
-      "label": "Radon gas"
-    },
-    {
-      "value": "RAIN",
-      "label": "Rainfall"
-    },
-    {
-      "value": "RDX",
-      "label": "Redox potential"
-    },
-    {
-      "value": "RES",
-      "label": "Apparent resistivity"
-    },
-    {
-      "value": "RFLOW",
-      "label": "River flowrate measurement"
-    },
-    {
-      "value": "RLEVEL",
-      "label": "River level measurement"
-    },
-    {
-      "value": "ROTS",
-      "label": "Rotational speed"
-    },
-    {
-      "value": "SAL",
-      "label": "Salinity"
-    },
-    {
-      "value": "SAMPTEMP",
-      "label": "Sample temperature"
-    },
-    {
-      "value": "STAT",
-      "label": "Status"
-    },
-    {
-      "value": "STRA",
-      "label": "Strain in direction A"
-    },
-    {
-      "value": "STRB",
-      "label": "Strain in direction B"
-    },
-    {
-      "value": "STRC",
-      "label": "Strain in direction C"
-    },
-    {
-      "value": "TDS",
-      "label": "Total dissolved solids"
-    },
-    {
-      "value": "TEMP",
-      "label": "Atmospheric temperature"
-    },
-    {
-      "value": "TGM",
-      "label": "Total methane concentration"
-    },
-    {
-      "value": "TGMP",
-      "label": "Peak total methane concentration"
-    },
-    {
-      "value": "TGMS",
-      "label": "Steady total methane concentration"
-    },
-    {
-      "value": "TORQ",
-      "label": "Torque"
-    },
-    {
-      "value": "TRST",
-      "label": "Thrust"
-    },
-    {
-      "value": "TURB",
-      "label": "Turbidity"
-    },
-    {
-      "value": "UPT",
-      "label": "Up/run time"
-    },
-    {
-      "value": "VEL",
-      "label": "Velocity"
-    },
-    {
-      "value": "VOC",
-      "label": "Volatile organic compound"
-    },
-    {
-      "value": "VOCP",
-      "label": "Peak volatile organic compound"
-    },
-    {
-      "value": "VOL",
-      "label": "Volume"
-    },
-    {
-      "value": "VOLT",
-      "label": "Voltage"
-    },
-    {
-      "value": "WDEP",
-      "label": "Depth to water from LOCA_ID datum"
-    },
-    {
-      "value": "WHD",
-      "label": "Head of water above tip"
-    }
-  ],
-  "GCHM_CODE": [
-    {
-      "value": "ACO2",
-      "label": "Aggressive carbon dioxide (as mg/l)"
-    },
-    {
-      "value": "AS",
-      "label": "Acid-soluble sulphate (as % SO4)"
-    },
-    {
-      "value": "AS_SO3",
-      "label": "Acid-soluble sulphate (as % SO3)"
-    },
-    {
-      "value": "CACO3",
-      "label": "Chalk content (as %CaCO3)"
-    },
-    {
-      "value": "CL",
-      "label": "Chloride (as mg/l)"
-    },
-    {
-      "value": "CO2",
-      "label": "Carbonate content (as %CO2)"
-    },
-    {
-      "value": "GWS",
-      "label": "Groundwater sulfate"
-    },
-    {
-      "value": "LOI",
-      "label": "Loss on ignition (as %)"
-    },
-    {
-      "value": "MSC",
-      "label": "Monosulfide sulfur content"
-    },
-    {
-      "value": "NH4",
-      "label": "Ammonium ion (as mg/l)"
-    },
-    {
-      "value": "NO3",
-      "label": "Nitrate (as mg/l)"
-    },
-    {
-      "value": "OGM",
-      "label": "Organic matter content (as %)"
-    },
-    {
-      "value": "OS",
-      "label": "Oxidisable Sulphide"
-    },
-    {
-      "value": "PH",
-      "label": "Acidity/alkalinity (pH to nearest 0.1)"
-    },
-    {
-      "value": "REDOX",
-      "label": "Redox potential (in mV)"
-    },
-    {
-      "value": "SO3",
-      "label": "Sulphate as SO3"
-    },
-    {
-      "value": "SO4",
-      "label": "Sulphate as SO4"
-    },
-    {
-      "value": "TDS",
-      "label": "Total dissolved solids (in mg/l to 2SF)"
-    },
-    {
-      "value": "TIC",
-      "label": "Total inorganic carbon"
-    },
-    {
-      "value": "TOC",
-      "label": "Total organic carbon"
-    },
-    {
-      "value": "TPS",
-      "label": "Total potential sulfate"
-    },
-    {
-      "value": "TRS",
-      "label": "Total reduced sulfur"
-    },
-    {
-      "value": "TS",
-      "label": "Total sulphur (as %S)"
-    },
-    {
-      "value": "WCL",
-      "label": "Water soluble chloride (as mg/l)"
-    },
-    {
-      "value": "WMG",
-      "label": "Water/soil extract Magnesium (as m/g)"
-    },
-    {
-      "value": "WS",
-      "label": "Water-soluble sulphate (as mg/l SO4)"
-    },
-    {
-      "value": "WS_SO3",
-      "label": "Water-soluble sulphate (as g/l SO3)"
-    }
-  ],
-  "ERES_RTYP": [
-    {
-      "value": "INITIAL",
-      "label": "Initial"
-    },
-    {
-      "value": "REANALYSIS",
-      "label": "Reanalysis"
-    },
-    {
-      "value": "REANALYSIS2",
-      "label": "2nd reanalysis"
-    },
-    {
-      "value": "REANALYSIS3",
-      "label": "3rd Reanalysis"
-    },
-    {
-      "value": "REANALYSIS4",
-      "label": "4th Reanalysis"
-    }
-  ],
-  "LOCA_GREF": [
-    {
-      "value": "ITM",
-      "label": "Ordnance Survey Ireland Irish Transverse Mercator"
-    },
-    {
-      "value": "LOCAL",
-      "label": "Local Grid"
-    },
-    {
-      "value": "OSGB",
-      "label": "Ordnance Survey Great Britain National Grid"
-    },
-    {
-      "value": "OSI",
-      "label": "Ordnance Survey Ireland Irish Grid"
-    }
-  ],
-  "FILE_TYPE": [
-    {
-      "value": "BMP",
-      "label": "Bitmap image file"
-    },
-    {
-      "value": "JPG",
-      "label": "Joint Photographic Experts Group graphics/image file"
-    },
-    {
-      "value": "PDF",
-      "label": "Portable Document Format"
-    }
-  ],
-  "GCHM_TTYP": [
-    {
-      "value": "SOLID_21 WATER EXTRACT",
-      "label": "Solid (2:1 Soil/Water extract)"
-    },
-    {
-      "value": "SOLID_ACID EXTRACT",
-      "label": "Solid (Acid extract)"
-    },
-    {
-      "value": "SOLID_TOTAL",
-      "label": "Solid (Total)"
-    },
-    {
-      "value": "WATER",
-      "label": "Water"
-    }
-  ],
-  "GRAT_TYPE": [
-    {
-      "value": "DS",
-      "label": "Dry sieve"
-    },
-    {
-      "value": "HY",
-      "label": "Hydrometer"
-    },
-    {
-      "value": "PP",
-      "label": "Pipette"
-    },
-    {
-      "value": "WS",
-      "label": "Wet sieve"
-    }
-  ],
-  "FGHT_TYPE": [
-    {
-      "value": "FLWR",
-      "label": "Instantaneous flow rate at time FGHT_TIME"
-    }
-  ],
-  "HDPH_TYPE": [
-    {
-      "value": "ABS",
-      "label": "Automatic Ballast Sampler"
-    },
-    {
-      "value": "CC",
-      "label": "Concrete core"
-    },
-    {
-      "value": "CH",
-      "label": "Slope surface protection stripping"
-    },
-    {
-      "value": "CP",
-      "label": "Cable percussion (shell and auger)"
-    },
-    {
-      "value": "DCP",
-      "label": "Dynamic cone penetrometer"
-    },
-    {
-      "value": "DP",
-      "label": "Dynamic probe sampling"
-    },
-    {
-      "value": "DS",
-      "label": "Dynamic Sampling"
-    },
-    {
-      "value": "EXP",
-      "label": "Logged exposure"
-    },
-    {
-      "value": "GCOP",
-      "label": "GCO probe"
-    },
-    {
-      "value": "HA",
-      "label": "Hand Auger"
-    },
-    {
-      "value": "ICBR",
-      "label": "In situ CBR test"
-    },
-    {
-      "value": "IDEN",
-      "label": "In situ density test"
-    },
-    {
-      "value": "IJ",
-      "label": "Injection Point"
-    },
-    {
-      "value": "INST",
-      "label": "Instrument"
-    },
-    {
-      "value": "IP",
-      "label": "Inspection pit"
-    },
-    {
-      "value": "IRDX",
-      "label": "In situ redox test"
-    },
-    {
-      "value": "IRES",
-      "label": "In situ resistivity"
-    },
-    {
-      "value": "ISPT",
-      "label": "Standard penetration test"
-    },
-    {
-      "value": "IVAN",
-      "label": "In situ vane test"
-    },
-    {
-      "value": "OP",
-      "label": "Observation pit/trench"
-    },
-    {
-      "value": "PC",
-      "label": "Pavement core"
-    },
-    {
-      "value": "PM",
-      "label": "Pressuremeter test hole"
-    },
-    {
-      "value": "RC",
-      "label": "Rotary cored"
-    },
-    {
-      "value": "RCG",
-      "label": "Rotary drilling in common ground"
-    },
-    {
-      "value": "RO",
-      "label": "Rotary open hole"
-    },
-    {
-      "value": "RPC",
-      "label": "Russian Peat Corer"
-    },
-    {
-      "value": "SCP",
-      "label": "Static cone penetrometer"
-    },
-    {
-      "value": "SH",
-      "label": "Shaft"
-    },
-    {
-      "value": "SNC",
-      "label": "Sonic core drilling"
-    },
-    {
-      "value": "TP",
-      "label": "Trial pit/trench"
-    },
-    {
-      "value": "TRAV",
-      "label": "Linear logging traverse or scanline survey"
-    },
-    {
-      "value": "VC",
-      "label": "Vibrocore"
-    },
-    {
-      "value": "VE",
-      "label": "Vacuum Excavation"
-    },
-    {
-      "value": "W",
-      "label": "Wash boring"
-    },
-    {
-      "value": "WLS",
-      "label": "Dynamic (windowless) sampler"
-    },
-    {
-      "value": "WS",
-      "label": "Window Sampler"
     }
   ],
   "BKFL_LEG": [
@@ -965,50 +67,328 @@
       "label": "Void"
     }
   ],
-  "PIPE_TYPE": [
+  "CBRG_COND": [
     {
-      "value": "PLAIN",
-      "label": "Plain"
+      "value": "REMOULDED",
+      "label": "Remoulded"
     },
     {
-      "value": "SLOTTED",
-      "label": "Slotted"
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
     }
   ],
-  "IVAN_TYPE": [
+  "CMPG_MOLD": [
     {
-      "value": "BOREHOLE",
-      "label": "Borehole vane"
+      "value": "1 LITRE",
+      "label": "1 Litre mould type"
     },
     {
-      "value": "CPT",
-      "label": "CPT Vane"
-    },
-    {
-      "value": "FIELD",
-      "label": "Hand-held field vane"
-    },
-    {
-      "value": "TORVANE",
-      "label": "Torvane"
+      "value": "CBR",
+      "label": "CBR Mould type"
     }
   ],
-  "PTST_TYPE": [
+  "CMPG_TYPE": [
     {
-      "value": "CONSTANT HEAD",
-      "label": "Constant head"
+      "value": "2.5KG",
+      "label": "2.5kg"
     },
     {
-      "value": "Constant Head",
-      "label": "Constant head"
+      "value": "4.5KG",
+      "label": "4.5kg Heavy compaction"
     },
     {
-      "value": "FALLING HEAD",
-      "label": "Falling head"
+      "value": "VIBRO",
+      "label": "Vibro compaction"
+    }
+  ],
+  "CONG_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
     },
     {
-      "value": "Falling Head",
-      "label": "Falling head"
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "CONG_TYPE": [
+    {
+      "value": "EXPANDABILITY",
+      "label": "Expandability"
+    },
+    {
+      "value": "HYDRAULIC CELL",
+      "label": "Hydraulic cell"
+    },
+    {
+      "value": "OEDOMETER",
+      "label": "Oedometer"
+    },
+    {
+      "value": "SETTLESAT",
+      "label": "Settlement on saturation"
+    },
+    {
+      "value": "SWELL",
+      "label": "Measurement of swelling"
+    },
+    {
+      "value": "SWELLPRESS",
+      "label": "Measurement of swelling pressure"
+    }
+  ],
+  "CTRC_BEAX": [
+    {
+      "value": "Sv",
+      "label": "Axial shear-wave propagation"
+    },
+    {
+      "value": "hh",
+      "label": "horizontally propagating, horizontally orientated"
+    },
+    {
+      "value": "hv",
+      "label": "horizontally propagating, vertically orientated"
+    },
+    {
+      "value": "vh",
+      "label": "vertically propagating, horizontally orientated"
+    }
+  ],
+  "CTRC_TYPE": [
+    {
+      "value": "ISOTROPIC",
+      "label": "Isotropic"
+    },
+    {
+      "value": "K0",
+      "label": "K0"
+    },
+    {
+      "value": "STRESS",
+      "label": "Stress path"
+    }
+  ],
+  "CTRD_COND": [
+    {
+      "value": "DRAINED",
+      "label": "Drained"
+    },
+    {
+      "value": "UNDRAINED",
+      "label": "Undrained"
+    }
+  ],
+  "CTRG_TYPE": [
+    {
+      "value": "CADC",
+      "label": "Consolidated Anisotropically Drained Cyclic Test"
+    },
+    {
+      "value": "CAUC",
+      "label": "Consolidated Anisotropically Undrained Cyclic Test"
+    },
+    {
+      "value": "CIDC",
+      "label": "Consolidated Isotropically Drained Cyclic Test"
+    },
+    {
+      "value": "CIUC",
+      "label": "Consolidated Isotropically Undrained Cyclic Test"
+    }
+  ],
+  "DICT_DTYP": [
+    {
+      "value": "0DP",
+      "label": "Value; required number of decimal places, 0"
+    },
+    {
+      "value": "0SCI",
+      "label": "Scientific Notation; required number of decimal places, 0"
+    },
+    {
+      "value": "1DP",
+      "label": "Value; required number of decimal places, 1"
+    },
+    {
+      "value": "1SCI",
+      "label": "Scientific Notation; required number of decimal places, 1"
+    },
+    {
+      "value": "1SF",
+      "label": "Value; required number of significant figures, 1"
+    },
+    {
+      "value": "2DP",
+      "label": "Value; required number of decimal places, 2"
+    },
+    {
+      "value": "2SCI",
+      "label": "Scientific Notation; required number of decimal places, 2"
+    },
+    {
+      "value": "2SF",
+      "label": "Value; required number of significant figures, 2"
+    },
+    {
+      "value": "3DP",
+      "label": "Value; required number of decimal places, 3"
+    },
+    {
+      "value": "3SCI",
+      "label": "Scientific Notation; required number of decimal places, 3"
+    },
+    {
+      "value": "3SF",
+      "label": "Value; required number of significant figures, 3"
+    },
+    {
+      "value": "4DP",
+      "label": "Value; required number of decimal places, 4"
+    },
+    {
+      "value": "4SCI",
+      "label": "Scientific Notation; required number of decimal places, 4"
+    },
+    {
+      "value": "4SF",
+      "label": "Value; required number of significant figures, 4"
+    },
+    {
+      "value": "DMS",
+      "label": "Degrees:Minutes:Seconds"
+    },
+    {
+      "value": "DT",
+      "label": "Date time in international format"
+    },
+    {
+      "value": "ID",
+      "label": "Unique Identifier"
+    },
+    {
+      "value": "MC",
+      "label": "British Standard BS1377 : Part 2 reported moisture content"
+    },
+    {
+      "value": "PA",
+      "label": "Text listed in ABBR Group"
+    },
+    {
+      "value": "PT",
+      "label": "Text listed in TYPE Group"
+    },
+    {
+      "value": "PU",
+      "label": "Text listed in UNIT Group"
+    },
+    {
+      "value": "RL",
+      "label": "Record link"
+    },
+    {
+      "value": "T",
+      "label": "Elapsed time"
+    },
+    {
+      "value": "U",
+      "label": "Value with variable format"
+    },
+    {
+      "value": "X",
+      "label": "Text"
+    },
+    {
+      "value": "XN",
+      "label": "Text / numeric"
+    },
+    {
+      "value": "YN",
+      "label": "Y or N or NULL"
+    }
+  ],
+  "DICT_STAT": [
+    {
+      "value": "DEPRECATED",
+      "label": "Deprecated field"
+    },
+    {
+      "value": "KEY",
+      "label": "Key field"
+    },
+    {
+      "value": "OTHER",
+      "label": "Other field"
+    },
+    {
+      "value": "REQUIRED",
+      "label": "Required field"
+    }
+  ],
+  "DICT_TYPE": [
+    {
+      "value": "GROUP",
+      "label": "Flag to indicate definition is a GROUP"
+    },
+    {
+      "value": "HEADING",
+      "label": "Flag to indicate definition is a HEADING"
+    }
+  ],
+  "DISC_TERM": [
+    {
+      "value": "D",
+      "label": "Terminates against another discontinuity"
+    },
+    {
+      "value": "R",
+      "label": "Terminates within rock"
+    },
+    {
+      "value": "X",
+      "label": "Extends beyond exposure"
+    }
+  ],
+  "DISC_TYPE": [
+    {
+      "value": "Joint",
+      "label": "Joint"
+    }
+  ],
+  "DPRG_TYPE": [
+    {
+      "value": "DPH",
+      "label": "Heavy dynamic probe (50kg hammer mass/500mm drop)"
+    },
+    {
+      "value": "DPL",
+      "label": "Light dynamic probe (10kg hammer mass/500mm drop)"
+    },
+    {
+      "value": "DPM",
+      "label": "Medium dynamic probe (30kg hammer mass/500mm drop)"
+    },
+    {
+      "value": "DPSH-A",
+      "label": "Superheavy dynamic probe (63.5kg hammer mass/500mm drop)"
+    },
+    {
+      "value": "DPSH-B",
+      "label": "Superheavy (63.5kg hammer mass/750mm drop)"
+    }
+  ],
+  "ELRG_BAS": [
+    {
+      "value": "AIR",
+      "label": "Air dried"
+    },
+    {
+      "value": "DRY",
+      "label": "Dry"
+    },
+    {
+      "value": "WET",
+      "label": "Wet"
     }
   ],
   "ELRG_CODE": [
@@ -9817,152 +9197,360 @@
       "label": "Mass of dried test portion"
     }
   ],
-  "TRIG_TYPE": [
+  "ELRG_LOCN": [
     {
-      "value": "UNC",
-      "label": "Unconfined Compressive test"
+      "value": "FIELDLAB",
+      "label": "Analysis location - field laboratory"
     },
     {
-      "value": "UU",
-      "label": "Unconsolidated quick undrained (single stage)"
+      "value": "LAB",
+      "label": "Analysis location - Laboratory"
     },
     {
-      "value": "UUM",
-      "label": "Unconsolidated quick undrained (multi-stage)"
+      "value": "SITE",
+      "label": "Analysis location - site"
     }
   ],
-  "LDEN_SMTY": [
+  "ELRG_MATX": [
     {
-      "value": "BLOCK SAMPLE",
-      "label": "Block sample"
+      "value": "LIQUID",
+      "label": "Liquid"
     },
     {
-      "value": "CYLINDER",
-      "label": "Cylinder"
+      "value": "PRODUCT",
+      "label": "Product"
+    },
+    {
+      "value": "SOLID",
+      "label": "Solid"
     }
   ],
-  "RUCS_ETYP": [
+  "ELRG_RTCD": [
     {
-      "value": "AVERAGE",
-      "label": "Average modulus"
+      "value": "IC",
+      "label": "Spiked compound"
     },
     {
-      "value": "SECANT",
-      "label": "Secant modulus"
+      "value": "IS",
+      "label": "Internal standards"
     },
     {
-      "value": "TANGENT",
-      "label": "Tangent modulus"
+      "value": "SUR",
+      "label": "Surrogate"
+    },
+    {
+      "value": "TIC",
+      "label": "Tentatively identified compound"
+    },
+    {
+      "value": "TRG",
+      "label": "Target"
     }
   ],
-  "DICT_DTYP": [
+  "ELRG_RTYP": [
     {
-      "value": "0DP",
-      "label": "Value; required number of decimal places, 0"
+      "value": "INITIAL",
+      "label": "Initial"
     },
     {
-      "value": "0SCI",
-      "label": "Scientific Notation; required number of decimal places, 0"
+      "value": "REANALYSIS",
+      "label": "Reanalysis"
     },
     {
-      "value": "1DP",
-      "label": "Value; required number of decimal places, 1"
+      "value": "REANALYSIS2",
+      "label": "2nd reanalysis"
+    }
+  ],
+  "ELRG_TADE": [
+    {
+      "value": "CEN_10_1",
+      "label": "CEN 10-1"
     },
     {
-      "value": "1SCI",
-      "label": "Scientific Notation; required number of decimal places, 1"
+      "value": "CEN_2_1",
+      "label": "CEN 2-1"
     },
     {
-      "value": "1SF",
-      "label": "Value; required number of significant figures, 1"
+      "value": "NRA",
+      "label": "National Rivers Authority"
+    }
+  ],
+  "ERES_BAS": [
+    {
+      "value": "AIRDRIED",
+      "label": "Air Dried Basis"
     },
     {
-      "value": "2DP",
-      "label": "Value; required number of decimal places, 2"
+      "value": "DRY",
+      "label": "Dry Basis"
     },
     {
-      "value": "2SCI",
-      "label": "Scientific Notation; required number of decimal places, 2"
+      "value": "WET",
+      "label": "Wet Basis"
+    }
+  ],
+  "ERES_LOCN": [
+    {
+      "value": "FIELDLAB",
+      "label": "Analysis location - field laboratory"
     },
     {
-      "value": "2SF",
-      "label": "Value; required number of significant figures, 2"
+      "value": "LAB",
+      "label": "Analysis location - laboratory"
     },
     {
-      "value": "3DP",
-      "label": "Value; required number of decimal places, 3"
+      "value": "SITE",
+      "label": "Analysis location - site"
+    }
+  ],
+  "ERES_MATX": [
+    {
+      "value": "AUS_ACE_PH5",
+      "label": "Australian (Acetate pH 5.0) Leachate"
     },
     {
-      "value": "3SCI",
-      "label": "Scientific Notation; required number of decimal places, 3"
+      "value": "AUS_ACE_PH5_29",
+      "label": "Australian (Acetate pH 5.0/2.9) Leachate"
     },
     {
-      "value": "3SF",
-      "label": "Value; required number of significant figures, 3"
+      "value": "AUS_RW",
+      "label": "Australian (Reagent Water) Leachate"
     },
     {
-      "value": "4DP",
-      "label": "Value; required number of decimal places, 4"
+      "value": "AUS_TET_PH92",
+      "label": "Australian (Tetraborate pH 9.2) Leachate"
     },
     {
-      "value": "4SCI",
-      "label": "Scientific Notation; required number of decimal places, 4"
+      "value": "CEN_10_1_1STAGE_MGKG",
+      "label": "CEN 10-1 (1 Stage) Leachate (mg/kg)"
     },
     {
-      "value": "4SF",
-      "label": "Value; required number of significant figures, 4"
+      "value": "CEN_10_1_1STAGE_MGL",
+      "label": "CEN 10-1 (1 Stage) Leachate (mg/l)"
     },
     {
-      "value": "DMS",
-      "label": "Degrees:Minutes:Seconds"
+      "value": "CEN_10_1_2STAGE_MGKG",
+      "label": "CEN 10-1 (2 Stage) Leachate (mg/kg)"
     },
     {
-      "value": "DT",
-      "label": "Date time in international format"
+      "value": "CEN_2_1_1STAGE_MGKG",
+      "label": "CEN 2-1 (1 Stage) Leachate (mg/kg)"
     },
     {
-      "value": "ID",
-      "label": "Unique Identifier"
+      "value": "CEN_2_1_1STAGE_MGL",
+      "label": "CEN 2-1 (1 Stage) Leachate (mg/l)"
     },
     {
-      "value": "MC",
-      "label": "British Standard BS1377 : Part 2 reported moisture content"
+      "value": "CEN_2_1_2STAGE_MGKG",
+      "label": "CEN 2-1 (2 Stage) Leachate (mg/kg)"
     },
     {
-      "value": "PA",
-      "label": "Text listed in ABBR Group"
+      "value": "CEN_2_1_2STAGE_MGL",
+      "label": "CEN 2-1 (2 Stage) Leachate (mg/l)"
     },
     {
-      "value": "PT",
-      "label": "Text listed in TYPE Group"
+      "value": "CEN_8_1_2STAGE_MGL",
+      "label": "CEN 8-1 (2 Stage) Leachate (mg/l)"
     },
     {
-      "value": "PU",
-      "label": "Text listed in UNIT Group"
+      "value": "GAS",
+      "label": "Gas"
     },
     {
-      "value": "RL",
-      "label": "Record link"
+      "value": "LIQUID",
+      "label": "Liquid"
     },
     {
-      "value": "T",
-      "label": "Elapsed time"
+      "value": "NRA",
+      "label": "NRA Leachate"
     },
     {
-      "value": "U",
-      "label": "Value with variable format"
+      "value": "PRODUCT",
+      "label": "Product"
     },
     {
-      "value": "X",
-      "label": "Text"
+      "value": "SOLID",
+      "label": "Solid"
     },
     {
-      "value": "XN",
-      "label": "Text / numeric"
+      "value": "SPLP",
+      "label": "SPLP Leachate"
     },
     {
-      "value": "YN",
-      "label": "Y or N or NULL"
+      "value": "TCLP",
+      "label": "TCLP Leachate"
+    }
+  ],
+  "ERES_RTCD": [
+    {
+      "value": "IC",
+      "label": "Spiked compound"
+    },
+    {
+      "value": "IS",
+      "label": "Internal Standards"
+    },
+    {
+      "value": "SUR",
+      "label": "Surrogate"
+    },
+    {
+      "value": "TIC",
+      "label": "Tentatively identified compound"
+    },
+    {
+      "value": "TRG",
+      "label": "Target"
+    }
+  ],
+  "ERES_RTYP": [
+    {
+      "value": "INITIAL",
+      "label": "Initial"
+    },
+    {
+      "value": "REANALYSIS",
+      "label": "Reanalysis"
+    },
+    {
+      "value": "REANALYSIS2",
+      "label": "2nd reanalysis"
+    },
+    {
+      "value": "REANALYSIS3",
+      "label": "3rd Reanalysis"
+    },
+    {
+      "value": "REANALYSIS4",
+      "label": "4th Reanalysis"
+    }
+  ],
+  "ESCG_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "ESCG_TYPE": [
+    {
+      "value": "CD",
+      "label": "Consolidated Drained"
+    },
+    {
+      "value": "CDM",
+      "label": "Consolidated Drained Multistage"
+    },
+    {
+      "value": "CU",
+      "label": "Consolidated Undrained"
+    },
+    {
+      "value": "CUM",
+      "label": "Consolidated Undrained Multistage"
+    }
+  ],
+  "FGHG_CNFG": [
+    {
+      "value": "BH",
+      "label": "Test in borehole"
+    },
+    {
+      "value": "PKD",
+      "label": "Borehole test using double packer"
+    },
+    {
+      "value": "PKS",
+      "label": "Borehole test using single packer"
+    },
+    {
+      "value": "PKSD",
+      "label": "Double Instrumented Packer"
+    },
+    {
+      "value": "PKSI",
+      "label": "Single Instrumented Packer"
+    },
+    {
+      "value": "SP",
+      "label": "Test in standpipe"
+    },
+    {
+      "value": "SPIE",
+      "label": "Standpipe Piezometer"
+    }
+  ],
+  "FGHG_FTYP": [
+    {
+      "value": "Dilation",
+      "label": "Dilation"
+    },
+    {
+      "value": "Filling",
+      "label": "Filling"
+    },
+    {
+      "value": "Hydraulic fracture",
+      "label": "Hydraulic fracture"
+    },
+    {
+      "value": "Laminar",
+      "label": "Laminar"
+    },
+    {
+      "value": "Progressive scour",
+      "label": "Progressive scour"
+    },
+    {
+      "value": "Turbulent",
+      "label": "Turbulent"
+    },
+    {
+      "value": "Void-filling",
+      "label": "Void-filling"
+    },
+    {
+      "value": "Wash-out",
+      "label": "Wash-out"
+    }
+  ],
+  "FGHG_TYPE": [
+    {
+      "value": "CONSTANT FLOW RATE",
+      "label": "Constant Flow Rate Test"
+    },
+    {
+      "value": "CONSTANT HEAD",
+      "label": "Constant Head"
+    },
+    {
+      "value": "CONSTANT HEAD (NEGATIVE)",
+      "label": "Constant Head Test with water abstraction"
+    },
+    {
+      "value": "CONSTANT HEAD (POSITIVE)",
+      "label": "Constant Head Test with water injection"
+    },
+    {
+      "value": "FALLING HEAD",
+      "label": "Falling Head"
+    },
+    {
+      "value": "RISING HEAD",
+      "label": "Rising Head"
+    },
+    {
+      "value": "WATER PRESSURE",
+      "label": "Water Pressure Test"
+    }
+  ],
+  "FGHT_TYPE": [
+    {
+      "value": "FLWR",
+      "label": "Instantaneous flow rate at time FGHT_TIME"
     }
   ],
   "FILE_DOCT": [
@@ -10007,254 +9595,162 @@
       "label": "Video clip"
     }
   ],
-  "FGHG_CNFG": [
+  "FILE_TYPE": [
     {
-      "value": "BH",
-      "label": "Test in borehole"
+      "value": "BMP",
+      "label": "Bitmap image file"
     },
     {
-      "value": "PKD",
-      "label": "Borehole test using double packer"
+      "value": "JPG",
+      "label": "Joint Photographic Experts Group graphics/image file"
     },
     {
-      "value": "PKS",
-      "label": "Borehole test using single packer"
-    },
-    {
-      "value": "PKSD",
-      "label": "Double Instrumented Packer"
-    },
-    {
-      "value": "PKSI",
-      "label": "Single Instrumented Packer"
-    },
-    {
-      "value": "SP",
-      "label": "Test in standpipe"
-    },
-    {
-      "value": "SPIE",
-      "label": "Standpipe Piezometer"
+      "value": "PDF",
+      "label": "Portable Document Format"
     }
   ],
-  "CMPG_MOLD": [
+  "FLSH_TYPE": [
     {
-      "value": "1 LITRE",
-      "label": "1 Litre mould type"
-    },
-    {
-      "value": "CBR",
-      "label": "CBR Mould type"
+      "value": "Water",
+      "label": "Water"
     }
   ],
-  "ELRG_RTYP": [
+  "FRST_COND": [
     {
-      "value": "INITIAL",
-      "label": "Initial"
-    },
-    {
-      "value": "REANALYSIS",
-      "label": "Reanalysis"
-    },
-    {
-      "value": "REANALYSIS2",
-      "label": "2nd reanalysis"
-    }
-  ],
-  "PTST_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
+      "value": "RECOMPACTION",
+      "label": "Recompacted"
     },
     {
       "value": "UNDISTURBED",
       "label": "Undisturbed"
     }
   ],
-  "SAMP_TYPE": [
+  "GCHM_CODE": [
     {
-      "value": "AMAL",
-      "label": "Amalgamated sample"
+      "value": "ACO2",
+      "label": "Aggressive carbon dioxide (as mg/l)"
     },
     {
-      "value": "B",
-      "label": "Bulk disturbed sample"
+      "value": "AS",
+      "label": "Acid-soluble sulphate (as % SO4)"
     },
     {
-      "value": "BLK",
-      "label": "Block sample"
+      "value": "AS_SO3",
+      "label": "Acid-soluble sulphate (as % SO3)"
     },
     {
-      "value": "C",
-      "label": "Core sample"
+      "value": "CACO3",
+      "label": "Chalk content (as %CaCO3)"
     },
     {
-      "value": "CBR",
-      "label": "CBR mould sample"
+      "value": "CL",
+      "label": "Chloride (as mg/l)"
     },
     {
-      "value": "COMP",
-      "label": "Composite sample - where the sample is made up of material from disparate unrecorded locations, coned and quartered into one composite sample"
+      "value": "CO2",
+      "label": "Carbonate content (as %CO2)"
     },
     {
-      "value": "CONCB",
-      "label": "Concrete Cube"
+      "value": "GWS",
+      "label": "Groundwater sulfate"
     },
     {
-      "value": "CONCC",
-      "label": "Concrete Core"
+      "value": "LOI",
+      "label": "Loss on ignition (as %)"
     },
     {
-      "value": "D",
-      "label": "Small disturbed sample"
+      "value": "MSC",
+      "label": "Monosulfide sulfur content"
     },
     {
-      "value": "ES",
-      "label": "Soil sample for environmental testing"
+      "value": "NH4",
+      "label": "Ammonium ion (as mg/l)"
     },
     {
-      "value": "EW",
-      "label": "Water sample for environmental testing"
+      "value": "NO3",
+      "label": "Nitrate (as mg/l)"
     },
     {
-      "value": "G",
-      "label": "Gas sample"
+      "value": "OGM",
+      "label": "Organic matter content (as %)"
     },
     {
-      "value": "L",
-      "label": "Liner sample (dynamic)"
+      "value": "OS",
+      "label": "Oxidisable Sulphide"
     },
     {
-      "value": "LB",
-      "label": "Large bulk disturbed sample (for earthworks testing)"
+      "value": "PH",
+      "label": "Acidity/alkalinity (pH to nearest 0.1)"
     },
     {
-      "value": "M",
-      "label": "Mazier type sample"
+      "value": "REDOX",
+      "label": "Redox potential (in mV)"
     },
     {
-      "value": "MOS",
-      "label": "Mostap sample"
+      "value": "SO3",
+      "label": "Sulphate as SO3"
     },
     {
-      "value": "P",
-      "label": "Piston sample"
+      "value": "SO4",
+      "label": "Sulphate as SO4"
     },
     {
-      "value": "SPTLS",
-      "label": "Standard penetration test liner sample"
+      "value": "TDS",
+      "label": "Total dissolved solids (in mg/l to 2SF)"
     },
     {
-      "value": "TW",
-      "label": "Thin walled push in sample"
+      "value": "TIC",
+      "label": "Total inorganic carbon"
     },
     {
-      "value": "U",
-      "label": "Undisturbed sample - open drive"
+      "value": "TOC",
+      "label": "Total organic carbon"
     },
     {
-      "value": "UT",
-      "label": "Thin wall open drive tube sampler"
+      "value": "TPS",
+      "label": "Total potential sulfate"
     },
     {
-      "value": "W",
-      "label": "Water sample"
+      "value": "TRS",
+      "label": "Total reduced sulfur"
+    },
+    {
+      "value": "TS",
+      "label": "Total sulphur (as %S)"
+    },
+    {
+      "value": "WCL",
+      "label": "Water soluble chloride (as mg/l)"
+    },
+    {
+      "value": "WMG",
+      "label": "Water/soil extract Magnesium (as m/g)"
+    },
+    {
+      "value": "WS",
+      "label": "Water-soluble sulphate (as mg/l SO4)"
+    },
+    {
+      "value": "WS_SO3",
+      "label": "Water-soluble sulphate (as g/l SO3)"
     }
   ],
-  "RESD_CNDS": [
+  "GCHM_TTYP": [
     {
-      "value": "DRAINED",
-      "label": "Drained"
-    }
-  ],
-  "FGHG_FTYP": [
-    {
-      "value": "Dilation",
-      "label": "Dilation"
+      "value": "SOLID_21 WATER EXTRACT",
+      "label": "Solid (2:1 Soil/Water extract)"
     },
     {
-      "value": "Filling",
-      "label": "Filling"
+      "value": "SOLID_ACID EXTRACT",
+      "label": "Solid (Acid extract)"
     },
     {
-      "value": "Hydraulic fracture",
-      "label": "Hydraulic fracture"
+      "value": "SOLID_TOTAL",
+      "label": "Solid (Total)"
     },
     {
-      "value": "Laminar",
-      "label": "Laminar"
-    },
-    {
-      "value": "Progressive scour",
-      "label": "Progressive scour"
-    },
-    {
-      "value": "Turbulent",
-      "label": "Turbulent"
-    },
-    {
-      "value": "Void-filling",
-      "label": "Void-filling"
-    },
-    {
-      "value": "Wash-out",
-      "label": "Wash-out"
-    }
-  ],
-  "LDEN_TYPE": [
-    {
-      "value": "IMMERSION",
-      "label": "Immersion/displacement measurement"
-    },
-    {
-      "value": "LINEAR",
-      "label": "Linear measurement"
-    }
-  ],
-  "LUCT_MODE": [
-    {
-      "value": "Brittle",
-      "label": "Brittle"
-    }
-  ],
-  "RTEN_MODE": [
-    {
-      "value": "Shear",
-      "label": "Shear"
-    }
-  ],
-  "ERES_BAS": [
-    {
-      "value": "AIRDRIED",
-      "label": "Air Dried Basis"
-    },
-    {
-      "value": "DRY",
-      "label": "Dry Basis"
-    },
-    {
-      "value": "WET",
-      "label": "Wet Basis"
-    }
-  ],
-  "CBRG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "SHBG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
+      "value": "WATER",
+      "label": "Water"
     }
   ],
   "GEOL_LEG": [
@@ -10891,26 +10387,1036 @@
       "label": "Void"
     }
   ],
-  "DPRG_TYPE": [
+  "GRAT_TYPE": [
     {
-      "value": "DPH",
-      "label": "Heavy dynamic probe (50kg hammer mass/500mm drop)"
+      "value": "DS",
+      "label": "Dry sieve"
     },
     {
-      "value": "DPL",
-      "label": "Light dynamic probe (10kg hammer mass/500mm drop)"
+      "value": "HY",
+      "label": "Hydrometer"
     },
     {
-      "value": "DPM",
-      "label": "Medium dynamic probe (30kg hammer mass/500mm drop)"
+      "value": "PP",
+      "label": "Pipette"
     },
     {
-      "value": "DPSH-A",
-      "label": "Superheavy dynamic probe (63.5kg hammer mass/500mm drop)"
+      "value": "WS",
+      "label": "Wet sieve"
+    }
+  ],
+  "HDPH_TYPE": [
+    {
+      "value": "ABS",
+      "label": "Automatic Ballast Sampler"
     },
     {
-      "value": "DPSH-B",
-      "label": "Superheavy (63.5kg hammer mass/750mm drop)"
+      "value": "CC",
+      "label": "Concrete core"
+    },
+    {
+      "value": "CH",
+      "label": "Slope surface protection stripping"
+    },
+    {
+      "value": "CP",
+      "label": "Cable percussion (shell and auger)"
+    },
+    {
+      "value": "DCP",
+      "label": "Dynamic cone penetrometer"
+    },
+    {
+      "value": "DP",
+      "label": "Dynamic probe sampling"
+    },
+    {
+      "value": "DS",
+      "label": "Dynamic Sampling"
+    },
+    {
+      "value": "EXP",
+      "label": "Logged exposure"
+    },
+    {
+      "value": "GCOP",
+      "label": "GCO probe"
+    },
+    {
+      "value": "HA",
+      "label": "Hand Auger"
+    },
+    {
+      "value": "ICBR",
+      "label": "In situ CBR test"
+    },
+    {
+      "value": "IDEN",
+      "label": "In situ density test"
+    },
+    {
+      "value": "IJ",
+      "label": "Injection Point"
+    },
+    {
+      "value": "INST",
+      "label": "Instrument"
+    },
+    {
+      "value": "IP",
+      "label": "Inspection pit"
+    },
+    {
+      "value": "IRDX",
+      "label": "In situ redox test"
+    },
+    {
+      "value": "IRES",
+      "label": "In situ resistivity"
+    },
+    {
+      "value": "ISPT",
+      "label": "Standard penetration test"
+    },
+    {
+      "value": "IVAN",
+      "label": "In situ vane test"
+    },
+    {
+      "value": "OP",
+      "label": "Observation pit/trench"
+    },
+    {
+      "value": "PC",
+      "label": "Pavement core"
+    },
+    {
+      "value": "PM",
+      "label": "Pressuremeter test hole"
+    },
+    {
+      "value": "RC",
+      "label": "Rotary cored"
+    },
+    {
+      "value": "RCG",
+      "label": "Rotary drilling in common ground"
+    },
+    {
+      "value": "RO",
+      "label": "Rotary open hole"
+    },
+    {
+      "value": "RPC",
+      "label": "Russian Peat Corer"
+    },
+    {
+      "value": "SCP",
+      "label": "Static cone penetrometer"
+    },
+    {
+      "value": "SH",
+      "label": "Shaft"
+    },
+    {
+      "value": "SNC",
+      "label": "Sonic core drilling"
+    },
+    {
+      "value": "TP",
+      "label": "Trial pit/trench"
+    },
+    {
+      "value": "TRAV",
+      "label": "Linear logging traverse or scanline survey"
+    },
+    {
+      "value": "VC",
+      "label": "Vibrocore"
+    },
+    {
+      "value": "VE",
+      "label": "Vacuum Excavation"
+    },
+    {
+      "value": "W",
+      "label": "Wash boring"
+    },
+    {
+      "value": "WLS",
+      "label": "Dynamic (windowless) sampler"
+    },
+    {
+      "value": "WS",
+      "label": "Window Sampler"
+    }
+  ],
+  "ICBR_TYPE": [
+    {
+      "value": "DCP",
+      "label": "Dynamic cone penetrometer"
+    },
+    {
+      "value": "IN SITU CBR",
+      "label": "In situ CBR apparatus"
+    },
+    {
+      "value": "MEXECONE",
+      "label": "Mexecone"
+    }
+  ],
+  "IDEN_TYPE": [
+    {
+      "value": "CORE",
+      "label": "Core"
+    },
+    {
+      "value": "NUCLEAR",
+      "label": "Nuclear"
+    },
+    {
+      "value": "SAND",
+      "label": "Sand Replacement/Cone"
+    },
+    {
+      "value": "WATER",
+      "label": "Water Replacement"
+    }
+  ],
+  "IPRG_TYPE": [
+    {
+      "value": "Constant Flow Rate",
+      "label": "Constant Flow Rate test"
+    },
+    {
+      "value": "Constant Head",
+      "label": "Constant Head"
+    },
+    {
+      "value": "Falling Head",
+      "label": "Falling Head"
+    },
+    {
+      "value": "Packer test",
+      "label": "Single or Multistage Packer Test"
+    },
+    {
+      "value": "Rising Head",
+      "label": "Rising Head"
+    },
+    {
+      "value": "Water Pressure",
+      "label": "Water Pressure test"
+    }
+  ],
+  "IRES_TYPE": [
+    {
+      "value": "DPDP",
+      "label": "Dipole-dipole array"
+    },
+    {
+      "value": "OWEN",
+      "label": "Offset-Wenner array"
+    },
+    {
+      "value": "SCHL",
+      "label": "Schlumberger array"
+    },
+    {
+      "value": "SQA",
+      "label": "Square array"
+    },
+    {
+      "value": "WEN",
+      "label": "Wenner array"
+    }
+  ],
+  "ISPT_TYPE": [
+    {
+      "value": "C",
+      "label": "Cone"
+    },
+    {
+      "value": "S",
+      "label": "Split spoon"
+    }
+  ],
+  "IVAN_TYPE": [
+    {
+      "value": "BOREHOLE",
+      "label": "Borehole vane"
+    },
+    {
+      "value": "CPT",
+      "label": "CPT Vane"
+    },
+    {
+      "value": "FIELD",
+      "label": "Hand-held field vane"
+    },
+    {
+      "value": "TORVANE",
+      "label": "Torvane"
+    }
+  ],
+  "LBST_STAT": [
+    {
+      "value": "AWAITING START",
+      "label": "Await start"
+    },
+    {
+      "value": "CANCELLED",
+      "label": "Cancelled"
+    },
+    {
+      "value": "COMPLETED",
+      "label": "Completed"
+    },
+    {
+      "value": "IN PROGRESS",
+      "label": "In progress"
+    },
+    {
+      "value": "NOT RECEIVED",
+      "label": "Sample has not been delivered to the testing laboratory"
+    },
+    {
+      "value": "NOT REQUIRED",
+      "label": "Test is not required dependant on results of another test"
+    },
+    {
+      "value": "RESTRICTED",
+      "label": "Restricted"
+    }
+  ],
+  "LDEN_COND": [
+    {
+      "value": "RECOMPACTED",
+      "label": "Recompacted"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "LDEN_SMTY": [
+    {
+      "value": "BLOCK SAMPLE",
+      "label": "Block sample"
+    },
+    {
+      "value": "CYLINDER",
+      "label": "Cylinder"
+    }
+  ],
+  "LDEN_TYPE": [
+    {
+      "value": "IMMERSION",
+      "label": "Immersion/displacement measurement"
+    },
+    {
+      "value": "LINEAR",
+      "label": "Linear measurement"
+    }
+  ],
+  "LLPL_CONE": [
+    {
+      "value": "60g/60deg",
+      "label": "60g/60deg"
+    },
+    {
+      "value": "80g/30deg",
+      "label": "80g/30deg"
+    }
+  ],
+  "LLPL_POIN": [
+    {
+      "value": "FOUR",
+      "label": "Four point"
+    },
+    {
+      "value": "ONE",
+      "label": "One point"
+    }
+  ],
+  "LLPL_TYPE": [
+    {
+      "value": "CASAGRANDE",
+      "label": "Casagrande"
+    },
+    {
+      "value": "FALL CONE",
+      "label": "Fall cone"
+    }
+  ],
+  "LOCA_GREF": [
+    {
+      "value": "ITM",
+      "label": "Ordnance Survey Ireland Irish Transverse Mercator"
+    },
+    {
+      "value": "LOCAL",
+      "label": "Local Grid"
+    },
+    {
+      "value": "OSGB",
+      "label": "Ordnance Survey Great Britain National Grid"
+    },
+    {
+      "value": "OSI",
+      "label": "Ordnance Survey Ireland Irish Grid"
+    }
+  ],
+  "LOCA_STAT": [
+    {
+      "value": "DRAFT",
+      "label": "Draft data"
+    },
+    {
+      "value": "FINAL",
+      "label": "Final data"
+    },
+    {
+      "value": "HISTORIC",
+      "label": "Historical data converted from paper records"
+    },
+    {
+      "value": "PRELIM",
+      "label": "Preliminary data"
+    },
+    {
+      "value": "PROPOSED",
+      "label": "Proposed data"
+    }
+  ],
+  "LOCA_TYPE": [
+    {
+      "value": "ABS",
+      "label": "Automatic Ballast Sampler"
+    },
+    {
+      "value": "AUGH",
+      "label": "Hollow Stem Auger"
+    },
+    {
+      "value": "AUGS",
+      "label": "Solid Stem Auger"
+    },
+    {
+      "value": "CC",
+      "label": "Concrete core"
+    },
+    {
+      "value": "CH",
+      "label": "Slope surface protection stripping"
+    },
+    {
+      "value": "CP",
+      "label": "Cable percussion (shell and auger)"
+    },
+    {
+      "value": "DCP",
+      "label": "Dynamic cone penetrometer"
+    },
+    {
+      "value": "DP",
+      "label": "Dynamic probe sampling"
+    },
+    {
+      "value": "DS",
+      "label": "Dynamic Sampler"
+    },
+    {
+      "value": "EH",
+      "label": "Exploratory Hole"
+    },
+    {
+      "value": "EXP",
+      "label": "Logged exposure"
+    },
+    {
+      "value": "GC",
+      "label": "Gravity Core"
+    },
+    {
+      "value": "GCOP",
+      "label": "GCO probe"
+    },
+    {
+      "value": "HA",
+      "label": "Hand Auger"
+    },
+    {
+      "value": "ICBR",
+      "label": "In situ CBR test"
+    },
+    {
+      "value": "IDEN",
+      "label": "In situ density test"
+    },
+    {
+      "value": "IJ",
+      "label": "Injection Point"
+    },
+    {
+      "value": "INST",
+      "label": "instrument"
+    },
+    {
+      "value": "IP",
+      "label": "Inspection pit"
+    },
+    {
+      "value": "IPLT",
+      "label": "In situ plate loading test"
+    },
+    {
+      "value": "IRDX",
+      "label": "In situ redox test"
+    },
+    {
+      "value": "IRES",
+      "label": "In situ resistivity"
+    },
+    {
+      "value": "IVAN",
+      "label": "In situ vane test"
+    },
+    {
+      "value": "LSW",
+      "label": "Landfill Spike/Pin Well"
+    },
+    {
+      "value": "MSTP",
+      "label": "Mostap sampling position"
+    },
+    {
+      "value": "OP",
+      "label": "Observation pit/trench"
+    },
+    {
+      "value": "PC",
+      "label": "Pavement core"
+    },
+    {
+      "value": "PM",
+      "label": "Pressuremeter test hole"
+    },
+    {
+      "value": "PPR",
+      "label": "Peat probe"
+    },
+    {
+      "value": "RC",
+      "label": "Rotary cored"
+    },
+    {
+      "value": "RCG",
+      "label": "Rotary drilling in common ground"
+    },
+    {
+      "value": "RO",
+      "label": "Rotary open hole"
+    },
+    {
+      "value": "RPC",
+      "label": "Russian Peat Corer"
+    },
+    {
+      "value": "SCP",
+      "label": "Static cone penetrometer"
+    },
+    {
+      "value": "SH",
+      "label": "Shaft"
+    },
+    {
+      "value": "SL",
+      "label": "Sampling Location"
+    },
+    {
+      "value": "SLDW",
+      "label": "Sampling Location - Drinking water"
+    },
+    {
+      "value": "SLSP",
+      "label": "Sampling Location - Stockpile"
+    },
+    {
+      "value": "SLSW",
+      "label": "Sampling Location - Surface water"
+    },
+    {
+      "value": "SNC",
+      "label": "Sonic core drilling"
+    },
+    {
+      "value": "SPR",
+      "label": "Bioremediation spray location"
+    },
+    {
+      "value": "STC",
+      "label": "Structure Coring"
+    },
+    {
+      "value": "TMP",
+      "label": "Tidal Monitoring Point"
+    },
+    {
+      "value": "TP",
+      "label": "Trial pit/trench"
+    },
+    {
+      "value": "TRAV",
+      "label": "Linear logging traverse or scanline survey"
+    },
+    {
+      "value": "TT",
+      "label": "Trial trench"
+    },
+    {
+      "value": "VC",
+      "label": "Vibrocore"
+    },
+    {
+      "value": "VE",
+      "label": "Vacuum Excavation"
+    },
+    {
+      "value": "W",
+      "label": "Wash boring"
+    },
+    {
+      "value": "WLS",
+      "label": "Dynamic (windowless) sampler"
+    },
+    {
+      "value": "WP",
+      "label": "Wellpoint"
+    },
+    {
+      "value": "WS",
+      "label": "Window Sampler"
+    }
+  ],
+  "LPDN_GAS": [
+    {
+      "value": "Helium",
+      "label": "Helium"
+    }
+  ],
+  "LPDN_TYPE": [
+    {
+      "value": "GAS JAR",
+      "label": "Gas jar method"
+    },
+    {
+      "value": "LARGE PYK",
+      "label": "Large pyknometer"
+    },
+    {
+      "value": "SMALL PYK",
+      "label": "Small pyknometer"
+    },
+    {
+      "value": "WIRE BASKET",
+      "label": "Wire basket method"
+    }
+  ],
+  "LUCT_MODE": [
+    {
+      "value": "Brittle",
+      "label": "Brittle"
+    }
+  ],
+  "LUCT_TYPE": [
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "LVAN_TYPE": [
+    {
+      "value": "HV",
+      "label": "Hand vane"
+    },
+    {
+      "value": "LV",
+      "label": "Laboratory vane"
+    },
+    {
+      "value": "TV",
+      "label": "Torvane"
+    }
+  ],
+  "MOND_TYPE": [
+    {
+      "value": "ANGA",
+      "label": "Rotation/Tilt in direction A"
+    },
+    {
+      "value": "ANGB",
+      "label": "Rotation/Tilt in direction B"
+    },
+    {
+      "value": "ANGC",
+      "label": "Rotation in direction C"
+    },
+    {
+      "value": "BAR",
+      "label": "Barometric pressure at time of monitoring"
+    },
+    {
+      "value": "BRG",
+      "label": "Bearing"
+    },
+    {
+      "value": "CURR",
+      "label": "Current"
+    },
+    {
+      "value": "DBSE",
+      "label": "Depth to base of installation on monitoring round"
+    },
+    {
+      "value": "DNAPL",
+      "label": "Dense Nonaqueous Phase Liquid"
+    },
+    {
+      "value": "DO",
+      "label": "Dissolved Oxygen"
+    },
+    {
+      "value": "DOWNTEMP",
+      "label": "Downhole temperature"
+    },
+    {
+      "value": "DSPA",
+      "label": "Displacement in direction A"
+    },
+    {
+      "value": "DSPB",
+      "label": "Displacement in direction B"
+    },
+    {
+      "value": "DSPC",
+      "label": "Displacement in direction C"
+    },
+    {
+      "value": "DSTA",
+      "label": "Distance A from LOCA_ID (slip indicator top rod)"
+    },
+    {
+      "value": "DSTB",
+      "label": "Distance B from LOCA_ID (slip indicator top rod)"
+    },
+    {
+      "value": "DSTL",
+      "label": "Distance"
+    },
+    {
+      "value": "EAST",
+      "label": "Absolute position (Easting)"
+    },
+    {
+      "value": "EC",
+      "label": "Electrical conductivity"
+    },
+    {
+      "value": "ECA",
+      "label": "Actual Conductivity"
+    },
+    {
+      "value": "ECS",
+      "label": "Specific Conductivity"
+    },
+    {
+      "value": "ERAT",
+      "label": "Volume extraction rate"
+    },
+    {
+      "value": "FLOW",
+      "label": "Flow"
+    },
+    {
+      "value": "FORC",
+      "label": "Force"
+    },
+    {
+      "value": "GAMP",
+      "label": "Peak ammonia concentration"
+    },
+    {
+      "value": "GAMS",
+      "label": "Steady ammonia concentration"
+    },
+    {
+      "value": "GAUG",
+      "label": "Gauge length"
+    },
+    {
+      "value": "GCD",
+      "label": "Carbon dioxide concentration"
+    },
+    {
+      "value": "GCDP",
+      "label": "Peak carbon dioxide concentration"
+    },
+    {
+      "value": "GCDS",
+      "label": "Steady carbon dioxide concentration"
+    },
+    {
+      "value": "GCM",
+      "label": "Carbon monoxide concentration"
+    },
+    {
+      "value": "GCMP",
+      "label": "Peak carbon monoxide concentration"
+    },
+    {
+      "value": "GCMS",
+      "label": "Steady carbon monoxide concentration"
+    },
+    {
+      "value": "GFLO",
+      "label": "Gas flow rate"
+    },
+    {
+      "value": "GFLOP",
+      "label": "Peak gas flow rate"
+    },
+    {
+      "value": "GFLOS",
+      "label": "Steady gas flow rate"
+    },
+    {
+      "value": "GHP",
+      "label": "Peak hydrogen concentration"
+    },
+    {
+      "value": "GHS",
+      "label": "Steady hydrogen concentration"
+    },
+    {
+      "value": "GM",
+      "label": "Measured methane as percentage of LEL"
+    },
+    {
+      "value": "GMP",
+      "label": "Peak methane as percentage of LEL"
+    },
+    {
+      "value": "GMS",
+      "label": "Steady methane as percentage of LEL"
+    },
+    {
+      "value": "GNIT",
+      "label": "Nitrogen concentration"
+    },
+    {
+      "value": "GNITP",
+      "label": "Peak nitrogen concentration"
+    },
+    {
+      "value": "GNITS",
+      "label": "Steady nitrogen concentration"
+    },
+    {
+      "value": "GOX",
+      "label": "Oxygen concentration"
+    },
+    {
+      "value": "GOXM",
+      "label": "Minimum oxygen concentration"
+    },
+    {
+      "value": "GOXP",
+      "label": "Steady oxygen concentration"
+    },
+    {
+      "value": "GOXS",
+      "label": "Peak oxygen concentration"
+    },
+    {
+      "value": "GPRS",
+      "label": "Differential Pressure"
+    },
+    {
+      "value": "HYC",
+      "label": "Hydrogen cyanide concentration"
+    },
+    {
+      "value": "HYCP",
+      "label": "Peak hydrogen cyanide concentration"
+    },
+    {
+      "value": "HYCS",
+      "label": "Steady hydrogen cyanide concentration"
+    },
+    {
+      "value": "HYS",
+      "label": "Hydrogen sulphide concentration"
+    },
+    {
+      "value": "HYSP",
+      "label": "Peak hydrogen sulphide concentration"
+    },
+    {
+      "value": "HYSS",
+      "label": "Steady hydrogen sulphide concentration"
+    },
+    {
+      "value": "LEV",
+      "label": "Absolute position (Level)"
+    },
+    {
+      "value": "LNAPL",
+      "label": "Light Nonaqueous Phase Liquid"
+    },
+    {
+      "value": "NRTH",
+      "label": "Absolute position (Northing)"
+    },
+    {
+      "value": "OPP",
+      "label": "Oxygen Partial Pressure"
+    },
+    {
+      "value": "PH",
+      "label": "Potential of Hydrogen (pH)"
+    },
+    {
+      "value": "PID",
+      "label": "Photo Ionisation Detector Reading"
+    },
+    {
+      "value": "PIDP",
+      "label": "Peak Photo Ionisation Detector Reading"
+    },
+    {
+      "value": "PIDS",
+      "label": "Steady Photo Ionisation Detector Reading"
+    },
+    {
+      "value": "PRES",
+      "label": "Pressure"
+    },
+    {
+      "value": "RAD",
+      "label": "Radon gas"
+    },
+    {
+      "value": "RAIN",
+      "label": "Rainfall"
+    },
+    {
+      "value": "RDX",
+      "label": "Redox potential"
+    },
+    {
+      "value": "RES",
+      "label": "Apparent resistivity"
+    },
+    {
+      "value": "RFLOW",
+      "label": "River flowrate measurement"
+    },
+    {
+      "value": "RLEVEL",
+      "label": "River level measurement"
+    },
+    {
+      "value": "ROTS",
+      "label": "Rotational speed"
+    },
+    {
+      "value": "SAL",
+      "label": "Salinity"
+    },
+    {
+      "value": "SAMPTEMP",
+      "label": "Sample temperature"
+    },
+    {
+      "value": "STAT",
+      "label": "Status"
+    },
+    {
+      "value": "STRA",
+      "label": "Strain in direction A"
+    },
+    {
+      "value": "STRB",
+      "label": "Strain in direction B"
+    },
+    {
+      "value": "STRC",
+      "label": "Strain in direction C"
+    },
+    {
+      "value": "TDS",
+      "label": "Total dissolved solids"
+    },
+    {
+      "value": "TEMP",
+      "label": "Atmospheric temperature"
+    },
+    {
+      "value": "TGM",
+      "label": "Total methane concentration"
+    },
+    {
+      "value": "TGMP",
+      "label": "Peak total methane concentration"
+    },
+    {
+      "value": "TGMS",
+      "label": "Steady total methane concentration"
+    },
+    {
+      "value": "TORQ",
+      "label": "Torque"
+    },
+    {
+      "value": "TRST",
+      "label": "Thrust"
+    },
+    {
+      "value": "TURB",
+      "label": "Turbidity"
+    },
+    {
+      "value": "UPT",
+      "label": "Up/run time"
+    },
+    {
+      "value": "VEL",
+      "label": "Velocity"
+    },
+    {
+      "value": "VOC",
+      "label": "Volatile organic compound"
+    },
+    {
+      "value": "VOCP",
+      "label": "Peak volatile organic compound"
+    },
+    {
+      "value": "VOL",
+      "label": "Volume"
+    },
+    {
+      "value": "VOLT",
+      "label": "Voltage"
+    },
+    {
+      "value": "WDEP",
+      "label": "Depth to water from LOCA_ID datum"
+    },
+    {
+      "value": "WHD",
+      "label": "Head of water above tip"
     }
   ],
   "MONG_TYPE": [
@@ -11071,13 +11577,57 @@
       "label": "Total station point"
     }
   ],
-  "LPDN_GAS": [
+  "PIPE_TYPE": [
     {
-      "value": "Helium",
-      "label": "Helium"
+      "value": "PLAIN",
+      "label": "Plain"
+    },
+    {
+      "value": "SLOTTED",
+      "label": "Slotted"
     }
   ],
-  "SUCT_COND": [
+  "PMTG_TYPE": [
+    {
+      "value": "HPD",
+      "label": "High pressure dilatometer"
+    },
+    {
+      "value": "MPM",
+      "label": "Menard type pressuremeter"
+    },
+    {
+      "value": "PIP",
+      "label": "Push-in pressuremeter"
+    },
+    {
+      "value": "SBP",
+      "label": "Self boring pressuremeter"
+    },
+    {
+      "value": "WRSBP",
+      "label": "Weak rock self boring pressuremeter"
+    }
+  ],
+  "PTST_CELL": [
+    {
+      "value": "CHP",
+      "label": "Constant head permeameter"
+    },
+    {
+      "value": "FHP",
+      "label": "Falling head permeameter"
+    },
+    {
+      "value": "HYDRAULIC CELL",
+      "label": "Hydraulic cell"
+    },
+    {
+      "value": "TRIAXIAL CELL",
+      "label": "Triaxial cell"
+    }
+  ],
+  "PTST_COND": [
     {
       "value": "REMOULDED",
       "label": "Remoulded"
@@ -11087,22 +11637,40 @@
       "label": "Undisturbed"
     }
   ],
-  "CTRC_BEAX": [
+  "PTST_TYPE": [
     {
-      "value": "Sv",
-      "label": "Axial shear-wave propagation"
+      "value": "CONSTANT HEAD",
+      "label": "Constant head"
     },
     {
-      "value": "hh",
-      "label": "horizontally propagating, horizontally orientated"
+      "value": "Constant Head",
+      "label": "Constant head"
     },
     {
-      "value": "hv",
-      "label": "horizontally propagating, vertically orientated"
+      "value": "FALLING HEAD",
+      "label": "Falling head"
     },
     {
-      "value": "vh",
-      "label": "vertically propagating, horizontally orientated"
+      "value": "Falling Head",
+      "label": "Falling head"
+    }
+  ],
+  "RESC_CTYP": [
+    {
+      "value": "ISOTROPIC",
+      "label": "Isotropic"
+    }
+  ],
+  "RESD_CNDS": [
+    {
+      "value": "DRAINED",
+      "label": "Drained"
+    }
+  ],
+  "RESG_COND": [
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
     }
   ],
   "RESG_ORNT": [
@@ -11111,36 +11679,52 @@
       "label": "Vertical"
     }
   ],
-  "ELRG_RTCD": [
+  "RPLT_PLTF": [
     {
-      "value": "IC",
-      "label": "Spiked compound"
+      "value": "A",
+      "label": "Axial"
     },
     {
-      "value": "IS",
-      "label": "Internal standards"
+      "value": "B",
+      "label": "Block"
     },
     {
-      "value": "SUR",
-      "label": "Surrogate"
+      "value": "D",
+      "label": "Diametral"
     },
     {
-      "value": "TIC",
-      "label": "Tentatively identified compound"
+      "value": "I",
+      "label": "Irregular lump"
     },
     {
-      "value": "TRG",
-      "label": "Target"
+      "value": "L",
+      "label": "Parallel to planes of weakness"
+    },
+    {
+      "value": "P",
+      "label": "Perpendicular to planes of weakness"
+    },
+    {
+      "value": "U",
+      "label": "Unknown"
     }
   ],
-  "LDEN_COND": [
+  "RSCH_EXCV": [
     {
-      "value": "RECOMPACTED",
-      "label": "Recompacted"
+      "value": "BLASTING",
+      "label": "Blasting"
     },
     {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
+      "value": "BORING",
+      "label": "Boring"
+    },
+    {
+      "value": "RIP",
+      "label": "Ripping"
+    },
+    {
+      "value": "SPLIT",
+      "label": "Mechanical Splitting"
     }
   ],
   "RSCH_HTYP": [
@@ -11153,94 +11737,46 @@
       "label": "N-Type"
     }
   ],
-  "ELRG_TADE": [
+  "RSCH_STYP": [
     {
-      "value": "CEN_10_1",
-      "label": "CEN 10-1"
+      "value": "CORE",
+      "label": "Core"
     },
     {
-      "value": "CEN_2_1",
-      "label": "CEN 2-1"
+      "value": "EXC",
+      "label": "Excavation face"
     },
     {
-      "value": "NRA",
-      "label": "National Rivers Authority"
+      "value": "LFB",
+      "label": "Large field block"
+    },
+    {
+      "value": "NAT",
+      "label": "Natural exposure"
+    },
+    {
+      "value": "SB",
+      "label": "Saw-cut block"
     }
   ],
-  "CONG_TYPE": [
+  "RTEN_MODE": [
     {
-      "value": "EXPANDABILITY",
-      "label": "Expandability"
-    },
-    {
-      "value": "HYDRAULIC CELL",
-      "label": "Hydraulic cell"
-    },
-    {
-      "value": "OEDOMETER",
-      "label": "Oedometer"
-    },
-    {
-      "value": "SETTLESAT",
-      "label": "Settlement on saturation"
-    },
-    {
-      "value": "SWELL",
-      "label": "Measurement of swelling"
-    },
-    {
-      "value": "SWELLPRESS",
-      "label": "Measurement of swelling pressure"
+      "value": "Shear",
+      "label": "Shear"
     }
   ],
-  "LBST_STAT": [
+  "RUCS_ETYP": [
     {
-      "value": "AWAITING START",
-      "label": "Await start"
+      "value": "AVERAGE",
+      "label": "Average modulus"
     },
     {
-      "value": "CANCELLED",
-      "label": "Cancelled"
+      "value": "SECANT",
+      "label": "Secant modulus"
     },
     {
-      "value": "COMPLETED",
-      "label": "Completed"
-    },
-    {
-      "value": "IN PROGRESS",
-      "label": "In progress"
-    },
-    {
-      "value": "NOT RECEIVED",
-      "label": "Sample has not been delivered to the testing laboratory"
-    },
-    {
-      "value": "NOT REQUIRED",
-      "label": "Test is not required dependant on results of another test"
-    },
-    {
-      "value": "RESTRICTED",
-      "label": "Restricted"
-    }
-  ],
-  "DISC_TYPE": [
-    {
-      "value": "Joint",
-      "label": "Joint"
-    }
-  ],
-  "ICBR_TYPE": [
-    {
-      "value": "DCP",
-      "label": "Dynamic cone penetrometer"
-    },
-    {
-      "value": "IN SITU CBR",
-      "label": "In situ CBR apparatus"
-    },
-    {
-      "value": "MEXECONE",
-      "label": "Mexecone"
+      "value": "TANGENT",
+      "label": "Tangent modulus"
     }
   ],
   "RUCS_MODE": [
@@ -11283,6 +11819,456 @@
     {
       "value": "SHEAR",
       "label": "Shear"
+    }
+  ],
+  "SAMP_TYPE": [
+    {
+      "value": "AMAL",
+      "label": "Amalgamated sample"
+    },
+    {
+      "value": "B",
+      "label": "Bulk disturbed sample"
+    },
+    {
+      "value": "BLK",
+      "label": "Block sample"
+    },
+    {
+      "value": "C",
+      "label": "Core sample"
+    },
+    {
+      "value": "CBR",
+      "label": "CBR mould sample"
+    },
+    {
+      "value": "COMP",
+      "label": "Composite sample - where the sample is made up of material from disparate unrecorded locations, coned and quartered into one composite sample"
+    },
+    {
+      "value": "CONCB",
+      "label": "Concrete Cube"
+    },
+    {
+      "value": "CONCC",
+      "label": "Concrete Core"
+    },
+    {
+      "value": "D",
+      "label": "Small disturbed sample"
+    },
+    {
+      "value": "ES",
+      "label": "Soil sample for environmental testing"
+    },
+    {
+      "value": "EW",
+      "label": "Water sample for environmental testing"
+    },
+    {
+      "value": "G",
+      "label": "Gas sample"
+    },
+    {
+      "value": "L",
+      "label": "Liner sample (dynamic)"
+    },
+    {
+      "value": "LB",
+      "label": "Large bulk disturbed sample (for earthworks testing)"
+    },
+    {
+      "value": "M",
+      "label": "Mazier type sample"
+    },
+    {
+      "value": "MOS",
+      "label": "Mostap sample"
+    },
+    {
+      "value": "P",
+      "label": "Piston sample"
+    },
+    {
+      "value": "SPTLS",
+      "label": "Standard penetration test liner sample"
+    },
+    {
+      "value": "TW",
+      "label": "Thin walled push in sample"
+    },
+    {
+      "value": "U",
+      "label": "Undisturbed sample - open drive"
+    },
+    {
+      "value": "UT",
+      "label": "Thin wall open drive tube sampler"
+    },
+    {
+      "value": "W",
+      "label": "Water sample"
+    }
+  ],
+  "SCPG_TYPE": [
+    {
+      "value": "CC",
+      "label": "Conductivity cone"
+    },
+    {
+      "value": "EC",
+      "label": "Electric cone"
+    },
+    {
+      "value": "FFD",
+      "label": "Fuel fluorescence cone"
+    },
+    {
+      "value": "MC",
+      "label": "Mechanical cone"
+    },
+    {
+      "value": "MG",
+      "label": "Magnetometer Cone"
+    },
+    {
+      "value": "PC",
+      "label": "Piezo cone"
+    },
+    {
+      "value": "SC",
+      "label": "P & S-wave Seismic Cone"
+    },
+    {
+      "value": "TC",
+      "label": "Temperature cone"
+    }
+  ],
+  "SHBG_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "SHBG_TYPE": [
+    {
+      "value": "LARGE RSHEAR",
+      "label": "Large Ring shear"
+    },
+    {
+      "value": "LARGE SBOX",
+      "label": "Large Shearbox"
+    },
+    {
+      "value": "SMALL RSHEAR",
+      "label": "Small Ring shear"
+    },
+    {
+      "value": "SMALL SBOX",
+      "label": "Small Shearbox"
+    }
+  ],
+  "SUCT_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "TREG_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "TREG_TYPE": [
+    {
+      "value": "CADC",
+      "label": "Anisotropically consolidated drained compression with pwp measurement"
+    },
+    {
+      "value": "CADE",
+      "label": "Anisotropically consolidated drained extension with pwp measurement"
+    },
+    {
+      "value": "CAUC",
+      "label": "Anisotropically consolidated undrained compression with pwp measurement"
+    },
+    {
+      "value": "CAUE",
+      "label": "Anisotropically consolidated undrained extension with pwp measurement"
+    },
+    {
+      "value": "CD",
+      "label": "Consolidated drained (single stage)"
+    },
+    {
+      "value": "CDM",
+      "label": "Consolidated drained (multi-stage)"
+    },
+    {
+      "value": "CIDC",
+      "label": "Isotropically consolidated drained compression with pwp measurement"
+    },
+    {
+      "value": "CIDE",
+      "label": "Isotropically consolidated drained extension with pwp measurement"
+    },
+    {
+      "value": "CIUC",
+      "label": "Isotropically consolidated undrained compression with pwp measurement"
+    },
+    {
+      "value": "CIUCM",
+      "label": "Isotropically consolidated undrained compression with pwp measurement (multi-stage)"
+    },
+    {
+      "value": "CU",
+      "label": "Consolidated undrained with pwp measurement (single stage)"
+    },
+    {
+      "value": "CUM",
+      "label": "Consolidated undrained with pwp measurement (multi-stage)"
+    },
+    {
+      "value": "UUP",
+      "label": "Unconsolidated undrained with pwp measurement"
+    }
+  ],
+  "TRET_MODE": [
+    {
+      "value": "Brittle",
+      "label": "Brittle"
+    }
+  ],
+  "TRIG_COND": [
+    {
+      "value": "REMOULDED",
+      "label": "Remoulded"
+    },
+    {
+      "value": "UNDISTURBED",
+      "label": "Undisturbed"
+    }
+  ],
+  "TRIG_TYPE": [
+    {
+      "value": "UNC",
+      "label": "Unconfined Compressive test"
+    },
+    {
+      "value": "UU",
+      "label": "Unconsolidated quick undrained (single stage)"
+    },
+    {
+      "value": "UUM",
+      "label": "Unconsolidated quick undrained (multi-stage)"
+    }
+  ],
+  "TRIT_MODE": [
+    {
+      "value": "Brittle",
+      "label": "Brittle"
+    }
+  ],
+  "WETH_SCH": [
+    {
+      "value": "BS 5930: 2015 AMEND 1",
+      "label": "BS 5930: 2015 AMEND 1"
+    },
+    {
+      "value": "BS 5930:1999 AMEND 1",
+      "label": "BS 5930:1999 Amendment 1"
+    },
+    {
+      "value": "BS 5930:1999 PRE AMEND 1",
+      "label": "BS 5930:1999 Pre Amendment 1"
+    },
+    {
+      "value": "BS 5930:2015",
+      "label": "BS 5930:2015"
+    },
+    {
+      "value": "BS EN ISO 14689-1:2003",
+      "label": "BS EN ISO 14689-1:2003"
+    },
+    {
+      "value": "BS5930: 2010 AMEND 2",
+      "label": "BS5930: 2010 Amendment 2"
+    },
+    {
+      "value": "CHANDLER APTED LC",
+      "label": "Chandler and Apted London Clay"
+    },
+    {
+      "value": "CHANDLER MERCIA",
+      "label": "Chandler Mercia Mudstone Weathering Grades"
+    },
+    {
+      "value": "CIRIA CHALK",
+      "label": "CIRIA chalk weathering system"
+    },
+    {
+      "value": "CIRIA MERCIA",
+      "label": "CIRIA C570 Simplified scheme for Mercia  Mudstone"
+    },
+    {
+      "value": "GEO3",
+      "label": "Geoguide 3"
+    },
+    {
+      "value": "ISRM",
+      "label": "ISRM"
+    },
+    {
+      "value": "MUNDFORD",
+      "label": "Mundford chalk weathering scale"
+    }
+  ],
+  "WETH_SYS": [
+    {
+      "value": "MASS CLASS",
+      "label": "Rock Mass Weathering Classification"
+    },
+    {
+      "value": "MASS GRADE",
+      "label": "Rock Mass Weathering Grade"
+    },
+    {
+      "value": "MASS ZONE",
+      "label": "Rock Mass Weathering Zone"
+    },
+    {
+      "value": "MAT CLASS",
+      "label": "Material Weathering Classification"
+    },
+    {
+      "value": "MAT GRADE",
+      "label": "Material Weathering Grade"
+    }
+  ],
+  "WGPG_TOOL": [
+    {
+      "value": "ABI",
+      "label": "Acoustic Borehole Imager"
+    },
+    {
+      "value": "BDEV",
+      "label": "Borehole Deviation"
+    },
+    {
+      "value": "BT",
+      "label": "Borehole Temperature"
+    },
+    {
+      "value": "CAL3",
+      "label": "Three arm Caliper"
+    },
+    {
+      "value": "CAL4",
+      "label": "Four Arm Caliper"
+    },
+    {
+      "value": "CALX-Y",
+      "label": "Caliper X-Y (2 x two arm Caliper)"
+    },
+    {
+      "value": "DFEL",
+      "label": "Dual Focused Resistivity"
+    },
+    {
+      "value": "DIEL",
+      "label": "Dual Induction"
+    },
+    {
+      "value": "DMR",
+      "label": "Downhole Magnetic Resonance"
+    },
+    {
+      "value": "ELOG",
+      "label": "Normal Resistivity"
+    },
+    {
+      "value": "FC",
+      "label": "Fluid Conductivity"
+    },
+    {
+      "value": "FWS",
+      "label": "Full Waveform Sonic"
+    },
+    {
+      "value": "GGD",
+      "label": "Dual Gamma Density"
+    },
+    {
+      "value": "HPFL",
+      "label": "Heat Pulse Flowmeter"
+    },
+    {
+      "value": "IPFL",
+      "label": "Impeller/Spinner Flowmeter"
+    },
+    {
+      "value": "MSUS",
+      "label": "Magnetic Susceptibility"
+    },
+    {
+      "value": "NGR",
+      "label": "Natural Gamma"
+    },
+    {
+      "value": "NTR",
+      "label": "Dual Neutron"
+    },
+    {
+      "value": "OBI",
+      "label": "Optical Borehole Imager"
+    },
+    {
+      "value": "PSL",
+      "label": "P&S Wave Suspension Logger"
+    },
+    {
+      "value": "SGR",
+      "label": "Spectral Gamma"
+    }
+  ],
+  "WGPT_CAS": [
+    {
+      "value": "OH",
+      "label": "Open hole"
+    },
+    {
+      "value": "PVCG",
+      "label": "PVC grouted"
+    },
+    {
+      "value": "PVCU",
+      "label": "PVC ungrouted"
+    },
+    {
+      "value": "SLOT",
+      "label": "Slotted casing"
+    },
+    {
+      "value": "STCG",
+      "label": "Steel cased grouted"
+    },
+    {
+      "value": "STCU",
+      "label": "Steel cased ungrouted"
     }
   ],
   "WGPT_PARA": [
@@ -11757,992 +12743,6 @@
     {
       "value": "SGR-UC",
       "label": "Spectral Gamma - Uranium Concentration"
-    }
-  ],
-  "RPLT_PLTF": [
-    {
-      "value": "A",
-      "label": "Axial"
-    },
-    {
-      "value": "B",
-      "label": "Block"
-    },
-    {
-      "value": "D",
-      "label": "Diametral"
-    },
-    {
-      "value": "I",
-      "label": "Irregular lump"
-    },
-    {
-      "value": "L",
-      "label": "Parallel to planes of weakness"
-    },
-    {
-      "value": "P",
-      "label": "Perpendicular to planes of weakness"
-    },
-    {
-      "value": "U",
-      "label": "Unknown"
-    }
-  ],
-  "RSCH_EXCV": [
-    {
-      "value": "BLASTING",
-      "label": "Blasting"
-    },
-    {
-      "value": "BORING",
-      "label": "Boring"
-    },
-    {
-      "value": "RIP",
-      "label": "Ripping"
-    },
-    {
-      "value": "SPLIT",
-      "label": "Mechanical Splitting"
-    }
-  ],
-  "SCPG_TYPE": [
-    {
-      "value": "CC",
-      "label": "Conductivity cone"
-    },
-    {
-      "value": "EC",
-      "label": "Electric cone"
-    },
-    {
-      "value": "FFD",
-      "label": "Fuel fluorescence cone"
-    },
-    {
-      "value": "MC",
-      "label": "Mechanical cone"
-    },
-    {
-      "value": "MG",
-      "label": "Magnetometer Cone"
-    },
-    {
-      "value": "PC",
-      "label": "Piezo cone"
-    },
-    {
-      "value": "SC",
-      "label": "P & S-wave Seismic Cone"
-    },
-    {
-      "value": "TC",
-      "label": "Temperature cone"
-    }
-  ],
-  "LOCA_TYPE": [
-    {
-      "value": "ABS",
-      "label": "Automatic Ballast Sampler"
-    },
-    {
-      "value": "AUGH",
-      "label": "Hollow Stem Auger"
-    },
-    {
-      "value": "AUGS",
-      "label": "Solid Stem Auger"
-    },
-    {
-      "value": "CC",
-      "label": "Concrete core"
-    },
-    {
-      "value": "CH",
-      "label": "Slope surface protection stripping"
-    },
-    {
-      "value": "CP",
-      "label": "Cable percussion (shell and auger)"
-    },
-    {
-      "value": "DCP",
-      "label": "Dynamic cone penetrometer"
-    },
-    {
-      "value": "DP",
-      "label": "Dynamic probe sampling"
-    },
-    {
-      "value": "DS",
-      "label": "Dynamic Sampler"
-    },
-    {
-      "value": "EH",
-      "label": "Exploratory Hole"
-    },
-    {
-      "value": "EXP",
-      "label": "Logged exposure"
-    },
-    {
-      "value": "GC",
-      "label": "Gravity Core"
-    },
-    {
-      "value": "GCOP",
-      "label": "GCO probe"
-    },
-    {
-      "value": "HA",
-      "label": "Hand Auger"
-    },
-    {
-      "value": "ICBR",
-      "label": "In situ CBR test"
-    },
-    {
-      "value": "IDEN",
-      "label": "In situ density test"
-    },
-    {
-      "value": "IJ",
-      "label": "Injection Point"
-    },
-    {
-      "value": "INST",
-      "label": "instrument"
-    },
-    {
-      "value": "IP",
-      "label": "Inspection pit"
-    },
-    {
-      "value": "IPLT",
-      "label": "In situ plate loading test"
-    },
-    {
-      "value": "IRDX",
-      "label": "In situ redox test"
-    },
-    {
-      "value": "IRES",
-      "label": "In situ resistivity"
-    },
-    {
-      "value": "IVAN",
-      "label": "In situ vane test"
-    },
-    {
-      "value": "LSW",
-      "label": "Landfill Spike/Pin Well"
-    },
-    {
-      "value": "MSTP",
-      "label": "Mostap sampling position"
-    },
-    {
-      "value": "OP",
-      "label": "Observation pit/trench"
-    },
-    {
-      "value": "PC",
-      "label": "Pavement core"
-    },
-    {
-      "value": "PM",
-      "label": "Pressuremeter test hole"
-    },
-    {
-      "value": "PPR",
-      "label": "Peat probe"
-    },
-    {
-      "value": "RC",
-      "label": "Rotary cored"
-    },
-    {
-      "value": "RCG",
-      "label": "Rotary drilling in common ground"
-    },
-    {
-      "value": "RO",
-      "label": "Rotary open hole"
-    },
-    {
-      "value": "RPC",
-      "label": "Russian Peat Corer"
-    },
-    {
-      "value": "SCP",
-      "label": "Static cone penetrometer"
-    },
-    {
-      "value": "SH",
-      "label": "Shaft"
-    },
-    {
-      "value": "SL",
-      "label": "Sampling Location"
-    },
-    {
-      "value": "SLDW",
-      "label": "Sampling Location - Drinking water"
-    },
-    {
-      "value": "SLSP",
-      "label": "Sampling Location - Stockpile"
-    },
-    {
-      "value": "SLSW",
-      "label": "Sampling Location - Surface water"
-    },
-    {
-      "value": "SNC",
-      "label": "Sonic core drilling"
-    },
-    {
-      "value": "SPR",
-      "label": "Bioremediation spray location"
-    },
-    {
-      "value": "STC",
-      "label": "Structure Coring"
-    },
-    {
-      "value": "TMP",
-      "label": "Tidal Monitoring Point"
-    },
-    {
-      "value": "TP",
-      "label": "Trial pit/trench"
-    },
-    {
-      "value": "TRAV",
-      "label": "Linear logging traverse or scanline survey"
-    },
-    {
-      "value": "TT",
-      "label": "Trial trench"
-    },
-    {
-      "value": "VC",
-      "label": "Vibrocore"
-    },
-    {
-      "value": "VE",
-      "label": "Vacuum Excavation"
-    },
-    {
-      "value": "W",
-      "label": "Wash boring"
-    },
-    {
-      "value": "WLS",
-      "label": "Dynamic (windowless) sampler"
-    },
-    {
-      "value": "WP",
-      "label": "Wellpoint"
-    },
-    {
-      "value": "WS",
-      "label": "Window Sampler"
-    }
-  ],
-  "RESG_COND": [
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "LLPL_TYPE": [
-    {
-      "value": "CASAGRANDE",
-      "label": "Casagrande"
-    },
-    {
-      "value": "FALL CONE",
-      "label": "Fall cone"
-    }
-  ],
-  "TRIG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "ERES_RTCD": [
-    {
-      "value": "IC",
-      "label": "Spiked compound"
-    },
-    {
-      "value": "IS",
-      "label": "Internal Standards"
-    },
-    {
-      "value": "SUR",
-      "label": "Surrogate"
-    },
-    {
-      "value": "TIC",
-      "label": "Tentatively identified compound"
-    },
-    {
-      "value": "TRG",
-      "label": "Target"
-    }
-  ],
-  "FGHG_TYPE": [
-    {
-      "value": "CONSTANT FLOW RATE",
-      "label": "Constant Flow Rate Test"
-    },
-    {
-      "value": "CONSTANT HEAD",
-      "label": "Constant Head"
-    },
-    {
-      "value": "CONSTANT HEAD (NEGATIVE)",
-      "label": "Constant Head Test with water abstraction"
-    },
-    {
-      "value": "CONSTANT HEAD (POSITIVE)",
-      "label": "Constant Head Test with water injection"
-    },
-    {
-      "value": "FALLING HEAD",
-      "label": "Falling Head"
-    },
-    {
-      "value": "RISING HEAD",
-      "label": "Rising Head"
-    },
-    {
-      "value": "WATER PRESSURE",
-      "label": "Water Pressure Test"
-    }
-  ],
-  "WGPG_TOOL": [
-    {
-      "value": "ABI",
-      "label": "Acoustic Borehole Imager"
-    },
-    {
-      "value": "BDEV",
-      "label": "Borehole Deviation"
-    },
-    {
-      "value": "BT",
-      "label": "Borehole Temperature"
-    },
-    {
-      "value": "CAL3",
-      "label": "Three arm Caliper"
-    },
-    {
-      "value": "CAL4",
-      "label": "Four Arm Caliper"
-    },
-    {
-      "value": "CALX-Y",
-      "label": "Caliper X-Y (2 x two arm Caliper)"
-    },
-    {
-      "value": "DFEL",
-      "label": "Dual Focused Resistivity"
-    },
-    {
-      "value": "DIEL",
-      "label": "Dual Induction"
-    },
-    {
-      "value": "DMR",
-      "label": "Downhole Magnetic Resonance"
-    },
-    {
-      "value": "ELOG",
-      "label": "Normal Resistivity"
-    },
-    {
-      "value": "FC",
-      "label": "Fluid Conductivity"
-    },
-    {
-      "value": "FWS",
-      "label": "Full Waveform Sonic"
-    },
-    {
-      "value": "GGD",
-      "label": "Dual Gamma Density"
-    },
-    {
-      "value": "HPFL",
-      "label": "Heat Pulse Flowmeter"
-    },
-    {
-      "value": "IPFL",
-      "label": "Impeller/Spinner Flowmeter"
-    },
-    {
-      "value": "MSUS",
-      "label": "Magnetic Susceptibility"
-    },
-    {
-      "value": "NGR",
-      "label": "Natural Gamma"
-    },
-    {
-      "value": "NTR",
-      "label": "Dual Neutron"
-    },
-    {
-      "value": "OBI",
-      "label": "Optical Borehole Imager"
-    },
-    {
-      "value": "PSL",
-      "label": "P&S Wave Suspension Logger"
-    },
-    {
-      "value": "SGR",
-      "label": "Spectral Gamma"
-    }
-  ],
-  "IRES_TYPE": [
-    {
-      "value": "DPDP",
-      "label": "Dipole-dipole array"
-    },
-    {
-      "value": "OWEN",
-      "label": "Offset-Wenner array"
-    },
-    {
-      "value": "SCHL",
-      "label": "Schlumberger array"
-    },
-    {
-      "value": "SQA",
-      "label": "Square array"
-    },
-    {
-      "value": "WEN",
-      "label": "Wenner array"
-    }
-  ],
-  "IPRG_TYPE": [
-    {
-      "value": "Constant Flow Rate",
-      "label": "Constant Flow Rate test"
-    },
-    {
-      "value": "Constant Head",
-      "label": "Constant Head"
-    },
-    {
-      "value": "Falling Head",
-      "label": "Falling Head"
-    },
-    {
-      "value": "Packer test",
-      "label": "Single or Multistage Packer Test"
-    },
-    {
-      "value": "Rising Head",
-      "label": "Rising Head"
-    },
-    {
-      "value": "Water Pressure",
-      "label": "Water Pressure test"
-    }
-  ],
-  "ESCG_TYPE": [
-    {
-      "value": "CD",
-      "label": "Consolidated Drained"
-    },
-    {
-      "value": "CDM",
-      "label": "Consolidated Drained Multistage"
-    },
-    {
-      "value": "CU",
-      "label": "Consolidated Undrained"
-    },
-    {
-      "value": "CUM",
-      "label": "Consolidated Undrained Multistage"
-    }
-  ],
-  "LLPL_POIN": [
-    {
-      "value": "FOUR",
-      "label": "Four point"
-    },
-    {
-      "value": "ONE",
-      "label": "One point"
-    }
-  ],
-  "ERES_LOCN": [
-    {
-      "value": "FIELDLAB",
-      "label": "Analysis location - field laboratory"
-    },
-    {
-      "value": "LAB",
-      "label": "Analysis location - laboratory"
-    },
-    {
-      "value": "SITE",
-      "label": "Analysis location - site"
-    }
-  ],
-  "CONG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "FLSH_TYPE": [
-    {
-      "value": "Water",
-      "label": "Water"
-    }
-  ],
-  "DICT_TYPE": [
-    {
-      "value": "GROUP",
-      "label": "Flag to indicate definition is a GROUP"
-    },
-    {
-      "value": "HEADING",
-      "label": "Flag to indicate definition is a HEADING"
-    }
-  ],
-  "ELRG_BAS": [
-    {
-      "value": "AIR",
-      "label": "Air dried"
-    },
-    {
-      "value": "DRY",
-      "label": "Dry"
-    },
-    {
-      "value": "WET",
-      "label": "Wet"
-    }
-  ],
-  "ESCG_COND": [
-    {
-      "value": "REMOULDED",
-      "label": "Remoulded"
-    },
-    {
-      "value": "UNDISTURBED",
-      "label": "Undisturbed"
-    }
-  ],
-  "CMPG_TYPE": [
-    {
-      "value": "2.5KG",
-      "label": "2.5kg"
-    },
-    {
-      "value": "4.5KG",
-      "label": "4.5kg Heavy compaction"
-    },
-    {
-      "value": "VIBRO",
-      "label": "Vibro compaction"
-    }
-  ],
-  "TREG_TYPE": [
-    {
-      "value": "CADC",
-      "label": "Anisotropically consolidated drained compression with pwp measurement"
-    },
-    {
-      "value": "CADE",
-      "label": "Anisotropically consolidated drained extension with pwp measurement"
-    },
-    {
-      "value": "CAUC",
-      "label": "Anisotropically consolidated undrained compression with pwp measurement"
-    },
-    {
-      "value": "CAUE",
-      "label": "Anisotropically consolidated undrained extension with pwp measurement"
-    },
-    {
-      "value": "CD",
-      "label": "Consolidated drained (single stage)"
-    },
-    {
-      "value": "CDM",
-      "label": "Consolidated drained (multi-stage)"
-    },
-    {
-      "value": "CIDC",
-      "label": "Isotropically consolidated drained compression with pwp measurement"
-    },
-    {
-      "value": "CIDE",
-      "label": "Isotropically consolidated drained extension with pwp measurement"
-    },
-    {
-      "value": "CIUC",
-      "label": "Isotropically consolidated undrained compression with pwp measurement"
-    },
-    {
-      "value": "CIUCM",
-      "label": "Isotropically consolidated undrained compression with pwp measurement (multi-stage)"
-    },
-    {
-      "value": "CU",
-      "label": "Consolidated undrained with pwp measurement (single stage)"
-    },
-    {
-      "value": "CUM",
-      "label": "Consolidated undrained with pwp measurement (multi-stage)"
-    },
-    {
-      "value": "UUP",
-      "label": "Unconsolidated undrained with pwp measurement"
-    }
-  ],
-  "DISC_TERM": [
-    {
-      "value": "D",
-      "label": "Terminates against another discontinuity"
-    },
-    {
-      "value": "R",
-      "label": "Terminates within rock"
-    },
-    {
-      "value": "X",
-      "label": "Extends beyond exposure"
-    }
-  ],
-  "LLPL_CONE": [
-    {
-      "value": "60g/60deg",
-      "label": "60g/60deg"
-    },
-    {
-      "value": "80g/30deg",
-      "label": "80g/30deg"
-    }
-  ],
-  "TRET_MODE": [
-    {
-      "value": "Brittle",
-      "label": "Brittle"
-    }
-  ],
-  "WETH_SCH": [
-    {
-      "value": "BS 5930: 2015 AMEND 1",
-      "label": "BS 5930: 2015 AMEND 1"
-    },
-    {
-      "value": "BS 5930:1999 AMEND 1",
-      "label": "BS 5930:1999 Amendment 1"
-    },
-    {
-      "value": "BS 5930:1999 PRE AMEND 1",
-      "label": "BS 5930:1999 Pre Amendment 1"
-    },
-    {
-      "value": "BS 5930:2015",
-      "label": "BS 5930:2015"
-    },
-    {
-      "value": "BS EN ISO 14689-1:2003",
-      "label": "BS EN ISO 14689-1:2003"
-    },
-    {
-      "value": "BS5930: 2010 AMEND 2",
-      "label": "BS5930: 2010 Amendment 2"
-    },
-    {
-      "value": "CHANDLER APTED LC",
-      "label": "Chandler and Apted London Clay"
-    },
-    {
-      "value": "CHANDLER MERCIA",
-      "label": "Chandler Mercia Mudstone Weathering Grades"
-    },
-    {
-      "value": "CIRIA CHALK",
-      "label": "CIRIA chalk weathering system"
-    },
-    {
-      "value": "CIRIA MERCIA",
-      "label": "CIRIA C570 Simplified scheme for Mercia  Mudstone"
-    },
-    {
-      "value": "GEO3",
-      "label": "Geoguide 3"
-    },
-    {
-      "value": "ISRM",
-      "label": "ISRM"
-    },
-    {
-      "value": "MUNDFORD",
-      "label": "Mundford chalk weathering scale"
-    }
-  ],
-  "PMTG_TYPE": [
-    {
-      "value": "HPD",
-      "label": "High pressure dilatometer"
-    },
-    {
-      "value": "MPM",
-      "label": "Menard type pressuremeter"
-    },
-    {
-      "value": "PIP",
-      "label": "Push-in pressuremeter"
-    },
-    {
-      "value": "SBP",
-      "label": "Self boring pressuremeter"
-    },
-    {
-      "value": "WRSBP",
-      "label": "Weak rock self boring pressuremeter"
-    }
-  ],
-  "CTRG_TYPE": [
-    {
-      "value": "CADC",
-      "label": "Consolidated Anisotropically Drained Cyclic Test"
-    },
-    {
-      "value": "CAUC",
-      "label": "Consolidated Anisotropically Undrained Cyclic Test"
-    },
-    {
-      "value": "CIDC",
-      "label": "Consolidated Isotropically Drained Cyclic Test"
-    },
-    {
-      "value": "CIUC",
-      "label": "Consolidated Isotropically Undrained Cyclic Test"
-    }
-  ],
-  "CTRD_COND": [
-    {
-      "value": "DRAINED",
-      "label": "Drained"
-    },
-    {
-      "value": "UNDRAINED",
-      "label": "Undrained"
-    }
-  ],
-  "ELRG_MATX": [
-    {
-      "value": "LIQUID",
-      "label": "Liquid"
-    },
-    {
-      "value": "PRODUCT",
-      "label": "Product"
-    },
-    {
-      "value": "SOLID",
-      "label": "Solid"
-    }
-  ],
-  "RSCH_STYP": [
-    {
-      "value": "CORE",
-      "label": "Core"
-    },
-    {
-      "value": "EXC",
-      "label": "Excavation face"
-    },
-    {
-      "value": "LFB",
-      "label": "Large field block"
-    },
-    {
-      "value": "NAT",
-      "label": "Natural exposure"
-    },
-    {
-      "value": "SB",
-      "label": "Saw-cut block"
-    }
-  ],
-  "LPDN_TYPE": [
-    {
-      "value": "GAS JAR",
-      "label": "Gas jar method"
-    },
-    {
-      "value": "LARGE PYK",
-      "label": "Large pyknometer"
-    },
-    {
-      "value": "SMALL PYK",
-      "label": "Small pyknometer"
-    },
-    {
-      "value": "WIRE BASKET",
-      "label": "Wire basket method"
-    }
-  ],
-  "IDEN_TYPE": [
-    {
-      "value": "CORE",
-      "label": "Core"
-    },
-    {
-      "value": "NUCLEAR",
-      "label": "Nuclear"
-    },
-    {
-      "value": "SAND",
-      "label": "Sand Replacement/Cone"
-    },
-    {
-      "value": "WATER",
-      "label": "Water Replacement"
-    }
-  ],
-  "CTRC_TYPE": [
-    {
-      "value": "ISOTROPIC",
-      "label": "Isotropic"
-    },
-    {
-      "value": "K0",
-      "label": "K0"
-    },
-    {
-      "value": "STRESS",
-      "label": "Stress path"
-    }
-  ],
-  "ISPT_TYPE": [
-    {
-      "value": "C",
-      "label": "Cone"
-    },
-    {
-      "value": "S",
-      "label": "Split spoon"
-    }
-  ],
-  "ERES_MATX": [
-    {
-      "value": "AUS_ACE_PH5",
-      "label": "Australian (Acetate pH 5.0) Leachate"
-    },
-    {
-      "value": "AUS_ACE_PH5_29",
-      "label": "Australian (Acetate pH 5.0/2.9) Leachate"
-    },
-    {
-      "value": "AUS_RW",
-      "label": "Australian (Reagent Water) Leachate"
-    },
-    {
-      "value": "AUS_TET_PH92",
-      "label": "Australian (Tetraborate pH 9.2) Leachate"
-    },
-    {
-      "value": "CEN_10_1_1STAGE_MGKG",
-      "label": "CEN 10-1 (1 Stage) Leachate (mg/kg)"
-    },
-    {
-      "value": "CEN_10_1_1STAGE_MGL",
-      "label": "CEN 10-1 (1 Stage) Leachate (mg/l)"
-    },
-    {
-      "value": "CEN_10_1_2STAGE_MGKG",
-      "label": "CEN 10-1 (2 Stage) Leachate (mg/kg)"
-    },
-    {
-      "value": "CEN_2_1_1STAGE_MGKG",
-      "label": "CEN 2-1 (1 Stage) Leachate (mg/kg)"
-    },
-    {
-      "value": "CEN_2_1_1STAGE_MGL",
-      "label": "CEN 2-1 (1 Stage) Leachate (mg/l)"
-    },
-    {
-      "value": "CEN_2_1_2STAGE_MGKG",
-      "label": "CEN 2-1 (2 Stage) Leachate (mg/kg)"
-    },
-    {
-      "value": "CEN_2_1_2STAGE_MGL",
-      "label": "CEN 2-1 (2 Stage) Leachate (mg/l)"
-    },
-    {
-      "value": "CEN_8_1_2STAGE_MGL",
-      "label": "CEN 8-1 (2 Stage) Leachate (mg/l)"
-    },
-    {
-      "value": "GAS",
-      "label": "Gas"
-    },
-    {
-      "value": "LIQUID",
-      "label": "Liquid"
-    },
-    {
-      "value": "NRA",
-      "label": "NRA Leachate"
-    },
-    {
-      "value": "PRODUCT",
-      "label": "Product"
-    },
-    {
-      "value": "SOLID",
-      "label": "Solid"
-    },
-    {
-      "value": "SPLP",
-      "label": "SPLP Leachate"
-    },
-    {
-      "value": "TCLP",
-      "label": "TCLP Leachate"
-    }
-  ],
-  "LVAN_TYPE": [
-    {
-      "value": "HV",
-      "label": "Hand vane"
-    },
-    {
-      "value": "LV",
-      "label": "Laboratory vane"
-    },
-    {
-      "value": "TV",
-      "label": "Torvane"
     }
   ]
 }

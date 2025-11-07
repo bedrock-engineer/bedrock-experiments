@@ -343,17 +343,17 @@ def _(ags_type_mapping, pl, v4_1_1_tables):
     return (columns_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    It's also possible to create enums from the
+    It's also possible to create enums from the ABBR table in the AGS 4 data dictionary .ags file. However, the JSON of those categories alone already contains 13k lines. Therefore, the ABBR categories are simply saved as a separate JSON.
     """)
     return
 
 
 @app.cell
-def _(pl, v4_1_1_tables):
-    ags_abbr_categories_df = (
+def _(cwd, json, pl, v4_1_1_tables):
+    abbr_df = (
         v4_1_1_tables["ABBR"]
         .select(
             pl.col("ABBR_HDNG").alias("column_name"),
@@ -361,37 +361,41 @@ def _(pl, v4_1_1_tables):
             pl.col("ABBR_DESC").alias("label"),
         )
         .group_by("column_name")
-        # .agg(pl.struct())
+        .agg(pl.struct(["value", "label"]).alias("categories"))
+        .sort("column_name")
     )
+    abbr_dict = {
+        row["column_name"]: row["categories"] for row in abbr_df.to_dicts()
+    }
     # BKFL_LEG and GEOL_LEG have integer values, the rest are string values
-    ags_abbr_categories_df
+    abbr_dict["BKFL_LEG"] = [
+        {"value": int(d["value"]), "label": d["label"]}
+        for d in abbr_dict["BKFL_LEG"]
+    ]
+    abbr_dict["GEOL_LEG"] = [
+        {"value": int(d["value"]), "label": d["label"]}
+        for d in abbr_dict["GEOL_LEG"]
+    ]
+
+    with open(cwd / "abbr_categories.json", "w") as json_f:
+        json.dump(abbr_dict, json_f, indent=2)
+
+    abbr_df
+    # abbr_dict["GEOL_LEG"]
     return
 
 
 @app.cell
-def _(columns_df, pl, tables_df):
-    tables_with_cols = (
-        tables_df.join(columns_df, on="table_name", maintain_order="left")
-        .group_by(["table_name", "description", "parent", "deprecated"])
-        .agg(
-            pl.struct(
-                pl.exclude(["table_name", "description", "parent", "group_name"])
-            ).alias("columns")
-        )
+def _(columns_df, cwd, json, pl, tables_df):
+    col_struct_df = columns_df.group_by("table_name").agg(
+        pl.struct(pl.exclude("table_name")).alias("columns")
     )
+    tables_with_cols = tables_df.join(col_struct_df, on="table_name", maintain_order="left")
+
+    with open(cwd / "data_dict_ags4.json", "w") as json_file:
+        json.dump(drop_nulls(tables_with_cols.to_dicts()), json_file, indent=2)
+
     tables_with_cols
-    return
-
-
-@app.cell
-def _(columns_df, pl):
-    columns_df.group_by("table_name").agg(pl.struct(pl.exclude("table_name")))
-    return
-
-
-@app.cell
-def _(columns_df, tables_df):
-    tables_df.join(columns_df, on="table_name", maintain_order="left")
     return
 
 
