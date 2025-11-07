@@ -162,6 +162,7 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 // Set the terrain provider to the Martini terrain provider
 console.log(terrainResource)
 viewer.terrainProvider = martiniTerrainProvider;
+console.log(martiniTerrainProvider)
 
 // Remove the Terrain section of the baseLayerPicker
 viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
