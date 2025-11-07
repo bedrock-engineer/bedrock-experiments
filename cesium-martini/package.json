@@ -14,6 +14,7 @@
   "dependencies": {
     "@macrostrat/cesium-martini": "^1.5.3",
     "cesium": "^1.135.0",
+    "ndarray": "^1.0.19",
     "typescript": "^5.9.3",
     "vite": "^7.2.2",
     "vite-plugin-cesium": "^1.2.23"

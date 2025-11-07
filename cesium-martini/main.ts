@@ -12,7 +12,8 @@ Cesium.Ion.defaultAccessToken = null;
 const mapboxAccessToken = import.meta.env.MAPBOX_API_TOKEN;
 
 // ----- Terrain Provider -----
-const terrainProvider = new MapboxTerrainProvider({
+// Create the Mapbox Martini Terrain Provider
+const mapboxTerrainProvider = new MapboxTerrainProvider({
   requestVertexNormals: false,
   requestWaterMask: false,
   accessToken: mapboxAccessToken,
@@ -20,6 +21,30 @@ const terrainProvider = new MapboxTerrainProvider({
   skipZoomLevels(z: number) {
     return z % 3 != 0;
   },
+});
+
+// Create Mapterhorn Martini Terrain Provider
+const mapterhornWorker = new Worker(
+  new URL("./mapterhorn.worker", import.meta.url),
+  { type: "module" },
+);
+
+const mapterhornTerrainResource = new DefaultHeightmapResource({
+  url: "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+//   skipOddLevels: true,
+  maxZoom: 12,
+});
+
+// Terrarium format utilises a different encoding scheme to Mapbox Terrain-RGB
+// See also QGIS XYZ-Tiles options
+const terrainDecoder = new WorkerFarmTerrainDecoder({
+  worker: mapterhornWorker,
+});
+
+// Construct terrain provider with Mapzen datasource and custom RGB decoding
+const mapterhornTerrainProvider = new MartiniTerrainProvider({
+  resource: mapterhornTerrainResource,
+  decoder: terrainDecoder,
 });
 
 // ----- Imagery Basemap Tile Providers -----
@@ -78,7 +103,11 @@ imageryViewModels.push(
 
 // ----- Initialize & Configure CesiumJS Viewer -----
 const viewer = new Cesium.Viewer("cesium-container", {
-  terrainProvider,
+  terrainProvider: mapboxTerrainProvider,
+  // terrainProvider: mapterhornTerrainProvider,
+  // Should also be possible to add both terrain providers to the baseLayerPicker.
+  // However, that requires me to create ProviderViewModels for the terrain providers
+  // terrainProviderViewModels: [mapboxTerrainProvider, mapterhornTerrainProvider],
   imageryProviderViewModels: imageryViewModels,
   selectedImageryProviderViewModel: imageryViewModels[0],
   animation: false,
@@ -89,7 +118,7 @@ const viewer = new Cesium.Viewer("cesium-container", {
   selectionIndicator: false,
 });
 
-// Remove the Terrain section of the baseLayerPicker
+// Remove the Terrain section from the baseLayerPicker
 viewer.baseLayerPicker.viewModel.terrainProviderViewModels = [];
 
 // Configure globe for underground visualization
@@ -99,11 +128,11 @@ const { globe } = viewer.scene;
 globe.translucency.enabled = true;
 globe.depthTestAgainstTerrain = true;
 globe.translucency.frontFaceAlpha = initAlpha;
-globe.undergroundColor = Cesium.Color.fromCssColorString("#e8e4e0"); // Solid color to block view to opposite side of globe
-globe.translucency.backFaceAlpha = 1.0; // Keep back face opaque so we don't see the opposite side of the globe
-
+// Solid color to block view to opposite side of globe
+globe.undergroundColor = Cesium.Color.fromCssColorString("#e8e4e0");
+// Keep back face opaque so we don't see the opposite side of the globe
+globe.translucency.backFaceAlpha = 1.0;
 // So we can move the camera below the surface
 viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
-
 // Limit how far out the camera can zoom (in meters)
 viewer.scene.screenSpaceCameraController.maximumZoomDistance = 50000;
