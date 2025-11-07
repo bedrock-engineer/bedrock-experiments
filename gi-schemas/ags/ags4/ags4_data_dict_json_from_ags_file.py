@@ -62,6 +62,7 @@ def _(cwd):
 def _(cwd, mo, pl):
     from python_ags4 import AGS4
 
+    # It would be possible to iterate over `ags4_dd_files[1:]` to obtain these AGS4 GIDBs
     v4_0_4_groups, _ = AGS4.AGS4_to_dataframe(cwd / "Standard_dictionary_v4_0_4.ags")
     v4_0_4_tables = {}
     for group, df in v4_0_4_groups.items():
@@ -215,9 +216,9 @@ def _(pl, v4_1_1_tables):
             pl.col("DICT_DESC").alias("description"),
             pl.col("DICT_PGRP").alias("parent"),
             pl.when(pl.col("DICT_STAT") == "DEPRECATED")
-              .then(True)
-              .otherwise(None)
-              .alias("deprecated")
+            .then(True)
+            .otherwise(None)
+            .alias("deprecated"),
         )
     )
     tables_df
@@ -255,55 +256,57 @@ def _(mo):
 @app.cell
 def _(cwd, json, pl, v4_1_1_tables):
     ags_units_df = v4_1_1_tables["UNIT"].select(
-            pl.col("UNIT_UNIT").alias("ags_unit"),
-            pl.col("UNIT_DESC").alias("ags_unit_description"),
+        pl.col("UNIT_UNIT").alias("ags_unit"),
+        pl.col("UNIT_DESC").alias("ags_unit_description"),
     )
-    ags_units_df.write_csv(cwd / "ags4_units.csv")
+    ags_units_df.write_csv(cwd / "units_ags4.csv")
 
     ags_types_df = v4_1_1_tables["TYPE"].select(
-            pl.col("TYPE_TYPE").alias("ags_type"),
-            pl.col("TYPE_DESC").alias("ags_type_description"),
+        pl.col("TYPE_TYPE").alias("ags_type"),
+        pl.col("TYPE_DESC").alias("ags_type_description"),
     )
 
-    ags_type_mapping = pl.DataFrame([
-        {"ags_type": "0DP", "type": "integer"},
-        {"ags_type": "0SCI", "type": "number"},
-        {"ags_type": "1DP", "type": "number"},
-        {"ags_type": "1SCI", "type": "number"},
-        {"ags_type": "1SF", "type": "number"},
-        {"ags_type": "2DP", "type": "number"},
-        {"ags_type": "2SCI", "type": "number"},
-        {"ags_type": "2SF", "type": "number"},
-        {"ags_type": "3DP", "type": "number"},
-        {"ags_type": "3SCI", "type": "number"},
-        {"ags_type": "3SF", "type": "number"},
-        {"ags_type": "4DP", "type": "number"},
-        {"ags_type": "4SCI", "type": "number"},
-        {"ags_type": "4SF", "type": "number"},
-        {"ags_type": "DMS", "type": "string"},
-        {"ags_type": "DT", "type": "string", "format": "date-time"},
-        {"ags_type": "ID", "type": "string"},
-        {"ags_type": "MC", "type": "number"},
-        {"ags_type": "PA", "type": "string"},
-        {
-            "ags_type": "PT",
-            "type": "string",
-            "enum": ags_types_df["ags_type"].to_list(),
-        },
-        {
-            "ags_type": "PU",
-            "type": "string",
-            "enum": ags_units_df["ags_unit"].to_list(),
-        },
-        {"ags_type": "RL", "type": "string"},
-        {"ags_type": "T", "type": "string", "format": "duration"},
-        {"ags_type": "U", "type": "string"},
-        {"ags_type": "X", "type": "string"},
-        {"ags_type": "XN", "type": "string"},
-        {"ags_type": "YN", "type": "boolean"},
-    ]).join(ags_types_df, on="ags_type")
+    ags_type_mapping = pl.DataFrame(
+        [
+            {"ags_type": "0DP", "type": "integer"},
+            {"ags_type": "0SCI", "type": "number"},
+            {"ags_type": "1DP", "type": "number"},
+            {"ags_type": "1SCI", "type": "number"},
+            {"ags_type": "1SF", "type": "number"},
+            {"ags_type": "2DP", "type": "number"},
+            {"ags_type": "2SCI", "type": "number"},
+            {"ags_type": "2SF", "type": "number"},
+            {"ags_type": "3DP", "type": "number"},
+            {"ags_type": "3SCI", "type": "number"},
+            {"ags_type": "3SF", "type": "number"},
+            {"ags_type": "4DP", "type": "number"},
+            {"ags_type": "4SCI", "type": "number"},
+            {"ags_type": "4SF", "type": "number"},
+            {"ags_type": "DMS", "type": "string"},
+            {"ags_type": "DT", "type": "string", "format": "date-time"},
+            {"ags_type": "ID", "type": "string"},
+            {"ags_type": "MC", "type": "number"},
+            {"ags_type": "PA", "type": "string"},
+            {
+                "ags_type": "PT",
+                "type": "string",
+                "enum": ags_types_df["ags_type"].to_list(),
+            },
+            {
+                "ags_type": "PU",
+                "type": "string",
+                "enum": ags_units_df["ags_unit"].to_list(),
+            },
+            {"ags_type": "RL", "type": "string"},
+            {"ags_type": "T", "type": "string", "format": "duration"},
+            {"ags_type": "U", "type": "string"},
+            {"ags_type": "X", "type": "string"},
+            {"ags_type": "XN", "type": "string"},
+            {"ags_type": "YN", "type": "boolean"},
+        ]
+    ).join(ags_types_df, on="ags_type")
 
-    with open(cwd / "ags4_types.json", "w") as f:
+    with open(cwd / "types_ags4.json", "w") as f:
         json.dump(drop_nulls(ags_type_mapping.to_dicts()), f, indent=2)
 
     ags_type_mapping
@@ -370,7 +373,11 @@ def _(columns_df, pl, tables_df):
     tables_with_cols = (
         tables_df.join(columns_df, on="table_name", maintain_order="left")
         .group_by(["table_name", "description", "parent", "deprecated"])
-        .agg(pl.struct(pl.exclude(["table_name", "description", "parent", "group_name"])).alias("columns"))
+        .agg(
+            pl.struct(
+                pl.exclude(["table_name", "description", "parent", "group_name"])
+            ).alias("columns")
+        )
     )
     tables_with_cols
     return

@@ -39,7 +39,6 @@ def _():
             )
         return groups
 
-
     def extract_ags3_headings_table(table):
         headings = []
         for row in table[2:]:  # Skip first 2 rows: 1st = title, 2nd = headings
@@ -47,9 +46,7 @@ def _():
                 {
                     "status": None if row[0] == "" else row[0].strip(),
                     "heading": row[1].strip(),
-                    "unit": None
-                    if row[2] == ""
-                    else row[2].strip().replace("\n", " "),
+                    "unit": None if row[2] == "" else row[2].strip().replace("\n", " "),
                     "description": row[3].strip().replace("\n", " "),
                     "example": None
                     if row[4] == ""
@@ -57,7 +54,6 @@ def _():
                 }
             )
         return headings
-
 
     def extract_ags4_groups_table(table):
         groups = []
@@ -74,7 +70,6 @@ def _():
             )
         return groups
 
-
     def extract_ags4_headings_table(table):
         # Skip rows that don't contain data
         for i, row in enumerate(table):
@@ -89,9 +84,7 @@ def _():
                 {
                     "status": None if row[0] == "" else row[0].strip(),
                     "heading": row[1].strip(),
-                    "unit": None
-                    if row[2] == ""
-                    else row[2].strip().replace("\n", ""),
+                    "unit": None if row[2] == "" else row[2].strip().replace("\n", ""),
                     "type": row[3].strip(),
                     "description": row[4].strip().replace("\n", " "),
                     "example": None
@@ -100,6 +93,7 @@ def _():
                 }
             )
         return headings
+
     return (
         extract_ags3_groups_table,
         extract_ags3_headings_table,
@@ -122,14 +116,14 @@ def _(
     data_dictionaries = {
         "ags3": {
             "pdf": {
-                "file_path": cwd / "AGS3_v3-1-2005.pdf",
+                "file_path": cwd / "ags3" / "AGS3_v3-1-2005.pdf",
                 "groups": {"from_page": 19, "to_page": 21},
                 "headings": {"from_page": 22, "to_page": 69},
             }
         },
         "ags4": {
             "pdf": {
-                "file_path": cwd / "AGS4-v4-1-1-2022.pdf",
+                "file_path": cwd / "ags4" / "AGS4-v4-1-1-2022.pdf",
                 "groups": {"from_page": 13, "to_page": 18},
                 "headings": {"from_page": 18, "to_page": 160},
             }
@@ -153,7 +147,7 @@ def _(
                     elif ags_version == "ags4":
                         # The first page with an AGS 4 group table contains
                         # another table we're not interested in.
-                        if table[0][1] == 'Type':
+                        if table[0][1] == "Type":
                             continue
                         groups = extract_ags4_groups_table(table)
 
@@ -231,7 +225,7 @@ def _(cwd, data_dictionaries, json):
         data_dict = data_dict["headings"]
 
         # Compare the extracted group names with group names that were extracted manually from the PDFs
-        with open(cwd / f"{ags_v}_manually_extracted_groups.json", "r") as f:
+        with open(cwd / ags_v / f"manually_extracted_groups_{ags_v}.json", "r") as f:
             manual_groups = json.load(f)
 
         # groups_from_headings = [d["group_name"] for d in data_dict]
@@ -258,7 +252,7 @@ def _(cwd, data_dictionaries, json):
     # Save the extracted data dictionaries to a JSON files
     for ags_ver, headings_df in data_dictionaries.items():
         headings_df = headings_df["headings"]
-        with open(cwd / f"{ags_ver}_pdf_data_dict.json", "w") as json_file:
+        with open(cwd / ags_ver / f"pdf_data_dict_{ags_ver}.json", "w") as json_file:
             json.dump(drop_nulls(headings_df.to_dicts()), json_file, indent=2)
     return
 
