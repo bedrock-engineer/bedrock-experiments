@@ -17,3 +17,7 @@ dependencies = [
     "pyzmq>=27.1.0",
     "striplog>=0.9.2",
 ]
+
+[[tool.mypy.overrides]]
+module = "python_ags4.*"
+ignore_missing_imports = true
