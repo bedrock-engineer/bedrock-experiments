@@ -10,10 +10,11 @@ def _():
 
     import marimo as mo
     import pdfplumber
+    import polars as pl
 
     cwd = mo.notebook_location()
     cwd
-    return cwd, json, mo, pdfplumber
+    return cwd, json, mo, pdfplumber, pl
 
 
 @app.cell
@@ -26,22 +27,55 @@ def _(mo):
 
 @app.cell
 def _():
-    def extract_ags3_data_dict_table(table):
+    def extract_ags3_groups_table(table):
+        groups = []
+        for row in table[1:]:
+            groups.append(
+                {
+                    "group_name": row[0].strip(),
+                    "group_description": row[3].strip().replace("\n", " "),
+                    "parent_group": row[6].strip(),
+                }
+            )
+        return groups
+
+
+    def extract_ags3_headings_table(table):
         headings = []
         for row in table[2:]:  # Skip first 2 rows: 1st = title, 2nd = headings
             headings.append(
                 {
                     "status": None if row[0] == "" else row[0].strip(),
                     "heading": row[1].strip(),
-                    "unit": None if row[2] == "" else row[2].strip().replace("\n", " "),
+                    "unit": None
+                    if row[2] == ""
+                    else row[2].strip().replace("\n", " "),
                     "description": row[3].strip().replace("\n", " "),
-                    "example": None if row[4] == "" else row[4].strip().replace("\n", " "),
+                    "example": None
+                    if row[4] == ""
+                    else row[4].strip().replace("\n", " "),
                 }
             )
         return headings
 
 
-    def extract_ags4_data_dict_table(table):
+    def extract_ags4_groups_table(table):
+        groups = []
+        for row in table[2:]:
+            groups.append(
+                {
+                    "group_name": row[0].strip(),
+                    "group_description": row[2].strip().replace("\n", " "),
+                    "group_notes": None
+                    if row[3] == "" or row[3] == None
+                    else row[3].strip().replace("\n", " "),
+                    "parent_group": row[-2].strip(),
+                }
+            )
+        return groups
+
+
+    def extract_ags4_headings_table(table):
         # Skip rows that don't contain data
         for i, row in enumerate(table):
             if "Suggested\nUnit / Type" in row or "Unit / Type" in row:
@@ -55,72 +89,115 @@ def _():
                 {
                     "status": None if row[0] == "" else row[0].strip(),
                     "heading": row[1].strip(),
-                    "unit": None if row[2] == "" else row[2].strip().replace("\n", ""),
+                    "unit": None
+                    if row[2] == ""
+                    else row[2].strip().replace("\n", ""),
                     "type": row[3].strip(),
                     "description": row[4].strip().replace("\n", " "),
-                    "example": None if row[5] == "" else row[5].strip().replace("\n", " "),
+                    "example": None
+                    if row[5] == ""
+                    else row[5].strip().replace("\n", " "),
                 }
             )
         return headings
-    return extract_ags3_data_dict_table, extract_ags4_data_dict_table
+    return extract_ags3_groups_table, extract_ags4_groups_table
 
 
 @app.cell
-def _(
-    cwd,
-    extract_ags3_data_dict_table,
-    extract_ags4_data_dict_table,
-    pdfplumber,
-):
+def _(cwd, extract_ags3_groups_table, extract_ags4_groups_table, pdfplumber):
+    # Adjust the page range based on where the tables are located in the pdfs
     data_dictionaries = {
-        "ags3": {"pdf_file": cwd / "AGS3_v3-1-2005.pdf", "from_page": 22, "to_page": 69},
-        "ags4": {"pdf_file": cwd / "AGS4-v4-1-1-2022.pdf", "from_page": 18, "to_page": 160},
+        "ags3": {
+            "pdf": {
+                "file_path": cwd / "AGS3_v3-1-2005.pdf",
+                "groups": {"from_page": 19, "to_page": 21},
+                "headings": {"from_page": 22, "to_page": 69},
+            }
+        },
+        "ags4": {
+            "pdf": {
+                "file_path": cwd / "AGS4-v4-1-1-2022.pdf",
+                "groups": {"from_page": 13, "to_page": 18},
+                "headings": {"from_page": 18, "to_page": 160},
+            }
+        },
     }
 
     for ags_version, pdf_extraction_info in data_dictionaries.items():
-        pdf_file, from_page, to_page = pdf_extraction_info.values()
-
-        # List to store extracted data for each group
-        extracted_data = []
-        previous_group_name = ""
-        with pdfplumber.open(pdf_file) as pdf:
-            # Adjust the page range based on where the tables are located
+        extracted_groups = []
+        extracted_headings = []
+        with pdfplumber.open(pdf_extraction_info["pdf"]["file_path"]) as pdf:
+            # Extract groups
+            from_page = pdf_extraction_info["pdf"]["groups"]["from_page"]
+            to_page = pdf_extraction_info["pdf"]["groups"]["to_page"]
             for page_number in range(from_page, to_page):
-                page = pdf.pages[page_number - 1]  # pdfplumber is 0-based, so subtract 1
-                tables_on_current_page = page.extract_tables()  # Extract tables from the page
-
-                # Iterate through all tables found on the page
+                # pdfplumber is 0-based, so subtract 1
+                page = pdf.pages[page_number - 1]
+                tables_on_current_page = page.extract_tables()
                 for table in tables_on_current_page:
                     if ags_version == "ags3":
-                        table_title = table[0][0].strip()  # Get table title from AGS3
+                        groups = extract_ags3_groups_table(table)
                     elif ags_version == "ags4":
-                        table_title = table[0][1].strip()  # Get table title from AGS4
-                    print(table_title)
+                        # The first page with an AGS 4 group table contains
+                        # another table we're not interested in.
+                        if table[0][1] == 'Type':
+                            continue
+                        groups = extract_ags4_groups_table(table)
+                
+                    extracted_groups.extend(groups)
 
-                    parts = table_title.split(": ", 1)  # Split on the first occurrence of ': '
-                    if "Group Name" in parts[0]:
-                        group_name = parts[1].split(" - ")[0]
-                        group_description = " - ".join(parts[1].split(" - ")[1:])
-                        group_description = group_description.replace("\n", " ")
-                        if ags_version == "ags3":
-                            headings = extract_ags3_data_dict_table(table)
-                        elif ags_version == "ags4":
-                            headings = extract_ags4_data_dict_table(table)
+            # Extract headings
+        #     previous_group_name = ""
+        #     from_page = pdf_extraction_info["pdf"]["headings"]["from_page"]
+        #     to_page = pdf_extraction_info["pdf"]["headings"]["to_page"]
+        #     for page_number in range(from_page, to_page):
+        #         # pdfplumber is 0-based, so subtract 1
+        #         page = pdf.pages[page_number - 1]
+        #         tables_on_current_page = page.extract_tables()
 
-                        if group_name == previous_group_name:
-                            extracted_data[-1]["headings"].extend(headings)
-                        else:
-                            extracted_data.append(
-                                {
-                                    "group_name": group_name,
-                                    "group_description": group_description,
-                                    "headings": headings,
-                                }
-                            )
-                        previous_group_name = group_name
+        #         # Iterate through all tables found on the page
+        #         for table in tables_on_current_page:
+        #             if ags_version == "ags3":
+        #                 table_title = table[0][0].strip()
+        #             elif ags_version == "ags4":
+        #                 table_title = table[0][1].strip()
+        #             print(table_title)
 
-        data_dictionaries[ags_version]["data_dictionary"] = extracted_data
+        #             parts = table_title.split(
+        #                 ": ", 1
+        #             )  # Split on the first occurrence of ': '
+        #             if "Group Name" in parts[0]:
+        #                 group_name = parts[1].split(" - ")[0]
+        #                 group_description = " - ".join(parts[1].split(" - ")[1:])
+        #                 group_description = group_description.replace("\n", " ")
+        #                 if ags_version == "ags3":
+        #                     headings = extract_ags3_headings_table(table)
+        #                 elif ags_version == "ags4":
+        #                     headings = extract_ags4_headings_table(table)
+
+        #                 if group_name == previous_group_name:
+        #                     extracted_headings[-1]["headings"].extend(headings)
+        #                 else:
+        #                     extracted_headings.append(
+        #                         {
+        #                             "group_name": group_name,
+        #                             "group_description": group_description,
+        #                             "headings": headings,
+        #                         }
+        #                     )
+        #                 previous_group_name = group_name
+
+        data_dictionaries[ags_version]["groups"] = extracted_groups
+        # data_dictionaries[ags_version]["data_dictionary"] = extracted_headings
     return (data_dictionaries,)
+
+
+@app.cell
+def _(data_dictionaries, pl):
+    ags3_groups_df = pl.DataFrame(data_dictionaries["ags3"]["groups"])
+    ags4_groups_df = pl.DataFrame(data_dictionaries["ags4"]["groups"])
+    ags4_groups_df
+    return
 
 
 @app.cell
@@ -138,13 +215,17 @@ def _(cwd, data_dictionaries, json):
         with open(cwd / f"{ags_v}_manually_extracted_groups.json", "r") as f:
             manual_groups = json.load(f)
 
-        extracted_groups = [d["group_name"] for d in data_dict]
+        groups_from_headings = [d["group_name"] for d in data_dict]
 
-        print(f"{ags_v} groups in manually extracted groups, not in extracted groups: {set(manual_groups) - set(extracted_groups)}")
-        print(f"{ags_v} groups in extracted groups, not in manually extracted groups: {set(extracted_groups) - set(manual_groups)}")
+        print(
+            f"{ags_v} groups in manually extracted groups, not in extracted groups: {set(manual_groups) - set(groups_from_headings)}"
+        )
+        print(
+            f"{ags_v} groups in extracted groups, not in manually extracted groups: {set(groups_from_headings) - set(manual_groups)}"
+        )
 
         # Save the extracted data dictionaries to a JSON files
-        with open(cwd / f"{ags_v}_data_dict.json", "w") as json_file:
+        with open(cwd / f"{ags_v}_pdf_data_dict.json", "w") as json_file:
             json.dump(data_dict, json_file, indent=2)
     return
 
