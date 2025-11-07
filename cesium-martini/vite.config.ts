@@ -20,8 +20,10 @@ const config: UserConfig = {
     },
   },
   envPrefix: "MAPBOX_",
-  envDir: path.join(__dirname, "..", ".."),
+  envDir: path.join(__dirname, ".."),
   plugins: [cesium({ cesiumBuildPath, cesiumBuildRootPath: cesiumRoot })],
 };
+
+console.log("Vite config:", config);
 
 export default config;

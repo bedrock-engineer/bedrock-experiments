@@ -114,7 +114,7 @@ imageryViewModels.push(new Cesium.ProviderViewModel({
         url: 'http://mt.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
         credit: 'Imagery © Google',
         minimumLevel: 0,
-        maximumLevel: 16
+        maximumLevel: 19
     });
     }
 }));
@@ -161,8 +161,8 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 
 // Set the terrain provider to the Martini terrain provider
 console.log(terrainResource)
-viewer.terrainProvider = martiniTerrainProvider;
-console.log(martiniTerrainProvider)
+// viewer.terrainProvider = martiniTerrainProvider;
+// console.log(martiniTerrainProvider)
 
 // Remove the Terrain section of the baseLayerPicker
 viewer.baseLayerPicker.viewModel.terrainProviderViewModels.removeAll()
