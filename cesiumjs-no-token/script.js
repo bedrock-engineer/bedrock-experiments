@@ -148,7 +148,7 @@ const martiniTerrainProvider = new MartiniTerrainProvider({
 
 // ----------------------------------------------------------------------------
 // Initialize the viewer - this works without a token!
-const viewer = new Cesium.Viewer('cesiumContainer', {
+const viewer = new Cesium.Viewer('cesium-container', {
     imageryProviderViewModels: imageryViewModels,
     selectedImageryProviderViewModel: imageryViewModels[1],
     animation: false,
@@ -160,7 +160,7 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 });
 
 // Set the terrain provider to the Martini terrain provider
-console.log(terrainResource)
+// console.log(terrainResource)
 // viewer.terrainProvider = martiniTerrainProvider;
 // console.log(martiniTerrainProvider)
 
