@@ -1,0 +1,1829 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "0",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.494,
+        "ground_level_elevation": 0.44,
+        "elevation_at_base": 6.494,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198149",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122305.0, 488886.0, 0.44],
+          [122305.0, 488886.0, -6.053999999999999]
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.549,
+        "ground_level_elevation": 0.6,
+        "elevation_at_base": 30.549,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198175",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122270.12, 488954.14, 0.6],
+          [122270.12, 488954.14, -29.948999999999998]
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.509,
+        "ground_level_elevation": 1.82,
+        "elevation_at_base": 30.509,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198161",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121896.01, 488696.75, 1.82],
+          [121896.01, 488696.75, -28.689]
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.92,
+        "ground_level_elevation": 1.3,
+        "elevation_at_base": 29.92,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204246",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121975.71, 488606.68, 1.3],
+          [121975.71, 488606.68, -28.62]
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 1.44,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205986",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122025.0, 488573.0, 1.44],
+          [122025.0, 488573.0, -24.06]
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.527,
+        "ground_level_elevation": 2.26,
+        "elevation_at_base": 30.527,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198160",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121864.99, 488701.4, 2.26],
+          [121864.99, 488701.4, -28.267000000000003]
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.548,
+        "ground_level_elevation": 0.77,
+        "elevation_at_base": 30.548,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198174",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122261.11, 488985.24, 0.77],
+          [122261.11, 488985.24, -29.778]
+        ]
+      }
+    },
+    {
+      "id": "7",
+      "type": "Feature",
+      "properties": {
+        "date": "2008-07-01",
+        "depth_to_base": 13.98,
+        "ground_level_elevation": 0.86,
+        "elevation_at_base": 13.98,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000037783",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122341.0, 488887.0, 0.86],
+          [122341.0, 488887.0, -13.120000000000001]
+        ]
+      }
+    },
+    {
+      "id": "8",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.996,
+        "ground_level_elevation": 0.81,
+        "elevation_at_base": 6.996,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198148",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122291.0, 488933.0, 0.81],
+          [122291.0, 488933.0, -6.186]
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.569,
+        "ground_level_elevation": 1.5,
+        "elevation_at_base": 30.569,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198162",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121950.32, 488715.54, 1.5],
+          [121950.32, 488715.54, -29.069]
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.532,
+        "ground_level_elevation": 0.49,
+        "elevation_at_base": 30.532,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198176",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122284.02, 488904.93, 0.49],
+          [122284.02, 488904.93, -30.042]
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 28.95,
+        "ground_level_elevation": 0.86,
+        "elevation_at_base": 28.95,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206335",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121997.33, 488656.53, 0.86],
+          [121997.33, 488656.53, -28.09]
+        ]
+      }
+    },
+    {
+      "id": "12",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.937,
+        "ground_level_elevation": 1.4,
+        "elevation_at_base": 34.937,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000203502",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122079.98, 488578.52, 1.4],
+          [122079.98, 488578.52, -33.537]
+        ]
+      }
+    },
+    {
+      "id": "13",
+      "type": "Feature",
+      "properties": {
+        "date": "2009-04-15",
+        "depth_to_base": 19.998,
+        "ground_level_elevation": 0.39,
+        "elevation_at_base": 19.998,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000060419",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122047.38, 488885.13, 0.39],
+          [122047.38, 488885.13, -19.608]
+        ]
+      }
+    },
+    {
+      "id": "14",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 22.5,
+        "ground_level_elevation": 1.53,
+        "elevation_at_base": 22.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205985",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122040.0, 488552.0, 1.53],
+          [122040.0, 488552.0, -20.97]
+        ]
+      }
+    },
+    {
+      "id": "15",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.577,
+        "ground_level_elevation": 1.33,
+        "elevation_at_base": 30.577,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198177",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122289.35, 488868.3, 1.33],
+          [122289.35, 488868.3, -29.247]
+        ]
+      }
+    },
+    {
+      "id": "16",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.542,
+        "ground_level_elevation": 3.07,
+        "elevation_at_base": 30.542,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198163",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122020.53, 488761.1, 3.07],
+          [122020.53, 488761.1, -27.472]
+        ]
+      }
+    },
+    {
+      "id": "17",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.363,
+        "ground_level_elevation": 1.77,
+        "elevation_at_base": 30.363,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198167",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121988.87, 488730.61, 1.77],
+          [121988.87, 488730.61, -28.593]
+        ]
+      }
+    },
+    {
+      "id": "18",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.426,
+        "ground_level_elevation": 0.72,
+        "elevation_at_base": 30.426,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198173",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122255.77, 489000.1, 0.72],
+          [122255.77, 489000.1, -29.706]
+        ]
+      }
+    },
+    {
+      "id": "19",
+      "type": "Feature",
+      "properties": {
+        "date": "1998-10-07",
+        "depth_to_base": 36.95,
+        "ground_level_elevation": 1.83,
+        "elevation_at_base": 36.95,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251863",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122352.0, 488493.0, 1.83],
+          [122352.0, 488493.0, -35.120000000000005]
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.97,
+        "ground_level_elevation": 1.64,
+        "elevation_at_base": 30.97,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204240",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122017.1, 488548.65, 1.64],
+          [122017.1, 488548.65, -29.33]
+        ]
+      }
+    },
+    {
+      "id": "21",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 28.01,
+        "ground_level_elevation": 0.88,
+        "elevation_at_base": 28.01,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206331",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122301.85, 488818.45, 0.88],
+          [122301.85, 488818.45, -27.130000000000003]
+        ]
+      }
+    },
+    {
+      "id": "22",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 31.849,
+        "ground_level_elevation": 2.37,
+        "elevation_at_base": 31.849,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198166",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122206.08, 488809.7, 2.37],
+          [122206.08, 488809.7, -29.479]
+        ]
+      }
+    },
+    {
+      "id": "23",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.546,
+        "ground_level_elevation": 1.89,
+        "elevation_at_base": 30.546,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198164",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122056.44, 488743.33, 1.89],
+          [122056.44, 488743.33, -28.656]
+        ]
+      }
+    },
+    {
+      "id": "24",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 31.279,
+        "ground_level_elevation": 0.78,
+        "elevation_at_base": 31.279,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198158",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122300.0, 488882.0, 0.78],
+          [122300.0, 488882.0, -30.499]
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 0.96,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205835",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121983.0, 488631.0, 0.96],
+          [121983.0, 488631.0, -24.54]
+        ]
+      }
+    },
+    {
+      "id": "26",
+      "type": "Feature",
+      "properties": {
+        "date": "1998-10-09",
+        "depth_to_base": 37.62,
+        "ground_level_elevation": 2.36,
+        "elevation_at_base": 37.62,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251519",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122369.0, 488506.0, 2.36],
+          [122369.0, 488506.0, -35.26]
+        ]
+      }
+    },
+    {
+      "id": "27",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 28.05,
+        "ground_level_elevation": 0.77,
+        "elevation_at_base": 28.05,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206252",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122297.24, 488800.05, 0.77],
+          [122297.24, 488800.05, -27.28]
+        ]
+      }
+    },
+    {
+      "id": "28",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.58,
+        "ground_level_elevation": 0.53,
+        "elevation_at_base": 6.58,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198159",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122299.0, 488883.0, 0.53],
+          [122299.0, 488883.0, -6.05]
+        ]
+      }
+    },
+    {
+      "id": "29",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.455,
+        "ground_level_elevation": 1.74,
+        "elevation_at_base": 30.455,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198165",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121912.4, 488668.84, 1.74],
+          [121912.4, 488668.84, -28.715]
+        ]
+      }
+    },
+    {
+      "id": "30",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.96,
+        "ground_level_elevation": 1.56,
+        "elevation_at_base": 29.96,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206209",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122004.68, 488571.71, 1.56],
+          [122004.68, 488571.71, -28.400000000000002]
+        ]
+      }
+    },
+    {
+      "id": "31",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.97,
+        "ground_level_elevation": 1.65,
+        "elevation_at_base": 29.97,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206221",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121954.12, 488568.45, 1.65],
+          [121954.12, 488568.45, -28.32]
+        ]
+      }
+    },
+    {
+      "id": "32",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.975,
+        "ground_level_elevation": 0.51,
+        "elevation_at_base": 34.975,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000202286",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122205.08, 488673.94, 0.51],
+          [122205.08, 488673.94, -34.465]
+        ]
+      }
+    },
+    {
+      "id": "33",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-18",
+        "depth_to_base": 27.68,
+        "ground_level_elevation": -2.74,
+        "elevation_at_base": 27.68,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061389",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122332.17, 488822.15, -2.74],
+          [122332.17, 488822.15, -30.42]
+        ]
+      }
+    },
+    {
+      "id": "34",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.0,
+        "ground_level_elevation": 0.7,
+        "elevation_at_base": 29.0,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204225",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122013.65, 488651.24, 0.7],
+          [122013.65, 488651.24, -28.3]
+        ]
+      }
+    },
+    {
+      "id": "35",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-17",
+        "depth_to_base": 32.1,
+        "ground_level_elevation": 0.89,
+        "elevation_at_base": 32.1,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061388",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122340.63, 488801.15, 0.89],
+          [122340.63, 488801.15, -31.21]
+        ]
+      }
+    },
+    {
+      "id": "36",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.958,
+        "ground_level_elevation": 0.63,
+        "elevation_at_base": 34.958,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000202087",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122171.37, 488645.84, 0.63],
+          [122171.37, 488645.84, -34.327999999999996]
+        ]
+      }
+    },
+    {
+      "id": "37",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.981,
+        "ground_level_elevation": 0.85,
+        "elevation_at_base": 34.981,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000202327",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122246.63, 488704.23, 0.85],
+          [122246.63, 488704.23, -34.131]
+        ]
+      }
+    },
+    {
+      "id": "38",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.9,
+        "ground_level_elevation": 1.47,
+        "elevation_at_base": 29.9,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204395",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121969.65, 488589.79, 1.47],
+          [121969.65, 488589.79, -28.43]
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.94,
+        "ground_level_elevation": 1.09,
+        "elevation_at_base": 29.94,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206353",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121979.68, 488626.41, 1.09],
+          [121979.68, 488626.41, -28.85]
+        ]
+      }
+    },
+    {
+      "id": "40",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.93,
+        "ground_level_elevation": 1.63,
+        "elevation_at_base": 30.93,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206226",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122025.21, 488572.93, 1.63],
+          [122025.21, 488572.93, -29.3]
+        ]
+      }
+    },
+    {
+      "id": "41",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.95,
+        "ground_level_elevation": 1.65,
+        "elevation_at_base": 29.95,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204357",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121934.59, 488637.63, 1.65],
+          [121934.59, 488637.63, -28.3]
+        ]
+      }
+    },
+    {
+      "id": "42",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 28.99,
+        "ground_level_elevation": 1.06,
+        "elevation_at_base": 28.99,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204382",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121996.14, 488638.32, 1.06],
+          [121996.14, 488638.32, -27.93]
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-17",
+        "depth_to_base": 31.74,
+        "ground_level_elevation": 0.82,
+        "elevation_at_base": 31.74,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061549",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122344.25, 488821.12, 0.82],
+          [122344.25, 488821.12, -30.919999999999998]
+        ]
+      }
+    },
+    {
+      "id": "44",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.985,
+        "ground_level_elevation": 1.06,
+        "elevation_at_base": 34.985,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000202240",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122266.47, 488737.88, 1.06],
+          [122266.47, 488737.88, -33.925]
+        ]
+      }
+    },
+    {
+      "id": "45",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 1.28,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205856",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121946.0, 488602.0, 1.28],
+          [121946.0, 488602.0, -24.22]
+        ]
+      }
+    },
+    {
+      "id": "46",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-17",
+        "depth_to_base": 32.05,
+        "ground_level_elevation": 1.34,
+        "elevation_at_base": 32.05,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061398",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122294.79, 488800.85, 1.34],
+          [122294.79, 488800.85, -30.709999999999997]
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 28.96,
+        "ground_level_elevation": 0.81,
+        "elevation_at_base": 28.96,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206344",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121975.07, 488647.43, 0.81],
+          [121975.07, 488647.43, -28.150000000000002]
+        ]
+      }
+    },
+    {
+      "id": "48",
+      "type": "Feature",
+      "properties": {
+        "date": "1998-11-02",
+        "depth_to_base": 37.67,
+        "ground_level_elevation": 1.81,
+        "elevation_at_base": 37.67,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251552",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122347.0, 488503.0, 1.81],
+          [122347.0, 488503.0, -35.86]
+        ]
+      }
+    },
+    {
+      "id": "49",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.94,
+        "ground_level_elevation": 1.66,
+        "elevation_at_base": 30.94,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204208",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121997.25, 488555.81, 1.66],
+          [121997.25, 488555.81, -29.28]
+        ]
+      }
+    },
+    {
+      "id": "50",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 1.3,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205857",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121941.0, 488625.0, 1.3],
+          [121941.0, 488625.0, -24.2]
+        ]
+      }
+    },
+    {
+      "id": "51",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.986,
+        "ground_level_elevation": 2.2,
+        "elevation_at_base": 34.986,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000202241",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122283.05, 488788.62, 2.2],
+          [122283.05, 488788.62, -32.785999999999994]
+        ]
+      }
+    },
+    {
+      "id": "52",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-17",
+        "depth_to_base": 32.31,
+        "ground_level_elevation": 1.4,
+        "elevation_at_base": 32.31,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061548",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122299.52, 488821.22, 1.4],
+          [122299.52, 488821.22, -30.910000000000004]
+        ]
+      }
+    },
+    {
+      "id": "53",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.52,
+        "ground_level_elevation": 1.19,
+        "elevation_at_base": 25.52,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205937",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121964.0, 488616.0, 1.19],
+          [121964.0, 488616.0, -24.33]
+        ]
+      }
+    },
+    {
+      "id": "54",
+      "type": "Feature",
+      "properties": {
+        "date": "1998-11-02",
+        "depth_to_base": 39.645,
+        "ground_level_elevation": 1.44,
+        "elevation_at_base": 39.645,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251774",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122323.0, 488486.0, 1.44],
+          [122323.0, 488486.0, -38.205000000000005]
+        ]
+      }
+    },
+    {
+      "id": "55",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 1.65,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205873",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122011.0, 488593.0, 1.65],
+          [122011.0, 488593.0, -23.85]
+        ]
+      }
+    },
+    {
+      "id": "56",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.89,
+        "ground_level_elevation": 1.6,
+        "elevation_at_base": 29.89,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204199",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121985.43, 488568.51, 1.6],
+          [121985.43, 488568.51, -28.29]
+        ]
+      }
+    },
+    {
+      "id": "57",
+      "type": "Feature",
+      "properties": {
+        "date": "1998-12-02",
+        "depth_to_base": 36.995,
+        "ground_level_elevation": 1.08,
+        "elevation_at_base": 36.995,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251617",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122377.0, 488525.0, 1.08],
+          [122377.0, 488525.0, -35.915]
+        ]
+      }
+    },
+    {
+      "id": "58",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-18",
+        "depth_to_base": 27.8,
+        "ground_level_elevation": -2.69,
+        "elevation_at_base": 27.8,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061397",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122310.55, 488799.96, -2.69],
+          [122310.55, 488799.96, -30.490000000000002]
+        ]
+      }
+    },
+    {
+      "id": "59",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 28.02,
+        "ground_level_elevation": 0.96,
+        "elevation_at_base": 28.02,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206148",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122302.87, 488826.21, 0.96],
+          [122302.87, 488826.21, -27.06]
+        ]
+      }
+    },
+    {
+      "id": "60",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.32,
+        "ground_level_elevation": 1.6,
+        "elevation_at_base": 30.32,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204388",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121988.22, 488514.2, 1.6],
+          [121988.22, 488514.2, -28.72]
+        ]
+      }
+    },
+    {
+      "id": "61",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.81,
+        "ground_level_elevation": 1.57,
+        "elevation_at_base": 30.81,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206206",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122035.41, 488549.68, 1.57],
+          [122035.41, 488549.68, -29.24]
+        ]
+      }
+    },
+    {
+      "id": "62",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.9,
+        "ground_level_elevation": 1.64,
+        "elevation_at_base": 30.9,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204377",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122011.21, 488533.65, 1.64],
+          [122011.21, 488533.65, -29.259999999999998]
+        ]
+      }
+    },
+    {
+      "id": "63",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.97,
+        "ground_level_elevation": 1.46,
+        "elevation_at_base": 29.97,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204363",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121994.09, 488606.98, 1.46],
+          [121994.09, 488606.98, -28.509999999999998]
+        ]
+      }
+    },
+    {
+      "id": "64",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-18",
+        "depth_to_base": 29.25,
+        "ground_level_elevation": -2.87,
+        "elevation_at_base": 29.25,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061390",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122329.82, 488801.01, -2.87],
+          [122329.82, 488801.01, -32.12]
+        ]
+      }
+    },
+    {
+      "id": "65",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.98,
+        "ground_level_elevation": 1.62,
+        "elevation_at_base": 29.98,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206238",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121957.22, 488632.47, 1.62],
+          [121957.22, 488632.47, -28.36]
+        ]
+      }
+    },
+    {
+      "id": "66",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.459,
+        "ground_level_elevation": 1.77,
+        "elevation_at_base": 30.459,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198168",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122022.24, 488700.32, 1.77],
+          [122022.24, 488700.32, -28.689]
+        ]
+      }
+    },
+    {
+      "id": "67",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 30.952,
+        "ground_level_elevation": 0.98,
+        "elevation_at_base": 30.952,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198154",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122270.0, 488980.0, 0.98],
+          [122270.0, 488980.0, -29.972]
+        ]
+      }
+    },
+    {
+      "id": "68",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.94,
+        "ground_level_elevation": 1.57,
+        "elevation_at_base": 29.94,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204273",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122006.25, 488589.41, 1.57],
+          [122006.25, 488589.41, -28.37]
+        ]
+      }
+    },
+    {
+      "id": "69",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.998,
+        "ground_level_elevation": 0.65,
+        "elevation_at_base": 6.998,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198155",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122271.0, 488980.0, 0.65],
+          [122271.0, 488980.0, -6.348]
+        ]
+      }
+    },
+    {
+      "id": "70",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-24",
+        "depth_to_base": 30.557,
+        "ground_level_elevation": 1.72,
+        "elevation_at_base": 30.557,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198169",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122013.66, 488713.59, 1.72],
+          [122013.66, 488713.59, -28.837]
+        ]
+      }
+    },
+    {
+      "id": "71",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.599,
+        "ground_level_elevation": 0.77,
+        "elevation_at_base": 6.599,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198157",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122287.0, 488930.0, 0.77],
+          [122287.0, 488930.0, -5.829000000000001]
+        ]
+      }
+    },
+    {
+      "id": "72",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 28.87,
+        "ground_level_elevation": 1.47,
+        "elevation_at_base": 28.87,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206248",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121958.39, 488655.4, 1.47],
+          [121958.39, 488655.4, -27.400000000000002]
+        ]
+      }
+    },
+    {
+      "id": "73",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.9,
+        "ground_level_elevation": 1.63,
+        "elevation_at_base": 29.9,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206260",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121965.9, 488577.45, 1.63],
+          [121965.9, 488577.45, -28.27]
+        ]
+      }
+    },
+    {
+      "id": "74",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 31.81,
+        "ground_level_elevation": 1.48,
+        "elevation_at_base": 31.81,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204310",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121989.99, 488587.17, 1.48],
+          [121989.99, 488587.17, -30.33]
+        ]
+      }
+    },
+    {
+      "id": "75",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.945,
+        "ground_level_elevation": 1.41,
+        "elevation_at_base": 34.945,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000203457",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122054.03, 488559.61, 1.41],
+          [122054.03, 488559.61, -33.535000000000004]
+        ]
+      }
+    },
+    {
+      "id": "76",
+      "type": "Feature",
+      "properties": {
+        "date": "2014-02-18",
+        "depth_to_base": 27.9,
+        "ground_level_elevation": -2.65,
+        "elevation_at_base": 27.9,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000061518",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122316.38, 488821.08, -2.65],
+          [122316.38, 488821.08, -30.549999999999997]
+        ]
+      }
+    },
+    {
+      "id": "77",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 31.301,
+        "ground_level_elevation": 0.75,
+        "elevation_at_base": 31.301,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198156",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122285.0, 488931.0, 0.75],
+          [122285.0, 488931.0, -30.551]
+        ]
+      }
+    },
+    {
+      "id": "78",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 28.17,
+        "ground_level_elevation": 0.75,
+        "elevation_at_base": 28.17,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205973",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122300.27, 488809.58, 0.75],
+          [122300.27, 488809.58, -27.42]
+        ]
+      }
+    },
+    {
+      "id": "79",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 29.54,
+        "ground_level_elevation": 0.69,
+        "elevation_at_base": 29.54,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206113",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122293.63, 488790.54, 0.69],
+          [122293.63, 488790.54, -28.849999999999998]
+        ]
+      }
+    },
+    {
+      "id": "80",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.95,
+        "ground_level_elevation": 1.6,
+        "elevation_at_base": 30.95,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205817",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122006.56, 488527.3, 1.6],
+          [122006.56, 488527.3, -29.349999999999998]
+        ]
+      }
+    },
+    {
+      "id": "81",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 3.44,
+        "ground_level_elevation": 1.62,
+        "elevation_at_base": 3.44,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204248",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121985.2, 488568.15, 1.62],
+          [121985.2, 488568.15, -1.8199999999999998]
+        ]
+      }
+    },
+    {
+      "id": "82",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.46,
+        "ground_level_elevation": 1.64,
+        "elevation_at_base": 30.46,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000204513",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121977.91, 488522.72, 1.64],
+          [121977.91, 488522.72, -28.82]
+        ]
+      }
+    },
+    {
+      "id": "83",
+      "type": "Feature",
+      "properties": {
+        "date": "2015-02-23",
+        "depth_to_base": 29.57,
+        "ground_level_elevation": 0.63,
+        "elevation_at_base": 29.57,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206112",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122290.84, 488783.6, 0.63],
+          [122290.84, 488783.6, -28.94]
+        ]
+      }
+    },
+    {
+      "id": "84",
+      "type": "Feature",
+      "properties": {
+        "date": "1999-01-12",
+        "depth_to_base": 69.68,
+        "ground_level_elevation": 2.51,
+        "elevation_at_base": 69.68,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000251670",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122364.0, 488518.0, 2.51],
+          [122364.0, 488518.0, -67.17]
+        ]
+      }
+    },
+    {
+      "id": "85",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 29.97,
+        "ground_level_elevation": 1.54,
+        "elevation_at_base": 29.97,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206072",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121954.14, 488612.44, 1.54],
+          [121954.14, 488612.44, -28.43]
+        ]
+      }
+    },
+    {
+      "id": "86",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.983,
+        "ground_level_elevation": 1.72,
+        "elevation_at_base": 34.983,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000203491",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122152.03, 488631.84, 1.72],
+          [122152.03, 488631.84, -33.263]
+        ]
+      }
+    },
+    {
+      "id": "87",
+      "type": "Feature",
+      "properties": {
+        "date": "2022-09-21",
+        "depth_to_base": 6.959,
+        "ground_level_elevation": 0.64,
+        "elevation_at_base": 6.959,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000198147",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122277.0, 488980.0, 0.64],
+          [122277.0, 488980.0, -6.319]
+        ]
+      }
+    },
+    {
+      "id": "88",
+      "type": "Feature",
+      "properties": {
+        "date": "2011-05-12",
+        "depth_to_base": 25.5,
+        "ground_level_elevation": 1.45,
+        "elevation_at_base": 25.5,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000205801",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121997.0, 488612.0, 1.45],
+          [121997.0, 488612.0, -24.05]
+        ]
+      }
+    },
+    {
+      "id": "89",
+      "type": "Feature",
+      "properties": {
+        "date": "2017-06-21",
+        "depth_to_base": 34.978,
+        "ground_level_elevation": 1.46,
+        "elevation_at_base": 34.978,
+        "standard": "ISO22476D1",
+        "location_source_id": "CPT000000203445",
+        "color": "#DC143C"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [122118.65, 488607.35, 1.46],
+          [122118.65, 488607.35, -33.518]
+        ]
+      }
+    },
+    {
+      "id": "90",
+      "type": "Feature",
+      "properties": {
+        "date": "2013-07-09",
+        "depth_to_base": 30.88,
+        "ground_level_elevation": 1.83,
+        "elevation_at_base": 30.88,
+        "standard": "NEN5140",
+        "location_source_id": "CPT000000206273",
+        "color": "#0000CD"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [121998.74, 488539.28, 1.83],
+          [121998.74, 488539.28, -29.049999999999997]
+        ]
+      }
+    }
+  ],
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:EPSG::7415" }
+  }
+}
