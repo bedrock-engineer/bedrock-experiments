@@ -12,3 +12,16 @@ The [plot at 52.385499 Latitude, 4.903831 Longitude (a.k.a. 52°23'07.8"N 4°54'
 https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections
 BGT 3D terreinen: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections/terreinen
 BGT 3D terreinen can be downloaded as .dxf meshes from https://netherlands3d.eu/twin/
+
+## Relevant links
+- BRO CPTs
+  - https://app.pdok.nl/viewer/#x=121942.13&y=488701.58&z=11.4883&background=BRT-A%20standaard&layers=45c40b3a-6212-4227-b939-496a5ce95734;GE.Borehole;_;1,54361b1e-ccea-4121-9616-fcdc9e5f2877;GE.ConePenetrationTest;_;1
+  - https://nationaalgeoregister.nl/geonetwork/srv/dut/catalog.search#/metadata/54361b1e-ccea-4121-9616-fcdc9e5f2877
+  - https://nationaalgeoregister.nl/geonetwork/srv/dut/catalog.search#/metadata/838e6339-1c0d-461b-bc0b-a5eeaa2c3648
+  - https://service.pdok.nl/bzk/geologie/bro-geotechnisch-sondeeronderzoek/atom/index.xml
+- 3D Basisvoorziening all: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections
+- 3D Basisvoorziening - AHN Digitaal Terreinmodel (DTM) incl. 3D Tiles quantized mesh:
+  - Info: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections/digitaalterreinmodel
+  - JSON: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections/digitaalterreinmodel/quantized-mesh
+- BRONodig QGIS plugin: https://github.com/ic144/bronodig
+- VIKTOR's BRO API app: https://github.com/viktor-platform/bro/blob/development/bro/api.py
