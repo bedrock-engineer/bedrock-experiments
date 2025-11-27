@@ -102,6 +102,10 @@ def _(client):
 def _(mo):
     mo.md(r"""
     ### 3. Create geometry
+    
+    /// danger | `untis="???"` required
+    `Point(x=0, y=0, z=10.5, units="m")`
+    ///
     """)
     return
 
