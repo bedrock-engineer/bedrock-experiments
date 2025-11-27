@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.17.7"
+__generated_with = "0.18.0"
 app = marimo.App(width="medium")
 
 
@@ -25,11 +25,8 @@ def _(Path, os):
     hk_kaitak_brgi_gpkg_path = Path(
         r"C:\Users\joost\ReposWindows\bedrock-ge\examples\hk_kaitak_ags3\kaitak_gi.gpkg"
     )
-    return (
-        hk_kaitak_brgi_gpkg_path,
-        speckle_datadb_path,
-        speckle_objectsdb_path,
-    )
+    speckle_datadb_path
+    return speckle_datadb_path, speckle_objectsdb_path
 
 
 @app.cell
@@ -43,36 +40,28 @@ def _(duckdb, speckle_datadb_path, speckle_objectsdb_path, sqlmodel):
     spkl_objectsdb_duckdb_engine = duckdb.connect(
         speckle_objectsdb_path, read_only=False
     )
-    return (spkl_objectsdb_duckdb_engine,)
+    return (spkl_objectsdb_sqlite_engine,)
 
 
 @app.cell
-def _(hk_kaitak_brgi_gpkg_path, sqlmodel):
-    hk_kaitak_sqlite_engine = sqlmodel.create_engine(
-        f"sqlite:///{hk_kaitak_brgi_gpkg_path}"
-    )
-    return
-
-
-@app.cell
-def _(mo, objects, spkl_objectsdb_duckdb_engine):
-    duckdb_df = mo.sql(
+def _(mo, objects, spkl_objectsdb_sqlite_engine):
+    objs_df = mo.sql(
         f"""
         SELECT
             *
         FROM "objects"
-        LIMIT 100;
+        LIMIT	50;
         """,
-        engine=spkl_objectsdb_duckdb_engine
+        engine=spkl_objectsdb_sqlite_engine
     )
-    return (duckdb_df,)
+    return (objs_df,)
 
 
 @app.cell
-def _(duckdb_df, json, pl):
+def _(json, objs_df, pl):
     spkl_objs_df = pl.DataFrame({
-        "hash": duckdb_df.select("hash"),
-        "content": [json.loads(c) for c in duckdb_df["content"]]
+        "hash": objs_df.select("hash"),
+        "content": [json.loads(c) for c in objs_df["content"]]
     })
     spkl_objs_df
     return

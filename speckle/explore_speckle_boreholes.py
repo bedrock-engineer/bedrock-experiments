@@ -6,18 +6,22 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
+    import os
+    from pathlib import Path
+
     import marimo as mo
     from specklepy.api import operations
-    from specklepy.api.credentials import get_local_accounts, get_default_account
     from specklepy.api.client import SpeckleClient
-    from specklepy.transports.server import ServerTransport
-    from specklepy.objects.geometry import Point, Line, Polyline
+    from specklepy.api.credentials import get_local_accounts, get_default_account
+    from specklepy.core.api.inputs.version_inputs import CreateVersionInput
     from specklepy.objects import Base
+    from specklepy.objects.geometry import Point, Line, Polyline
+    from specklepy.transports.server import ServerTransport
+
+    appdata = Path(os.environ["APPDATA"])
+    speckle_local_path = appdata / "Speckle"
+    speckle_local_path
     return (
-        Base,
-        Line,
-        Point,
-        Polyline,
         ServerTransport,
         SpeckleClient,
         get_default_account,
@@ -67,56 +71,42 @@ def _(client, mo):
 def _(ServerTransport, client, mo, projects_dd):
     project_id = projects_dd.value.id
 
-    transport = ServerTransport(stream_id=projects_dd.value.id, client=client)
+    server_transport = ServerTransport(stream_id=projects_dd.value.id, client=client)
 
     models = client.model.get_models(project_id)
     models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
     models_dd
-    return (transport,)
+    return models_dd, project_id, server_transport
 
 
 @app.cell
-def _(Base, Line, Point, Polyline):
-    # Create some points
-    p1 = Point(x=0, y=0, z=0, units="m")
-    p2 = Point(x=10, y=0, z=0, units="m")
-    p3 = Point(x=10, y=10, z=0, units="m")
-    p4 = Point(x=0, y=10, z=0, units="m")
+def _(client, models_dd, operations, project_id, server_transport):
+    model_id = models_dd.value.id
 
-    # Create a line
-    line = Line(start=p1, end=p2)
+    latest_version = client.version.get_versions(
+        project_id=project_id, 
+        model_id=model_id,
+        limit=1 # only get the latest version
+    )
 
-    # Create a polyline (closed rectangle)
-    # Polyline uses a flat list of coordinates: [x1, y1, z1, x2, y2, z2, ...]
-    coords = [
-        p1.x, p1.y, p1.z,
-        p2.x, p2.y, p2.z,
-        p3.x, p3.y, p3.z,
-        p4.x, p4.y, p4.z,
-        p1.x, p1.y, p1.z,  # Close the shape
-    ]
-    polyline = Polyline(value=coords)
-    polyline.units = "m"
+    received_data = operations.receive(
+        obj_id=latest_version.items[0].referenced_object,
+        remote_transport=server_transport
+    )
 
-    # ✅ IMPORTANT: Wrap geometry in Base object for viewer visibility
-    object = Base()
-    object.line = line
-    object.rectangle = polyline
-    object.points = [p1, p2, p3, p4]
+    received_data.__dict__
+    return (received_data,)
+
+
+@app.cell
+def _(received_data):
+    received_data.colorProxies[5].__dict__
     return
 
 
 @app.cell
-def _(ams_noord, ams_noord_models, client, operations, transport):
-    ams_noord_gi_latest = client.version.get_versions(
-        project_id=ams_noord.id, 
-        model_id=ams_noord_models["epsg:7415/geo/gi"].id,
-        limit=1 # only get the latest version
-    )
-    ams_noord_gi = operations.receive(
-        obj_id=ams_noord_gi_latest.items[0].id,
-        remote_transport=transport
-    )
+def _(received_data):
+    received_data.elements[0].elements[0].elements[0].displayValue[0].__dict__
     return
 
 
