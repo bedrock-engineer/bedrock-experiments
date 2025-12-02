@@ -23,5 +23,5 @@ dependencies = [
 ]
 
 [[tool.mypy.overrides]]
-module = "python_ags4.*"
+module = ["pandas", "geopandas", "specklepy.*", "python_ags4.*", "requests"]
 ignore_missing_imports = true

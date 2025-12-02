@@ -6,9 +6,7 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    import io
     import uuid
-    from typing import Union
 
     import geopandas as gpd
     import marimo as mo

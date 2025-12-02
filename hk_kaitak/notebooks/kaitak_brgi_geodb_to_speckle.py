@@ -6,9 +6,7 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    import io
     import uuid
-    from typing import Union
 
     import geopandas as gpd
     import marimo as mo
@@ -32,8 +30,6 @@ def _():
     from specklepy.transports.server import ServerTransport
 
     cwd = mo.notebook_location()
-    gpkg_path = cwd / "kaitak_gi.gpkg"
-    # gpkg_path = cwd / "wekahills_gi.gpkg"
     return (
         ColorProxy,
         CreateVersionInput,
@@ -41,10 +37,10 @@ def _():
         RenderMaterialProxy,
         ServerTransport,
         SpeckleClient,
+        cwd,
         get_default_account,
         get_local_accounts,
         gpd,
-        gpkg_path,
         mcolors,
         mo,
         np,
@@ -62,14 +58,15 @@ def _():
 
 
 @app.cell
-def _(gpkg_path, requests):
+def _(cwd, requests):
+    gpkg_path = cwd / "kaitak_gi.gpkg"
     raw_githubusercontent_url = "https://raw.githubusercontent.com/bedrock-engineer/bedrock-ge/main/examples/hk_kaitak_ags3/kaitak_gi.gpkg"
     response = requests.get(raw_githubusercontent_url)
     response.raise_for_status()  # Check for request errors
 
     with open(gpkg_path, "wb") as gpkg:
         gpkg.write(response.content)
-    return
+    return (gpkg_path,)
 
 
 @app.cell
