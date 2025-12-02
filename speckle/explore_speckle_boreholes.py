@@ -68,19 +68,17 @@ def _(client, mo):
 
 
 @app.cell
-def _(ServerTransport, client, mo, projects_dd):
+def _(client, mo, projects_dd):
     project_id = projects_dd.value.id
-
-    server_transport = ServerTransport(stream_id=projects_dd.value.id, client=client)
 
     models = client.model.get_models(project_id)
     models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
     models_dd
-    return models_dd, project_id, server_transport
+    return models_dd, project_id
 
 
 @app.cell
-def _(client, models_dd, operations, project_id, server_transport):
+def _(ServerTransport, client, models_dd, operations, project_id):
     model_id = models_dd.value.id
 
     latest_version = client.version.get_versions(
@@ -89,6 +87,7 @@ def _(client, models_dd, operations, project_id, server_transport):
         limit=1 # only get the latest version
     )
 
+    server_transport = ServerTransport(stream_id=project_id, client=client)
     received_data = operations.receive(
         obj_id=latest_version.items[0].referenced_object,
         remote_transport=server_transport

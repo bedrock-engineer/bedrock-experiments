@@ -454,20 +454,10 @@ def _(coords_to_pyvista_mesh, pl, weth_spkl_props):
 
 
 @app.cell
-def _(line, pv):
-    ln = pv.Line(pointa=[0, 0, 0], pointb=[0, 0, 5], resolution=10)
-
-    # Create a tube around the line
-    tb = line.tube(radius=0.2, n_sides=20)
-    tb.strips
-    return
-
-
-@app.cell
 def _(pv, pv_mesh_df):
     plotter = pv.Plotter()
     for pv_row in pv_mesh_df.iter_rows(named=True):
-        print(pv_row["pyvista_mesh"])
+        # print(pv_row["pyvista_mesh"])
         plotter.add_mesh(pv_row["pyvista_mesh"], color=pv_row["color"])
 
     plotter.show()
@@ -529,7 +519,7 @@ def _(np, pv):
     # tube.plot(smooth_shading=True)
 
     type(tube)
-    return (line,)
+    return
 
 
 @app.cell
