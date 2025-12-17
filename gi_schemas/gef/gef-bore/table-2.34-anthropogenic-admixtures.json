@@ -1,0 +1,25 @@
+{
+  "table": "2.34",
+  "title": "Antropogene bijmengingen",
+  "description": "Anthropogenic admixtures",
+  "codes": {
+    "BST1": "spoor baksteen",
+    "BST2": "weinig baksteen",
+    "BST3": "veel baksteen",
+    "PUR1": "spoor puinresten",
+    "PUR2": "weinig puinresten",
+    "PUR3": "veel puinresten",
+    "SIN1": "spoor sintels",
+    "SIN2": "weinig sintels",
+    "SIN3": "veel sintels",
+    "STO1": "spoor stortsteen",
+    "STO2": "weinig stortsteen",
+    "STO3": "veel stortsteen",
+    "VUI1": "spoor vuilnis",
+    "VUI2": "weinig vuilnis",
+    "VUI3": "veel vuilnis",
+    "GL": "gley",
+    "RT": "roest",
+    "SE": "silex"
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "title": "CPT Column Quantities",
+  "description": "Quantity numbers for data columns in CPT files",
+  "quantities": {
+    "1": {
+      "name": "Penetration length",
+      "nameNl": "Sondeerlengte",
+      "unit": "m",
+      "description": "Depth of cone tip below fixed horizontal surface",
+      "descriptionNl": "Diepte van conuspunt onder vast horizontaal oppervlak",
+      "required": true,
+      "category": "primary",
+      "symbol": null
+    },
+    "2": {
+      "name": "Measured cone resistance",
+      "nameNl": "Gemeten conusweerstand",
+      "unit": "MPa",
+      "description": "Direct cone tip resistance measurement",
+      "descriptionNl": "Directe conuspunt weerstandsmeting",
+      "required": true,
+      "category": "primary",
+      "symbol": "qc"
+    },
+    "3": {
+      "name": "Friction resistance",
+      "nameNl": "Wrijvingsweerstand",
+      "unit": "MPa",
+      "description": "Sleeve friction measurement",
+      "descriptionNl": "Mantelwrijvingsmeting",
+      "required": false,
+      "category": "friction",
+      "symbol": null
+    },
+    "4": {
+      "name": "Friction number",
+      "nameNl": "Wrijvingsgetal",
+      "unit": "%",
+      "description": "Friction ratio percentage",
+      "descriptionNl": "Wrijvingsratio percentage",
+      "required": false,
+      "category": "friction",
+      "symbol": null
+    },
+    "5": {
+      "name": "Pore pressure u1",
+      "nameNl": "Waterspanning u1",
+      "unit": "MPa",
+      "description": "Pore pressure at cone tip",
+      "descriptionNl": "Waterspanning bij conuspunt",
+      "required": false,
+      "category": "pore_pressure",
+      "symbol": "u1"
+    },
+    "6": {
+      "name": "Pore pressure u2",
+      "nameNl": "Waterspanning u2",
+      "unit": "MPa",
+      "description": "Pore pressure at cone shoulder",
+      "descriptionNl": "Waterspanning bij conusschouder",
+      "required": false,
+      "category": "pore_pressure",
+      "symbol": "u2"
+    },
+    "7": {
+      "name": "Pore pressure u3",
+      "nameNl": "Waterspanning u3",
+      "unit": "MPa",
+      "description": "Pore pressure at friction sleeve",
+      "descriptionNl": "Waterspanning bij wrijvingsmantel",
+      "required": false,
+      "category": "pore_pressure",
+      "symbol": "u3"
+    },
+    "8": {
+      "name": "Inclination (resultant)",
+      "nameNl": "Helling (resultante)",
+      "unit": "degrees",
+      "description": "Total inclination from vertical",
+      "descriptionNl": "Totale helling t.o.v. verticaal",
+      "required": false,
+      "category": "inclination",
+      "symbol": null
+    },
+    "9": {
+      "name": "Inclination N-S",
+      "nameNl": "Helling N-Z",
+      "unit": "degrees",
+      "description": "North-South inclination component",
+      "descriptionNl": "Noord-Zuid hellingscomponent",
+      "required": false,
+      "category": "inclination",
+      "symbol": null
+    },
+    "10": {
+      "name": "Inclination E-W",
+      "nameNl": "Helling O-W",
+      "unit": "degrees",
+      "description": "East-West inclination component",
+      "descriptionNl": "Oost-West hellingscomponent",
+      "required": false,
+      "category": "inclination",
+      "symbol": null
+    },
+    "11": {
+      "name": "Corrected depth",
+      "nameNl": "Gecorrigeerde diepte",
+      "unit": "m",
+      "description": "Corrected depth below fixed horizontal surface",
+      "descriptionNl": "Gecorrigeerde diepte onder vast horizontaal oppervlak",
+      "required": false,
+      "category": "calculated",
+      "symbol": null
+    },
+    "12": {
+      "name": "Time",
+      "nameNl": "Tijd",
+      "unit": "s",
+      "description": "Time of measurement",
+      "descriptionNl": "Tijd van meting",
+      "required": false,
+      "category": "measurement_info",
+      "symbol": null
+    },
+    "13": {
+      "name": "Corrected cone resistance",
+      "nameNl": "Gecorrigeerde conusweerstand",
+      "unit": "MPa",
+      "description": "Cone resistance corrected for pore pressure effects",
+      "descriptionNl": "Conusweerstand gecorrigeerd voor waterspanningseffecten",
+      "required": false,
+      "category": "calculated",
+      "symbol": "qt"
+    },
+    "14": {
+      "name": "Net cone resistance",
+      "nameNl": "Netto conusweerstand",
+      "unit": "MPa",
+      "description": "Net cone resistance",
+      "descriptionNl": "Netto conusweerstand",
+      "required": false,
+      "category": "calculated",
+      "symbol": "qn"
+    },
+    "15": {
+      "name": "Pore ratio",
+      "nameNl": "Poriënratio",
+      "unit": "-",
+      "description": "Pore pressure ratio",
+      "descriptionNl": "Waterspanningsratio",
+      "required": false,
+      "category": "calculated",
+      "symbol": "Bq"
+    },
+    "16": {
+      "name": "Cone resistance number",
+      "nameNl": "Conusweerstandsgetal",
+      "unit": "-",
+      "description": "Normalized cone resistance",
+      "descriptionNl": "Genormaliseerde conusweerstand",
+      "required": false,
+      "category": "calculated",
+      "symbol": "Nm"
+    },
+    "17": {
+      "name": "Weight per unit volume",
+      "nameNl": "Volumegewicht",
+      "unit": "kN/m³",
+      "description": "Unit weight of soil",
+      "descriptionNl": "Volumegewicht van grond",
+      "required": false,
+      "category": "soil_properties",
+      "symbol": "γ"
+    },
+    "18": {
+      "name": "In-situ initial pore pressure",
+      "nameNl": "In-situ initiële waterspanning",
+      "unit": "MPa",
+      "description": "Initial pore water pressure",
+      "descriptionNl": "Initiële poriënwaterdruk",
+      "required": false,
+      "category": "soil_properties",
+      "symbol": "u0"
+    },
+    "19": {
+      "name": "Total vertical soil pressure",
+      "nameNl": "Totale verticale grondspanning",
+      "unit": "MPa",
+      "description": "Total overburden stress",
+      "descriptionNl": "Totale deklaagspanning",
+      "required": false,
+      "category": "soil_properties",
+      "symbol": "σv0"
+    },
+    "20": {
+      "name": "Effective vertical soil pressure",
+      "nameNl": "Effectieve verticale grondspanning",
+      "unit": "MPa",
+      "description": "Effective overburden stress",
+      "descriptionNl": "Effectieve deklaagspanning",
+      "required": false,
+      "category": "soil_properties",
+      "symbol": "σ'v0"
+    },
+    "21": {
+      "name": "Inclination in X direction",
+      "nameNl": "Helling in X-richting",
+      "unit": "degrees",
+      "description": "X-direction inclination component",
+      "descriptionNl": "X-richting hellingscomponent",
+      "required": false,
+      "category": "inclination",
+      "symbol": null
+    },
+    "22": {
+      "name": "Inclination in Y direction",
+      "nameNl": "Helling in Y-richting",
+      "unit": "degrees",
+      "description": "Y-direction inclination component",
+      "descriptionNl": "Y-richting hellingscomponent",
+      "required": false,
+      "category": "inclination",
+      "symbol": null
+    },
+    "23": {
+      "name": "Electric conductivity",
+      "nameNl": "Elektrische geleidbaarheid",
+      "unit": "S/m",
+      "description": "Electrical conductivity measurement",
+      "descriptionNl": "Elektrische geleidbaarheidsmeting",
+      "required": false,
+      "category": "additional_measurements",
+      "symbol": null
+    },
+    "24": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "25": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "26": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "27": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "28": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "29": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "30": {
+      "name": "Reserved for future use",
+      "nameNl": "Gereserveerd voor toekomstig gebruik",
+      "unit": null,
+      "description": "Reserved slot",
+      "descriptionNl": "Gereserveerde positie",
+      "required": false,
+      "category": "reserved",
+      "symbol": null
+    },
+    "31": {
+      "name": "Magnetic field strength Bx",
+      "nameNl": "Magnetische veldsterkte Bx",
+      "unit": "nT",
+      "description": "Magnetic field strength in X direction",
+      "descriptionNl": "Magnetische veldsterkte in X-richting",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": "Bx"
+    },
+    "32": {
+      "name": "Magnetic field strength By",
+      "nameNl": "Magnetische veldsterkte By",
+      "unit": "nT",
+      "description": "Magnetic field strength in Y direction",
+      "descriptionNl": "Magnetische veldsterkte in Y-richting",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": "By"
+    },
+    "33": {
+      "name": "Magnetic field strength Bz",
+      "nameNl": "Magnetische veldsterkte Bz",
+      "unit": "nT",
+      "description": "Magnetic field strength in Z direction",
+      "descriptionNl": "Magnetische veldsterkte in Z-richting",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": "Bz"
+    },
+    "34": {
+      "name": "Total magnetic field strength",
+      "nameNl": "Totale magnetische veldsterkte",
+      "unit": "nT",
+      "description": "Total magnetic field strength",
+      "descriptionNl": "Totale magnetische veldsterkte",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": "Btot"
+    },
+    "35": {
+      "name": "Magnetic inclination",
+      "nameNl": "Magnetische inclinatie",
+      "unit": "degrees",
+      "description": "Magnetic field inclination angle",
+      "descriptionNl": "Magnetische veld inclinatiehoek",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": null
+    },
+    "36": {
+      "name": "Magnetic declination",
+      "nameNl": "Magnetische declinatie",
+      "unit": "degrees",
+      "description": "Magnetic field declination angle",
+      "descriptionNl": "Magnetische veld declinatiehoek",
+      "required": false,
+      "category": "magnetic_measurements",
+      "symbol": null
+    },
+    "128": {
+      "name": "Totale weerstand",
+      "nameNl": "Totale weerstand",
+      "unit": "MPa",
+      "description": "Totale conusweerstand Qt",
+      "descriptionNl": "Totale conusweerstand Qt",
+      "required": false,
+      "category": "dov_measurements",
+      "symbol": "Qt"
+    },
+    "129": {
+      "name": "Temperatuur",
+      "nameNl": "Temperatuur",
+      "unit": "°C",
+      "description": "Temperatuurmeting",
+      "descriptionNl": "Temperatuurmeting",
+      "required": false,
+      "category": "dov_measurements",
+      "symbol": "T"
+    }
+  }
+}

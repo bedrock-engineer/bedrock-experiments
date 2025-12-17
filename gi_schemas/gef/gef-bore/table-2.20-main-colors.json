@@ -1,0 +1,23 @@
+{
+  "table": "2.20",
+  "title": "Hoofdkleur",
+  "description": "Main colors",
+  "colors": {
+    "BL": "blauw",
+    "BR": "bruin",
+    "GE": "geel",
+    "GN": "groen",
+    "GR": "grijs",
+    "OL": "olijf",
+    "OR": "oranje",
+    "PA": "paars",
+    "RO": "rood",
+    "WI": "wit",
+    "RZ": "roze",
+    "ZW": "zwart"
+  },
+  "intensity": {
+    "LI": "licht",
+    "DO": "donker"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "table": "2.26",
+  "title": "Veen amorfiteit",
+  "description": "Peat amorphosity",
+  "codes": {
+    "AV1": "zwak amorf",
+    "AV2": "matig amorf",
+    "AV3": "sterk amorf"
+  }
+}

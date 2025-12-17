@@ -1,0 +1,325 @@
+{
+  "title": "CPT Measurement Variables",
+  "description": "Numeric measurement variables for CPT files",
+  "variables": {
+    "1": {
+      "defaultValue": 1000,
+      "unit": "mm²",
+      "description": "Nominal surface area of cone tip",
+      "descriptionNl": "Nominaal oppervlak van conuspunt",
+      "category": "equipment",
+      "dataType": "float"
+    },
+    "2": {
+      "defaultValue": 15000,
+      "unit": "mm²",
+      "description": "Nominal surface area of friction sleeve",
+      "descriptionNl": "Nominaal oppervlak van wrijvingsmantel",
+      "category": "equipment",
+      "dataType": "float"
+    },
+    "3": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Net surface area quotient of cone tip",
+      "descriptionNl": "Netto oppervlaktequotiënt van conuspunt",
+      "category": "equipment",
+      "dataType": "float"
+    },
+    "4": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Net surface area quotient of friction sleeve",
+      "descriptionNl": "Netto oppervlaktequotiënt van wrijvingsmantel",
+      "category": "equipment",
+      "dataType": "float"
+    },
+    "5": {
+      "defaultValue": 100,
+      "unit": "mm",
+      "description": "Distance of cone to centre of friction sleeve",
+      "descriptionNl": "Afstand van conus tot midden wrijvingsmantel",
+      "category": "equipment",
+      "dataType": "float"
+    },
+    "6": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Friction present",
+      "descriptionNl": "Wrijving aanwezig",
+      "category": "capabilities",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "7": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "PPT u1 present",
+      "descriptionNl": "PPT u1 aanwezig",
+      "category": "capabilities",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "8": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "PPT u2 present",
+      "descriptionNl": "PPT u2 aanwezig",
+      "category": "capabilities",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "9": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "PPT u3 present",
+      "descriptionNl": "PPT u3 aanwezig",
+      "category": "capabilities",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "10": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Inclination measurement present",
+      "descriptionNl": "Hellingsmeting aanwezig",
+      "category": "capabilities",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "11": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Use of back-flow compensator",
+      "descriptionNl": "Gebruik van terugstroomcompensator",
+      "category": "equipment",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "no" },
+        { "value": 1, "meaning": "yes" }
+      ]
+    },
+    "12": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Type of cone penetration test",
+      "descriptionNl": "Type conuspenetratietest",
+      "category": "test_type",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "electronic penetration test" },
+        { "value": 1, "meaning": "mechanical discontinue" },
+        { "value": 2, "meaning": "mechanical continue" }
+      ]
+    },
+    "13": {
+      "defaultValue": null,
+      "unit": "m",
+      "description": "Pre-excavated depth",
+      "descriptionNl": "Voorontgraven diepte",
+      "category": "site_conditions",
+      "dataType": "float"
+    },
+    "14": {
+      "defaultValue": null,
+      "unit": "m",
+      "description": "Groundwater level (with respect to datum of height system in ZID)",
+      "descriptionNl": "Grondwaterstand (t.o.v. datum van hoogtestelsel in ZID)",
+      "category": "site_conditions",
+      "dataType": "float"
+    },
+    "15": {
+      "defaultValue": null,
+      "unit": "m",
+      "description": "Water depth (for offshore activities)",
+      "descriptionNl": "Waterdiepte (voor offshore activiteiten)",
+      "category": "site_conditions",
+      "dataType": "float"
+    },
+    "16": {
+      "defaultValue": null,
+      "unit": "m",
+      "description": "End depth of penetration test",
+      "descriptionNl": "Einddiepte van penetratietest",
+      "category": "test_execution",
+      "dataType": "float"
+    },
+    "17": {
+      "defaultValue": null,
+      "unit": "-",
+      "description": "Stop criteria",
+      "descriptionNl": "Stopcriteria",
+      "category": "test_execution",
+      "dataType": "enum",
+      "options": [
+        { "value": 0, "meaning": "end depth reached" },
+        { "value": 1, "meaning": "max. penetration force" },
+        { "value": 2, "meaning": "cone value" },
+        { "value": 3, "meaning": "max. friction value" },
+        { "value": 4, "meaning": "max. PPT value" },
+        { "value": 5, "meaning": "max. inclination value" },
+        { "value": 6, "meaning": "obstacle" },
+        { "value": 7, "meaning": "danger of buckling" }
+      ]
+    },
+    "20": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement of cone before penetration test",
+      "descriptionNl": "Nulmeting van conus vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "21": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement of cone after penetration test",
+      "descriptionNl": "Nulmeting van conus na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "22": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement friction before penetration test",
+      "descriptionNl": "Nulmeting wrijving vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "23": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement friction after penetration test",
+      "descriptionNl": "Nulmeting wrijving na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "24": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u1 before penetration test",
+      "descriptionNl": "Nulmeting PPT u1 vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "25": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u1 after penetration test",
+      "descriptionNl": "Nulmeting PPT u1 na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "26": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u2 before penetration test",
+      "descriptionNl": "Nulmeting PPT u2 vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "27": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u2 after penetration test",
+      "descriptionNl": "Nulmeting PPT u2 na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "28": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u3 before penetration test",
+      "descriptionNl": "Nulmeting PPT u3 vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "29": {
+      "defaultValue": null,
+      "unit": "MPa",
+      "description": "Zero measurement PPT u3 after penetration test",
+      "descriptionNl": "Nulmeting PPT u3 na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "30": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination before penetration test",
+      "descriptionNl": "Nulmeting helling vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "31": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination after penetration test",
+      "descriptionNl": "Nulmeting helling na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "32": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination NS before penetration test",
+      "descriptionNl": "Nulmeting helling NZ vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "33": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination NS after penetration test",
+      "descriptionNl": "Nulmeting helling NZ na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "34": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination EW before penetration test",
+      "descriptionNl": "Nulmeting helling OW vóór penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "35": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Zero measurement inclination EW after penetration test",
+      "descriptionNl": "Nulmeting helling OW na penetratietest",
+      "category": "calibration",
+      "dataType": "float"
+    },
+    "41": {
+      "defaultValue": null,
+      "unit": "km",
+      "description": "Mileage",
+      "descriptionNl": "Kilometrering",
+      "category": "location",
+      "dataType": "float"
+    },
+    "42": {
+      "defaultValue": null,
+      "unit": "degrees",
+      "description": "Orientation between X axis inclination and North",
+      "descriptionNl": "Oriëntatie tussen X-as helling en Noord",
+      "category": "location",
+      "dataType": "float"
+    }
+  }
+}

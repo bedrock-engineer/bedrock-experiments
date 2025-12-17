@@ -1,0 +1,45 @@
+{
+  "title": "Height Reference Systems",
+  "description": "Standardized height/elevation reference systems used in GEF files (ZID header)",
+  "systems": {
+    "00000": {
+      "name": "Lokaal referentiesysteem",
+      "nameEn": "Local reference system (self-defined)",
+      "epsg": null,
+      "country": "N/A"
+    },
+    "00001": {
+      "name": "Low Low Water Spring",
+      "nameEn": "Low Low Water Spring",
+      "epsg": null,
+      "country": "International"
+    },
+    "31000": {
+      "name": "Normaal Amsterdams Peil",
+      "nameEn": "Amsterdam Ordnance Datum",
+      "epsg": "EPSG:7415",
+      "country": "Netherlands",
+      "note": "ETRS89 + NAP height"
+    },
+    "32000": {
+      "name": "Ostend Level",
+      "nameEn": "Ostend Height",
+      "epsg": "EPSG:5710",
+      "country": "Belgium"
+    },
+    "32001": {
+      "name": "Tweede Algemene Waterpassing",
+      "nameEn": "Second General Levelling",
+      "epsg": "EPSG:5710",
+      "country": "Belgium",
+      "note": "TAW"
+    },
+    "49000": {
+      "name": "Normalnull",
+      "nameEn": "Normal Null (German standard height)",
+      "epsg": "EPSG:5783",
+      "country": "Germany",
+      "note": "DHHN92 height"
+    }
+  }
+}

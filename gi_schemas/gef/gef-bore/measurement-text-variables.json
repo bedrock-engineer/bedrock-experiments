@@ -1,0 +1,211 @@
+{
+  "title": "Bore measurement text variables",
+  "description": "Text field variables for GEF-BORE files",
+  "variables": {
+    "1": {
+      "description": "Opdrachtgever",
+      "category": "project_info",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "2": {
+      "description": "Doel onderzoek",
+      "category": "project_info",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "3": {
+      "description": "Plaats uitvoering",
+      "category": "location",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "4": {
+      "description": "Boring volgens NEN5119 uitgevoerd",
+      "category": "project_info",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "5": {
+      "description": "Datum boorbeschrijving",
+      "category": "project_info",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "6": {
+      "description": "Beschrijver lagen",
+      "category": "personnel",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "9": {
+      "description": "Locaal referentiesysteem",
+      "category": "reference_system",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "11": {
+      "description": "Methode maaiveldhoogtebepaling",
+      "category": "elevation_determination",
+      "required": false,
+      "standardizedCodes": "heightDeterminationCodes"
+    },
+    "12": {
+      "description": "Methode plaatsbepaling",
+      "category": "position_determination",
+      "required": false,
+      "standardizedCodes": "placeDeterminationCodes"
+    },
+    "13": {
+      "description": "Boorfirma",
+      "category": "personnel",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "14": {
+      "description": "Vertrouwelijkheid boorbeschrijving",
+      "category": "data_management",
+      "required": false,
+      "standardizedCodes": [
+        {
+          "code": "Ja",
+          "descriptionNl": "vertrouwelijk",
+          "description": "confidential"
+        },
+        { "code": "Nee", "descriptionNl": "openbaar", "description": "public" }
+      ]
+    },
+    "15": {
+      "description": "Einddatum geheimhouding",
+      "category": "data_management",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "16": {
+      "description": "Datum boring",
+      "category": "project_info",
+      "required": true,
+      "standardizedCodes": null
+    },
+    "17": {
+      "description": "Vochtigheidstoestand beschreven grond",
+      "category": "sample_condition",
+      "required": false,
+      "standardizedCodes": [
+        { "code": "droog", "descriptionNl": "droge grond", "description": "dry soil" },
+        {
+          "code": "nat",
+          "descriptionNl": "veldvochtige grond",
+          "description": "field-moist soil"
+        }
+      ]
+    },
+    "18": {
+      "description": "Aanwezigheid peilbuis",
+      "category": "monitoring_wells",
+      "required": false,
+      "standardizedCodes": [
+        {
+          "code": "Ja",
+          "descriptionNl": "peilbuis aanwezig",
+          "description": "monitoring well present"
+        },
+        {
+          "code": "Nee",
+          "descriptionNl": "peilbuis afwezig",
+          "description": "monitoring well absent"
+        }
+      ]
+    },
+    "19": {
+      "description": "Einddatum boring",
+      "category": "project_info",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "20": {
+      "description": "Koppeling met sondering",
+      "category": "related_investigations",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "21": {
+      "description": "Gebruik boor- en steunvloeistof",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "22": {
+      "description": "Omschrijving boor- en steunvloeistof",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "23": {
+      "description": "Boormeester",
+      "category": "personnel",
+      "required": false,
+      "standardizedCodes": null
+    },
+    "31": {
+      "description": "Boormethode boortraject 1",
+      "category": "drilling_methods",
+      "required": true,
+      "standardizedCodes": "drillingMethods"
+    },
+    "32": {
+      "description": "Boormethode boortraject 2",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "33": {
+      "description": "Boormethode boortraject 3",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "34": {
+      "description": "Boormethode boortraject 4",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "35": {
+      "description": "Boormethode boortraject 5",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "36": {
+      "description": "Boormethode boortraject 6",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "37": {
+      "description": "Boormethode boortraject 7",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "38": {
+      "description": "Boormethode boortraject 8",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "39": {
+      "description": "Boormethode boortraject 9",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    },
+    "40": {
+      "description": "Boormethode boortraject 10",
+      "category": "drilling_methods",
+      "required": false,
+      "standardizedCodes": "drillingMethods"
+    }
+  }
+}

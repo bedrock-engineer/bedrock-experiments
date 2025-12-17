@@ -1,0 +1,13 @@
+{
+  "table": "2.23",
+  "title": "Korrelvorm",
+  "description": "Grain shape",
+  "codes": {
+    "ZZH": "sterk hoekig",
+    "ZHK": "hoekig",
+    "ZMH": "matig hoekig",
+    "ZMA": "matig afgerond",
+    "ZAF": "afgerond",
+    "ZSA": "sterk afgerond"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Specimen codes",
+  "description": "Specimen codes based on GEF-BORE specification",
+  "geroerd": [
+    { "code": "G", "nl": "Geroerd", "en": "Disturbed" },
+    { "code": "O", "nl": "Ongeroerd", "en": "Undisturbed" }
+  ],
+  "monstersteekapparaat": [
+    { "code": "AMS", "nl": "Ackermann-apparaat", "en": "Ackermann apparatus" },
+    {
+      "code": "BMS",
+      "nl": "Begemann-continu-monstersteekapparaat",
+      "en": "Begemann continuous sampler"
+    },
+    { "code": "DMS", "nl": "Druksteekapparaat", "en": "Push sampler" },
+    { "code": "ZMS", "nl": "Zuiger-monstersteekapparaat", "en": "Piston sampler" },
+    { "code": "OMS", "nl": "Open monstersteekapparaat", "en": "Open tube sampler" },
+    { "code": "SMS", "nl": "Monstersteekapparaat SPT", "en": "SPT sampler" }
+  ],
+  "dikDunwandig": [
+    { "code": "DIK", "nl": "Dikwandig", "en": "Thick-walled" },
+    { "code": "DUN", "nl": "Dunwandig", "en": "Thin-walled" }
+  ],
+  "monstermethode": [
+    { "code": "D", "nl": "Drukken", "en": "Pushed/Static" },
+    { "code": "H", "nl": "Hameren", "en": "Hammered/Dynamic" }
+  ]
+}

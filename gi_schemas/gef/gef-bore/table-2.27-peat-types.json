@@ -1,0 +1,15 @@
+{
+  "table": "2.27",
+  "title": "Veensoorten",
+  "description": "Peat types",
+  "codes": {
+    "BSV": "bosveen",
+    "HEV": "heideveen",
+    "MOV": "mosveen",
+    "RIV": "rietveen",
+    "SZV": "Scheuchzeriaveen",
+    "VMV": "veenmosveen",
+    "WOV": "wollegrasveen",
+    "ZEV": "zeggeveen"
+  }
+}

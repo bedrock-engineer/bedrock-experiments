@@ -1,0 +1,31 @@
+{
+  "table": "2.35",
+  "title": "Gelaagdheid",
+  "description": "Layering/stratification",
+  "codes": {
+    "BIO": "bioturbatie",
+    "DWO": "doorworteling",
+    "GCM": "cm-gelaagdheid",
+    "GDM": "dm-gelaagdheid",
+    "GDU": "dubbeltjes-gelaagdheid",
+    "GMM": "mm-gelaagdheid",
+    "GRG": "graafgangen",
+    "GSC": "scheve gelaagdheid",
+    "GSP": "spekkoek-gelaagdheid",
+    "HOM": "homogeen",
+    "GE1": "zwak gelaagd",
+    "GE2": "weinig gelaagd",
+    "GE3": "sterk gelaagd",
+    "GEX": "gelaagd",
+    "STGL": "met grindlagen",
+    "STKL": "met kleilagen",
+    "STLL": "met leemlagen",
+    "STSL": "met stenenlagen",
+    "STVL": "met veenlagen",
+    "STZL": "met zandlagen",
+    "STBR": "met bruinkoollagen",
+    "STDE": "met detrituslagen",
+    "STGY": "met gyttjalagen",
+    "STSC": "met schelpenlagen"
+  }
+}

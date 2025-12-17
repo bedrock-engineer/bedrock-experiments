@@ -1,0 +1,33 @@
+{
+  "table": "2.16",
+  "title": "Grondsoorten niet volgens NEN 5104",
+  "description": "Soil types not according to NEN 5104 standard",
+  "codes": {
+    "G": "grind",
+    "K": "klei",
+    "L": "leem",
+    "V": "veen",
+    "Z": "zand",
+    "KX": "kleiig",
+    "K1": "zwak kleiig",
+    "K3": "sterk kleiig",
+    "SX": "siltig",
+    "S1": "zwak siltig",
+    "S2": "matig siltig",
+    "S3": "sterk siltig",
+    "S4": "uiterst siltig",
+    "ZX": "zandig",
+    "Z1": "zwak zandig",
+    "Z2": "matig zandig",
+    "Z3": "sterk zandig",
+    "Z4": "uiterst zandig",
+    "GX": "grindig",
+    "G1": "zwak grindig",
+    "G2": "matig grindig",
+    "G3": "sterk grindig",
+    "HX": "humeus",
+    "H1": "zwak humeus",
+    "H2": "matig humeus",
+    "H3": "sterk humeus"
+  }
+}

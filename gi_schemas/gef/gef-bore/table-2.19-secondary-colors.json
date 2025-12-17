@@ -1,0 +1,19 @@
+{
+  "table": "2.19",
+  "title": "Tweede kleur",
+  "description": "Secondary colors",
+  "codes": {
+    "TBL": "blauw-",
+    "TBR": "bruin-",
+    "TGE": "geel-",
+    "TGN": "groen-",
+    "TGR": "grijs-",
+    "TOL": "olijf-",
+    "TOR": "oranje-",
+    "TPA": "paars-",
+    "TRO": "rood-",
+    "TWI": "wit-",
+    "TRZ": "roze-",
+    "TZW": "zwart-"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "table": "2.28",
+  "title": "Consistentie",
+  "description": "Consistency",
+  "clay": {
+    "KZSL": "zeer slap",
+    "KSLA": "slap",
+    "KMSL": "matig slap",
+    "KMST": "matig stevig",
+    "KSTV": "stevig",
+    "KZST": "zeer stevig",
+    "KHRD": "hard",
+    "KZHR": "zeer hard"
+  },
+  "loam": {
+    "LZSL": "zeer slap",
+    "LSLA": "slap",
+    "LMSL": "matig slap",
+    "LMST": "matig stevig",
+    "LSTV": "stevig",
+    "LZST": "zeer stevig",
+    "LHRD": "hard",
+    "LZHR": "zeer hard"
+  },
+  "peat": {
+    "VZSL": "zeer slap",
+    "VSLA": "slap",
+    "VMSL": "matig slap",
+    "VMST": "matig stevig",
+    "VSTV": "stevig"
+  }
+}

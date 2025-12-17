@@ -1,0 +1,13 @@
+{
+  "table": "2.21",
+  "title": "Zandmediaanklasse",
+  "description": "Sand median classes",
+  "codes": {
+    "ZUF": "uiterst fijn",
+    "ZZF": "zeer fijn",
+    "ZMF": "matig fijn",
+    "ZMG": "matig grof",
+    "ZZG": "zeer grof",
+    "ZUG": "uiterst grof"
+  }
+}

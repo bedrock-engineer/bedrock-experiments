@@ -1,0 +1,12 @@
+{
+  "table": "2.22",
+  "title": "Zandspreiding",
+  "description": "Sand spread/distribution",
+  "codes": {
+    "SZK": "zeer kleine spreiding",
+    "SMK": "matig kleine spreiding",
+    "SMG": "matig grote spreiding",
+    "SZG": "zeer grote spreiding",
+    "STW": "tweetoppige spreiding"
+  }
+}

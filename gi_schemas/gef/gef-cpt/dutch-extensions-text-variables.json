@@ -1,0 +1,240 @@
+{
+  "title": "Dutch Extensions - Text Variables",
+  "description": "Dutch-specific text field variables (BRO: Basis Registratie Ondergrond + VOTB: Vereniging Ondernemers Technisch Bodemonderzoek)",
+  "variables": {
+    "101": {
+      "description": "Data holder",
+      "descriptionNl": "Bronhouder",
+      "category": "bro_submission",
+      "example": "Bronhouder, 52605825, 31"
+    },
+    "102": {
+      "description": "Delivery framework",
+      "descriptionNl": "Kader aanlevering",
+      "category": "bro_submission",
+      "example": "opdracht publieke taakuitvoering"
+    },
+    "103": {
+      "description": "Investigation purpose",
+      "descriptionNl": "Kader inwinning",
+      "category": "bro_submission",
+      "example": "overig onderzoek"
+    },
+    "104": {
+      "description": "Location surveyor",
+      "descriptionNl": "Uitvoerder locatiebepaling",
+      "category": "bro_submission",
+      "example": "24257098, 31"
+    },
+    "105": {
+      "description": "Location determination date",
+      "descriptionNl": "Datum locatiebepaling",
+      "category": "bro_submission",
+      "example": "2019, 01, 29"
+    },
+    "106": {
+      "description": "Elevation surveyor",
+      "descriptionNl": "Uitvoerder verticale positiebepaling",
+      "category": "bro_submission",
+      "example": "24257098, 31"
+    },
+    "107": {
+      "description": "Elevation determination date",
+      "descriptionNl": "Datum verticale positiebepaling",
+      "category": "bro_submission",
+      "example": "2019, 01, 29"
+    },
+    "108": {
+      "description": "Surface conditions",
+      "descriptionNl": "Hoedanigheid oppervlakte",
+      "category": "bro_submission",
+      "example": "verhard"
+    },
+    "109": {
+      "description": "Dissipation test performed",
+      "descriptionNl": "Dissipatietest uitgevoerd",
+      "category": "bro_submission",
+      "example": "nee"
+    },
+    "110": {
+      "description": "Expert correction performed",
+      "descriptionNl": "Expertcorrectie uitgevoerd",
+      "category": "bro_submission",
+      "example": "ja"
+    },
+    "111": {
+      "description": "Additional investigation performed",
+      "descriptionNl": "Aanvullend onderzoek uitgevoerd",
+      "category": "bro_submission",
+      "example": "nee"
+    },
+    "112": {
+      "description": "Reporting date",
+      "descriptionNl": "Rapportagedatum onderzoek",
+      "category": "bro_submission",
+      "example": "2019, 01, 31"
+    },
+    "113": {
+      "description": "Last processing date",
+      "descriptionNl": "Datum laatste bewerking",
+      "category": "bro_submission",
+      "example": "2019, 01, 30"
+    },
+    "114": {
+      "description": "Investigation date",
+      "descriptionNl": "Datum onderzoek",
+      "category": "bro_submission",
+      "example": "2019, 01, 29"
+    },
+    "115": {
+      "description": "Quality regime",
+      "descriptionNl": "Kwaliteitsregime",
+      "category": "bro_registration",
+      "example": "IMBRO/A"
+    },
+    "116": {
+      "description": "Registration timestamp",
+      "descriptionNl": "Tijdstip registratie object",
+      "category": "bro_registration",
+      "example": "2019-02-15T10:30:00"
+    },
+    "117": {
+      "description": "Registration status",
+      "descriptionNl": "Registratiestatus",
+      "category": "bro_registration",
+      "example": "voltooid"
+    },
+    "118": {
+      "description": "Registration completion timestamp",
+      "descriptionNl": "Tijdstip voltooiing registratie",
+      "category": "bro_registration",
+      "example": "2019-02-15T10:30:00"
+    },
+    "119": {
+      "description": "Corrected indicator",
+      "descriptionNl": "Gecorrigeerd",
+      "category": "bro_registration",
+      "example": "nee"
+    },
+    "120": {
+      "description": "Last correction timestamp",
+      "descriptionNl": "Tijdstip laatste correctie",
+      "category": "bro_registration",
+      "example": null
+    },
+    "121": {
+      "description": "Under investigation",
+      "descriptionNl": "In onderzoek",
+      "category": "bro_registration",
+      "example": "nee"
+    },
+    "122": {
+      "description": "Under investigation since",
+      "descriptionNl": "In onderzoek sinds",
+      "category": "bro_registration",
+      "example": null
+    },
+    "123": {
+      "description": "Removed from registration",
+      "descriptionNl": "Uit registratie genomen",
+      "category": "bro_registration",
+      "example": "nee"
+    },
+    "124": {
+      "description": "Removal timestamp",
+      "descriptionNl": "Tijdstip uit registratie genomen",
+      "category": "bro_registration",
+      "example": null
+    },
+    "125": {
+      "description": "Re-registered",
+      "descriptionNl": "Weer in registratie genomen",
+      "category": "bro_registration",
+      "example": "nee"
+    },
+    "126": {
+      "description": "Re-registration timestamp",
+      "descriptionNl": "Tijdstip weer in registratie genomen",
+      "category": "bro_registration",
+      "example": null
+    },
+    "127": {
+      "description": "Standardized location reference system",
+      "descriptionNl": "Gestandaardiseerde locatie referentiestelsel",
+      "category": "bro_registration",
+      "example": "EPSG:28992"
+    },
+    "128": {
+      "description": "Coordinate transformation",
+      "descriptionNl": "Coördinaattransformatie",
+      "category": "bro_registration",
+      "example": "nee"
+    },
+    "1100": {
+      "description": "Filter material type for pore pressure filter",
+      "descriptionNl": "Type filtermateriaal voor waterspanningsfilter",
+      "category": "votb_equipment",
+      "example": "sintered steel"
+    },
+    "1101": {
+      "description": "Use of friction reducer",
+      "descriptionNl": "Gebruik kleefbreker",
+      "category": "votb_equipment",
+      "example": "ja"
+    },
+    "1102": {
+      "description": "Type of friction reducer",
+      "descriptionNl": "Type kleefbreker",
+      "category": "votb_equipment",
+      "example": "mechanical"
+    },
+    "1103": {
+      "description": "Fluid type for wash boring",
+      "descriptionNl": "Type vloeistof bij spoelsondering",
+      "category": "votb_equipment",
+      "example": "water"
+    },
+    "1104": {
+      "description": "Inclinometer position",
+      "descriptionNl": "Positie hellingmeter",
+      "category": "votb_equipment",
+      "example": "in cone"
+    },
+    "1105": {
+      "description": "Dissipation test with closed pressure clamp",
+      "descriptionNl": "Dissipatietest met gesloten drukklem",
+      "category": "votb_test",
+      "example": "nee"
+    },
+    "1106": {
+      "description": "Postal code for project location",
+      "descriptionNl": "Postcode voor de projectlocatie",
+      "category": "votb_location",
+      "example": "3011 AA"
+    },
+    "1107": {
+      "description": "Street name of project location",
+      "descriptionNl": "Straatnaam van de projectlocatie",
+      "category": "votb_location",
+      "example": "Coolsingel"
+    },
+    "1108": {
+      "description": "City of project location",
+      "descriptionNl": "Plaats van de projectlocatie",
+      "category": "votb_location",
+      "example": "Rotterdam"
+    },
+    "1109": {
+      "description": "Province of project location",
+      "descriptionNl": "Provincie waarin de projectlocatie is gelegen",
+      "category": "votb_location",
+      "example": "Zuid-Holland"
+    },
+    "1110": {
+      "description": "Country of project",
+      "descriptionNl": "Land waar het project in is gelegen",
+      "category": "votb_location",
+      "example": "Nederland"
+    }
+  }
+}

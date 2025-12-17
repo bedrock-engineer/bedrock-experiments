@@ -1,0 +1,14 @@
+{
+  "table": "2.36",
+  "title": "Geologische interpretatie",
+  "description": "Geological interpretation",
+  "codes": {
+    "ANT": "Antropogeen",
+    "BOO": "Boomse klei",
+    "DEZ": "dekzand",
+    "KEL": "keileem",
+    "LSS": "loess",
+    "POK": "potklei",
+    "WAR": "warven"
+  }
+}

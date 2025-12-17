@@ -1,0 +1,13 @@
+{
+  "table": "2.33",
+  "title": "Glauconietgehalte",
+  "description": "Glauconite content",
+  "codes": {
+    "GC0": "geen glauconiet",
+    "GC1": "spoor glauconiet",
+    "GC2": "weinig glauconiet",
+    "GC3": "veel glauconiet",
+    "GC4": "zeer veel glauconiet",
+    "GC5": "uiterst veel glauconiet"
+  }
+}
