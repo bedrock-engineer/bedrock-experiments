@@ -1,0 +1,14 @@
+# Constructiesafari Rotterdam
+
+| Locatie                                                                                    | Bijzonderheden                                                                                                                                |
+|--------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| **NS Station Blaak**                                                                       | Ondergrondse kruising van trein en metro Bovengronds tram, weg en marktplein Luifel met ondersteuning door vakwerkboog Glazen dak metrogebouw |
+| Rotta Nova                                                                                 | in aanbouw naast Markthal                                                                                                                     |
+| **Markthal**                                                                               | Ondergrondse meerlaagse parkeergarage Boogconstructie gebouw Kabelnetgevel                                                                    |
+| Willemsbrug                                                                                | Asymmetrische tuibrug Verankering achtertuien? Overspanning? Fundering?                                                                       |
+| **Koningshavenbrug (“De Hef”)**                                                            | Klassieke vakwerkbrug                                                                                                                         |
+| Maastoren                                                                                  | In-situ betonnen kern met prefabgevel Luifel boven ingang                                                                                     |
+| De Rotterdam                                                                               | Multi-use hoogbouwcomplex op meerlaagse parkeerkelder                                                                                         |
+| **Erasmusbrug**                                                                            | Asymmetrische tuibrug Fundering Verankering achtertui Overspanning                                                                            |
+| **De Zalmhaven**                                                                           | Hoogste woongebouw van Nederland Link naar het vak dynamica (Karel van Dalen) m.b.t. eigenfrequentie en demping                               |
+| Wandeling is vanaf hier verder vrij, nu startpunt als eindpunt gekozen, totaal circa 6 km. | Leuvehaven en Wijnhaven-gebied bieden interessante hoogbouw                                                                                   |
