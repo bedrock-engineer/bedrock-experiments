@@ -1,0 +1,86 @@
+{
+  "title": "Belgian Extensions - Text Variables",
+  "description": "Belgian-specific text field variables (DOV: Databank Ondergrond Vlaanderen)",
+  "variables": {
+    "100": {
+      "description": "Testtype",
+      "category": "dov_execution",
+      "example": "sondering"
+    },
+    "130": {
+      "description": "Watermeting tijdstip",
+      "category": "dov_execution",
+      "example": "voor sondering"
+    },
+    "131": {
+      "description": "Grondsoort bij conus",
+      "category": "dov_execution",
+      "example": "zand"
+    },
+    "132": {
+      "description": "Buisgewichtcorrectie",
+      "category": "dov_execution",
+      "example": "ja"
+    },
+    "133": {
+      "description": "Stanggewichtcorrectie",
+      "category": "dov_execution",
+      "example": "ja"
+    },
+    "134": {
+      "description": "Kalibratiedatum",
+      "category": "dov_calibration",
+      "example": "2019-01-15"
+    },
+    "135": {
+      "description": "Conus calibratie datum",
+      "category": "dov_calibration",
+      "example": "2019-01-15"
+    },
+    "136": {
+      "description": "Leverancier conus",
+      "category": "dov_equipment",
+      "example": "Fugro"
+    },
+    "137": {
+      "description": "Methode verzadiging voor U conus",
+      "category": "dov_equipment",
+      "example": "glycerine"
+    },
+    "138": {
+      "description": "Conustype",
+      "category": "dov_equipment",
+      "example": "electric"
+    },
+    "139": {
+      "description": "Opvullen van sondeergat",
+      "category": "dov_execution",
+      "example": "ja"
+    },
+    "140": {
+      "description": "Afwijkingen van de norm",
+      "category": "dov_remarks",
+      "example": "geen"
+    },
+    "141": {
+      "description": "Reden vroegtijdig stoppen",
+      "category": "dov_remarks",
+      "example": "obstakel"
+    },
+    "142": {
+      "description": "Hernemen sondering",
+      "category": "dov_remarks",
+      "example": "hervat na herpositionering"
+    },
+    "143": {
+      "description": "Speciale opstellingen",
+      "category": "dov_remarks",
+      "example": "platform gemonteerd"
+    },
+    "144": {
+      "description": "Waarneming tijdens uitvoering",
+      "category": "dov_remarks",
+      "example": "grondwater instroming waargenomen"
+    }
+  }
+}

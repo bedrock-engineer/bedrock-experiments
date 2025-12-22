@@ -1,0 +1,10 @@
+{
+  "table": "2.29",
+  "title": "Zandcompactie",
+  "description": "Sand compaction",
+  "codes": {
+    "LOS": "los gepakt",
+    "NOR": "normaal gepakt",
+    "VAS": "vast gepakt"
+  }
+}

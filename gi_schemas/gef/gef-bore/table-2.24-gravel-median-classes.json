@@ -1,0 +1,10 @@
+{
+  "table": "2.24",
+  "title": "Grindmediaanklasse",
+  "description": "Gravel median classes",
+  "codes": {
+    "GFN": "fijn grind",
+    "GMG": "matig grof grind",
+    "GZG": "zeer grof grind"
+  }
+}

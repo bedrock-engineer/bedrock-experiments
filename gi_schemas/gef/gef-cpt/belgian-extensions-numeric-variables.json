@@ -1,0 +1,210 @@
+{
+  "title": "Belgian Extensions - Numeric Variables",
+  "description": "Belgian-specific numeric measurement variables (DOV: Databank Ondergrond Vlaanderen)",
+  "variables": {
+    "155": {
+      "unit": "MPa",
+      "description": "Nulpunt Qt voor de meting",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "156": {
+      "unit": "MPa",
+      "description": "Nulpunt Qt na de meting",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "157": {
+      "unit": "°C",
+      "description": "Nulpunt T voor de meting",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "158": {
+      "unit": "°C",
+      "description": "Nulpunt T na de meting",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "130": {
+      "unit": "-",
+      "description": "Indringing",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "131": {
+      "unit": "m",
+      "description": "Dichtvallen sondeergat op",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "132": {
+      "unit": "m",
+      "description": "Diepte plaatsen kleefvanger",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "133": {
+      "unit": "m",
+      "description": "Diepte plaatsen verlengbuis",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "134": {
+      "unit": "-",
+      "description": "Aantal buizen",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "135": {
+      "unit": "m",
+      "description": "Gemeten sondeerlengte",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "138": {
+      "unit": "kN",
+      "description": "Totale drukkracht bij einde sondering",
+      "category": "dov_execution",
+      "dataType": "float"
+    },
+    "139": {
+      "unit": "-",
+      "description": "Conuspenetrometer klasse (NBN EN ISO 22476-1:2023)",
+      "category": "dov_equipment",
+      "dataType": "string"
+    },
+    "140": {
+      "unit": "kPa",
+      "description": "Max. toelaatbare meetonzekerheid qc",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "141": {
+      "unit": "kPa/°C",
+      "description": "Omgevingstemperatuurstabiliteit qc",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "142": {
+      "unit": "kPa/°C",
+      "description": "Wisselende temperatuurstabiliteit qc",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "143": {
+      "unit": "kPa/N",
+      "description": "Conusbelastingsinvloed qc",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "144": {
+      "unit": "kPa",
+      "description": "Max. toelaatbare meetonzekerheid fs",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "145": {
+      "unit": "kPa/°C",
+      "description": "Omgevingstemperatuurstabiliteit fs",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "146": {
+      "unit": "kPa/°C",
+      "description": "Wisselende temperatuurstabiliteit fs",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "147": {
+      "unit": "kPa/N",
+      "description": "Conusbelastingsinvloed fs",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "148": {
+      "unit": "kPa",
+      "description": "Max. toelaatbare meetonzekerheid u",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "149": {
+      "unit": "kPa/°C",
+      "description": "Omgevingstemperatuurstabiliteit u",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "150": {
+      "unit": "kPa/°C",
+      "description": "Wisselende temperatuurstabiliteit u",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "151": {
+      "unit": "kPa/N",
+      "description": "Conusbelastingsinvloed u",
+      "category": "dov_calibration",
+      "dataType": "float"
+    },
+    "200": {
+      "unit": "m",
+      "description": "Voerbuis 1 tot",
+      "category": "dov_guide_tubes",
+      "dataType": "float"
+    },
+    "201": {
+      "unit": "m",
+      "description": "Voerbuis 1 op",
+      "category": "dov_guide_tubes",
+      "dataType": "float"
+    },
+    "250": {
+      "unit": "m",
+      "description": "Boring 0 van",
+      "category": "dov_borings",
+      "dataType": "float"
+    },
+    "251": {
+      "unit": "m",
+      "description": "Boring 0 tot",
+      "category": "dov_borings",
+      "dataType": "float"
+    },
+    "300": {
+      "unit": "m",
+      "description": "Optrekking 1",
+      "category": "dov_retractions",
+      "dataType": "float"
+    },
+    "350": {
+      "unit": "m",
+      "description": "Stopzetting 1",
+      "category": "dov_stops",
+      "dataType": "float"
+    },
+    "351": {
+      "unit": "m",
+      "description": "Stopzetting 2",
+      "category": "dov_stops",
+      "dataType": "float"
+    },
+    "352": {
+      "unit": "m",
+      "description": "Stopzetting 3",
+      "category": "dov_stops",
+      "dataType": "float"
+    },
+    "353": {
+      "unit": "m",
+      "description": "Stopzetting 4",
+      "category": "dov_stops",
+      "dataType": "float"
+    },
+    "354": {
+      "unit": "m",
+      "description": "Stopzetting 5",
+      "category": "dov_stops",
+      "dataType": "float"
+    }
+  }
+}

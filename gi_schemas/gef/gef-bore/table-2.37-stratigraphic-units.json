@@ -1,0 +1,14 @@
+{
+  "table": "2.37",
+  "title": "Stratigrafische eenheden",
+  "description": "Stratigraphic units",
+  "codes": {
+    "DR": "Formatie van Drente",
+    "EC": "Formatie van Echteld",
+    "KR": "Formatie van Kreftenheye",
+    "NA": "Formatie van Naaldwijk",
+    "NI": "Formatie van Nieuwkoop",
+    "TW": "Formatie van Twente",
+    "WA": "Formatie van Waalre"
+  }
+}

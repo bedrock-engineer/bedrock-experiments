@@ -1,0 +1,216 @@
+{
+  "title": "Dutch Extensions - Numeric Variables",
+  "description": "Dutch-specific numeric measurement variables (BRO: Basis Registratie Ondergrond + VOTB: Vereniging Ondernemers Technisch Bodemonderzoek)",
+  "variables": {
+    "101": {
+      "unit": "m",
+      "description": "Penetration length",
+      "descriptionNl": "Sondeertrajectlengte",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "102": {
+      "unit": "m",
+      "description": "Depth",
+      "descriptionNl": "Diepte",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "103": {
+      "unit": "s",
+      "description": "Elapsed time",
+      "descriptionNl": "Verlopen tijd",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "104": {
+      "unit": "MPa",
+      "description": "Cone resistance",
+      "descriptionNl": "Conusweerstand",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "105": {
+      "unit": "MPa",
+      "description": "Corrected cone resistance",
+      "descriptionNl": "Gecorrigeerde conusweerstand",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "106": {
+      "unit": "MPa",
+      "description": "Net cone resistance",
+      "descriptionNl": "Netto conusweerstand",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "107": {
+      "unit": "nT",
+      "description": "Magnetic field strength x",
+      "descriptionNl": "Magnetische veldsterkte x",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "108": {
+      "unit": "nT",
+      "description": "Magnetic field strength y",
+      "descriptionNl": "Magnetische veldsterkte y",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "109": {
+      "unit": "nT",
+      "description": "Magnetic field strength z",
+      "descriptionNl": "Magnetische veldsterkte z",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "110": {
+      "unit": "nT",
+      "description": "Total magnetic field strength",
+      "descriptionNl": "Totale magnetische veldsterkte",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "111": {
+      "unit": "S/m",
+      "description": "Electrical conductivity",
+      "descriptionNl": "Electrische geleidbaarheid",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "112": {
+      "unit": "degrees",
+      "description": "Inclination east-west",
+      "descriptionNl": "Helling oost-west",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "113": {
+      "unit": "degrees",
+      "description": "Inclination north-south",
+      "descriptionNl": "Helling noord-zuid",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "114": {
+      "unit": "degrees",
+      "description": "Inclination x",
+      "descriptionNl": "Helling x",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "115": {
+      "unit": "degrees",
+      "description": "Inclination y",
+      "descriptionNl": "Helling y",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "116": {
+      "unit": "degrees",
+      "description": "Resultant inclination",
+      "descriptionNl": "Hellingresultante",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "117": {
+      "unit": "degrees",
+      "description": "Magnetic inclination",
+      "descriptionNl": "Magnetische inclinatie",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "118": {
+      "unit": "degrees",
+      "description": "Magnetic declination",
+      "descriptionNl": "Magnetische declinatie",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "119": {
+      "unit": "MPa",
+      "description": "Local friction",
+      "descriptionNl": "Plaatselijke wrijving",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "120": {
+      "unit": "-",
+      "description": "Pore ratio",
+      "descriptionNl": "Poriënratio",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "121": {
+      "unit": "°C",
+      "description": "Temperature",
+      "descriptionNl": "Temperatuur",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "122": {
+      "unit": "MPa",
+      "description": "Pore pressure u1",
+      "descriptionNl": "Waterspanning u1",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "123": {
+      "unit": "MPa",
+      "description": "Pore pressure u2",
+      "descriptionNl": "Waterspanning u2",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "124": {
+      "unit": "%",
+      "description": "Friction ratio",
+      "descriptionNl": "Wrijvingsgetal",
+      "category": "bro_data",
+      "dataType": "float"
+    },
+    "130": {
+      "unit": "mm",
+      "description": "Cone diameter before test",
+      "descriptionNl": "Conusdiameter voor test",
+      "category": "bro_equipment",
+      "dataType": "float"
+    },
+    "1100": {
+      "unit": "µm",
+      "description": "Pore diameter of filter material",
+      "descriptionNl": "Poriëndiameter filtermateriaal waterspanningsfilter",
+      "category": "votb_equipment",
+      "dataType": "float"
+    },
+    "1101": {
+      "unit": "mm",
+      "description": "Filter diameter behind cone tip",
+      "descriptionNl": "Diameter filter achter conuspunt",
+      "category": "votb_equipment",
+      "dataType": "float"
+    },
+    "1102": {
+      "unit": "mm",
+      "description": "Distance friction reducer to cone tip",
+      "descriptionNl": "Afstand kleefbreker tot conuspunt",
+      "category": "votb_equipment",
+      "dataType": "float"
+    },
+    "1103": {
+      "unit": "°C",
+      "description": "Cone temperature before test",
+      "descriptionNl": "Temperatuur conus voor test",
+      "category": "votb_calibration",
+      "dataType": "float"
+    },
+    "1104": {
+      "unit": "°C",
+      "description": "Ambient temperature before test",
+      "descriptionNl": "Temperatuur omgeving voor test",
+      "category": "votb_calibration",
+      "dataType": "float"
+    }
+  }
+}

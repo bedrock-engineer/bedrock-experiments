@@ -1,0 +1,11 @@
+{
+  "table": "2.31",
+  "title": "Hoeveelheid schelpmateriaal",
+  "description": "Shell material content",
+  "codes": {
+    "SCH0": "geen schelpmateriaal",
+    "SCH1": "spoor schelpmateriaal",
+    "SCH2": "weinig schelpmateriaal",
+    "SCH3": "veel schelpmateriaal"
+  }
+}

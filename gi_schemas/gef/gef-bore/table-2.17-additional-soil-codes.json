@@ -1,0 +1,58 @@
+{
+  "table": "2.17",
+  "title": "Aanvullende grondsoorten",
+  "description": "Additional soil types",
+  "categories": {
+    "large_particles": {
+      "BLK": "blokken",
+      "KEI": "keien",
+      "STN": "stenen"
+    },
+    "organic": {
+      "BRK": "bruinkool",
+      "DET": "detritus",
+      "DY": "dy",
+      "GY": "gyttja",
+      "HO": "hout"
+    },
+    "minerals": {
+      "GCZ": "glauconietzand",
+      "GOZ": "goethietzand",
+      "SHE": "schelpen",
+      "SLI": "slib"
+    },
+    "rocks": {
+      "KAS": "kalksteen",
+      "LEI": "leisteen",
+      "MER": "mergel",
+      "SHA": "schalie",
+      "ZNS": "zandsteen",
+      "GES": "vast gesteente"
+    },
+    "anthropogenic": {
+      "AF": "afval",
+      "AS": "asfalt",
+      "BE": "beton",
+      "BI": "bitumen",
+      "BT": "ballast",
+      "BST": "baksteen",
+      "GI": "gips",
+      "GA": "glas",
+      "HK": "houtskool",
+      "HU": "huisvuil",
+      "KA": "kalk",
+      "KG": "kolengruis",
+      "KO": "kolen",
+      "KT": "krijt",
+      "ME": "metaal",
+      "MI": "mijnsteen",
+      "OE": "oer",
+      "PL": "planten",
+      "PU": "puin",
+      "SI": "sintels",
+      "SL": "slakken",
+      "WO": "wortels",
+      "YZ": "ijzer"
+    }
+  }
+}

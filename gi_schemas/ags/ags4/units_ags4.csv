@@ -1,0 +1,155 @@
+ags_unit,ags_unit_description
+%,percentage
+% dry weight,percentage of dry weight
+%/hr,percentage per hour
+%/min,percentage per minute
+%vol,percentage volume
+(K-cm)/W,Kelvin centimetres per Watt
+(K-m)/W,Kelvin metres per Watt
+acre,acre
+API,American Petroleum Institute
+bar,bar
+Bq/g,Becquerel per gram
+cfs,cubic feet per second
+CFU/g,colony forming units per gram
+CFU/ml,colony forming units per millilitre
+cm,centimetre
+cm/s,centimetres per second
+cm2,square centimetre
+cm3,cubic centimetre
+colonies/l,colonies per litre
+colonies/ml,colonies per millilitre
+counts/s,counts per second
+day,day
+deg,degree (angle)
+DegC,degree Celsius
+DegC/W,Degree Celsius per Watt
+DegF,degree Fahrenheit
+ft,foot
+ft/min,feet per minute
+ft2,square foot
+ft2/day,square feet per day
+ft2/t,square feet per ton
+ft2/yr,square feet per year
+ft3,cubic foot
+g,gram
+g/cm3,grams per cubic centimetre
+g/l,grams per litre
+gal,gallon
+GPa,gigaPascal
+gpm,gallons per minute
+hect,hectare
+hh:mm,hours minutes
+hh:mm:ss,hours minutes seconds
+hr,hour
+Hz,hertz
+in,inch
+in2,square inch
+in3,cubic inch
+K/W,Kelvin per Watt
+kg,kilogram
+kg/cm2,kilograms per square centimetre
+kg/m,kilograms per metre
+kg/m3,kilograms per cubic metre
+kgf,kilograms force
+kips,kilopound
+kJ/kg,kiloJoules per kilogram
+km,kilometre
+km/hr,kilometres per hour
+km2,square kilometre
+kN,kiloNewton
+kN/m2,kiloNewtons per square metre
+kN/m3,kiloNewtons per cubic metre
+kPa,kiloPascal
+ksf,kips per square foot
+ksi,kips per square inch
+l,litre
+l/hr,litres per hour
+l/min,litres per minute
+l/s,litres per second
+lb,pound
+lbf,pounds force
+m,metre
+m/day,metres per day
+m/hr,metres per hour
+m/min,metres per minute
+m/s,metres per second
+m2,square metre
+m2/MN,square metres per megaNewton
+m2/yr,square metres per year
+m3,cubic metre
+m3/s,cubic metres per second
+mbar,millibars
+mD,milli Darcy
+Mg,megagram (tonne)
+mg/kg,milligrams per kilogram
+mg/l,milligrams per litre
+Mg/m3,megagrams per cubic metre
+mgd,million gallons per day
+mi,mile
+mi2,square mile
+min,minute
+MJ,MegaJoule
+MJ/m3,MegaJoule per cubic meter
+ml,millilitre
+mm,millimetre
+mm/min,millimetres per minute
+mm/s,millimetres per second
+mm2,square millimetre
+mm3,cubic millimetre
+mm:ss,minutes seconds
+MN,megaNewton
+MN/m2,megaNewtons per square metre
+mol/kg,moles per kilogram
+month,month
+MPa,megaPascal
+MPa/m,mega Pascals per metre
+MPa/s,mega Pascals per second
+mph,miles per hour
+MPN/100ml,most probable number per 100 millilitres
+MPN/l,most probable number per litre
+MPN/ml,most probable number per millilitre
+ms,millisecond
+mS/cm,milliSiemens per centimetre
+mV,milliVolt
+N,Newton
+N/s,Newton-second
+ng/l,nanograms per litre
+Nm,Newton metre
+No,No
+nT,nano Tesla
+ohm,Ohm
+ohm m,Ohm metres
+ohmcm,Ohm centimetre
+pcf,pounds per cubic foot
+ppb,parts per billion
+ppm,parts per million
+ppmv,Parts per million volume
+psf,pounds per square foot
+psi,pounds per square inch
+rpm,revolution per minute
+rps,rotations per second
+s,second
+S/m,Siemens per metre
+t,ton
+tonf,tons force
+tsf,tons per square foot
+ug/kg,micrograms per kilogram
+ug/l,micrograms per litre
+UNITLESS,No unit
+us,microsecond
+uS/cm,microSiemens per centimetre
+uT,micro Tesla
+uV,microVolt
+W/(K-cm),Watts per Kelvin centimetre
+W/(K-m),Watts per Kelvin metre
+W/DegC,Watts per degree Celsius
+W/K,Watts per Kelvin
+yd,yard
+yd2,square yard
+yd3,cubic yard
+Yes,Yes
+yr,year
+yyyy-mm-dd,year month day
+yyyy-mm-ddThh:mm,year month day hours minutes
+yyyy-mm-ddThh:mm:ss,year month day hours minutes seconds

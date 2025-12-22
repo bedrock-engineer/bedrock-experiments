@@ -1,0 +1,57 @@
+{
+  "title": "Coordinate Systems",
+  "description": "Standardized coordinate reference systems used in GEF files (XYID header)",
+  "systems": {
+    "00000": {
+      "epsg": null,
+      "name": "Lokaal coördinatensysteem",
+      "nameEn": "Local coordinate system (self-defined)",
+      "country": "N/A"
+    },
+    "00001": {
+      "epsg": "EPSG:4326",
+      "name": "Geografisch coördinatensysteem",
+      "nameEn": "Geographic coordinate system (WGS 84)",
+      "country": "International"
+    },
+    "01000": {
+      "epsg": null,
+      "name": "State Plane Coordinate System",
+      "nameEn": "State Plane Coordinate System",
+      "country": "USA",
+      "note": "SPCS has many zones, would need specific zone for EPSG code"
+    },
+    "31000": {
+      "epsg": "EPSG:28992",
+      "proj4def": "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.417,50.3319,465.552,-0.398957,0.343988,-1.8774,4.0725 +units=m +no_defs",
+      "name": "Rijksdriehoekscoördinaten",
+      "nameEn": "Dutch National Grid",
+      "country": "Netherlands"
+    },
+    "31001": {
+      "epsg": "EPSG:32631",
+      "name": "UTM zone 31N",
+      "nameEn": "WGS 84 / UTM zone 31N",
+      "country": "International"
+    },
+    "31002": {
+      "epsg": "EPSG:32609",
+      "name": "UTM zone 9N",
+      "nameEn": "WGS 84 / UTM zone 9N",
+      "country": "International"
+    },
+    "32000": {
+      "epsg": "EPSG:31370",
+      "proj4def": "+proj=lcc +lat_0=90 +lon_0=4.36748666666667 +lat_1=51.1666672333333 +lat_2=49.8333339 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-106.8686,52.2978,-103.7239,0.3366,-0.457,1.8422,-1.2747 +units=m +no_defs",
+      "name": "Belge 1972 / Belgian Lambert 72",
+      "nameEn": "Belgian Lambert 72",
+      "country": "Belgium"
+    },
+    "49000": {
+      "epsg": "EPSG:31467",
+      "name": "DHDN / Gauss-Krüger zone 3",
+      "nameEn": "German Gauss-Krüger zone 3",
+      "country": "Germany"
+    }
+  }
+}

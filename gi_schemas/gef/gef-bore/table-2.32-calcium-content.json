@@ -1,0 +1,10 @@
+{
+  "table": "2.32",
+  "title": "Kalkgehalte",
+  "description": "Calcium/lime content",
+  "codes": {
+    "CA1": "kalkloos",
+    "CA2": "kalkarm",
+    "CA3": "kalkrijk"
+  }
+}

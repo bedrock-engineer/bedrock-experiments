@@ -1,0 +1,14 @@
+{
+  "table": "2.30",
+  "title": "Vast gesteente hardheid",
+  "description": "Rock hardness",
+  "codes": {
+    "VGZZ": "zeer zacht",
+    "VGZA": "zacht",
+    "VGMZ": "matig zacht",
+    "VGMH": "matig hard",
+    "VGHA": "hard",
+    "VGZH": "zeer hard",
+    "VGEH": "extreem hard"
+  }
+}

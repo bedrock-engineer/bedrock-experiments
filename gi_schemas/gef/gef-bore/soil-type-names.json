@@ -1,0 +1,12 @@
+{
+  "title": "Soil type names",
+  "description": "Main soil type names in Dutch",
+  "codes": {
+    "G": "Grind",
+    "Z": "Zand",
+    "L": "Leem",
+    "K": "Klei",
+    "V": "Veen",
+    "NBE": "Niet beschreven"
+  }
+}

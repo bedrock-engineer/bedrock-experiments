@@ -1,0 +1,272 @@
+{
+  "title": "CPT Measurement Text Variables",
+  "description": "Text field variables for CPT files",
+  "variables": {
+    "1": {
+      "description": "Client",
+      "descriptionNl": "Opdrachtgever",
+      "category": "project_info",
+      "example": "ABC Engineering Company"
+    },
+    "2": {
+      "description": "Name of the project",
+      "descriptionNl": "Naam van het project",
+      "category": "project_info",
+      "example": "Highway A1 Extension"
+    },
+    "3": {
+      "description": "Name of the location",
+      "descriptionNl": "Naam van de locatie",
+      "category": "project_info",
+      "example": "Rotterdam Port Area"
+    },
+    "4": {
+      "description": "Cone type and serial number",
+      "descriptionNl": "Conustype en serienummer",
+      "category": "equipment",
+      "example": "Fugro Type A, Serial 12345"
+    },
+    "5": {
+      "description": "Mass and geometry of probe apparatus, including anchoring",
+      "descriptionNl": "Massa en geometrie van sondeerinstallatie, inclusief verankering",
+      "category": "equipment",
+      "example": "Mass: 2500kg, Length: 15m, Anchoring: hydraulic"
+    },
+    "6": {
+      "description": "Applied standard, including class",
+      "descriptionNl": "Toegepaste norm, inclusief klasse",
+      "category": "standards",
+      "example": "NEN 5140 Class 1, NEN 3680"
+    },
+    "7": {
+      "description": "Own coordinate system",
+      "descriptionNl": "Eigen coördinatenstelsel",
+      "category": "coordinates",
+      "example": "Local site grid, origin at building corner"
+    },
+    "8": {
+      "description": "Own reference level",
+      "descriptionNl": "Eigen referentieniveau",
+      "category": "coordinates",
+      "example": "Site datum +5.00m above MSL"
+    },
+    "9": {
+      "description": "Fixed horizontal level (usually: ground level or flow bed)",
+      "descriptionNl": "Vast horizontaal niveau (meestal: maaiveld of stroombed)",
+      "category": "coordinates",
+      "example": "+2.35m NAP"
+    },
+    "10": {
+      "description": "Orientation direction biaxial inclination measurement (N-direction)",
+      "descriptionNl": "Oriëntatierichting biaxiale hellingsmeting (N-richting)",
+      "category": "measurements",
+      "example": "North = 0°, magnetic declination +2°"
+    },
+    "11": {
+      "description": "Unusual circumstances",
+      "descriptionNl": "Bijzondere omstandigheden",
+      "category": "conditions",
+      "example": "Heavy rain during test, vibrations from nearby construction"
+    },
+    "12": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "13": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "14": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "15": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "16": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "17": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "18": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "19": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "20": {
+      "description": "Correction method for zero drift",
+      "descriptionNl": "Correctiemethode voor nuldrift",
+      "category": "processing",
+      "example": "Linear interpolation between pre/post zero measurements"
+    },
+    "21": {
+      "description": "Method for processing interruptions",
+      "descriptionNl": "Methode voor verwerking van onderbrekingen",
+      "category": "processing",
+      "example": "Data gap filled using adjacent measurements"
+    },
+    "22": {
+      "description": "Remarks",
+      "descriptionNl": "Opmerkingen",
+      "category": "general",
+      "example": "Test performed according to project specifications"
+    },
+    "23": {
+      "description": "Remarks",
+      "descriptionNl": "Opmerkingen",
+      "category": "general",
+      "example": "Groundwater encountered at 3.2m depth"
+    },
+    "24": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "25": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "26": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "27": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "28": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "29": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "30": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Friction ratio = (fs/qc) × 100%"
+    },
+    "31": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Corrected cone resistance = qc + u2(1-a)"
+    },
+    "32": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Net cone resistance = qc - σvo"
+    },
+    "33": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Pore pressure ratio = (u2 - u0) / (qc - σvo)"
+    },
+    "34": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Soil behavior type index = sqrt((3.47-log10(Qt))^2 + (log10(Fr)+1.22)^2)"
+    },
+    "35": {
+      "description": "Calculation formula or reference for column number",
+      "descriptionNl": "Berekeningsformule of referentie voor kolomnummer",
+      "category": "calculations",
+      "example": "Normalized cone resistance = (qc - σvo) / σ'vo"
+    },
+    "36": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "37": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "38": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "39": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "40": {
+      "description": "Reserved for future use",
+      "descriptionNl": "Gereserveerd voor toekomstig gebruik",
+      "category": "reserved",
+      "example": null
+    },
+    "41": {
+      "description": "Highway, railway or dike code",
+      "descriptionNl": "Rijksweg-, spoorweg- of dijkcode",
+      "category": "infrastructure",
+      "example": "Railway line A16, km 23.4"
+    },
+    "42": {
+      "description": "Method for determination of ZID (height)",
+      "descriptionNl": "Methode voor bepaling van ZID (hoogte)",
+      "category": "coordinates",
+      "example": "MMET (Measured, surveying)",
+      "standardizedCodes": "heightDeterminationCodes"
+    },
+    "43": {
+      "description": "Method for determination of XYID (position)",
+      "descriptionNl": "Methode voor bepaling van XYID (positie)",
+      "category": "coordinates",
+      "example": "LMET (Measured, surveying)",
+      "standardizedCodes": "placeDeterminationCodes"
+    },
+    "44": {
+      "description": "Orientation of X axis of inclination measurement",
+      "descriptionNl": "Oriëntatie van X-as van hellingsmeting",
+      "category": "measurements",
+      "example": "X-axis aligned with magnetic north"
+    }
+  }
+}

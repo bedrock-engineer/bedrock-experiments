@@ -1,0 +1,35 @@
+"Simply supported beam
+'Length -'L = 6m
+'Load -'q = 10kN/m
+'Shear -'V_0 = q*L/2
+'Bending -'M_max = q*L^2/8
+'Diagrams
+V(x) = V_0 - q*x
+M(x) = V_0*x - q*x^2/2
+PlotHeight = 100
+$Plot{V(x) @ x = 0m : L}
+$Plot{M(x) @ x = 0m : L}
+
+"Axial resistance of steel HSS member
+'Loads
+C_f = 275kN
+'Member geometry
+L = 6.5m
+k = 1
+'Material properties
+φ_s = 0.85
+E_mod = 200GPa
+F_y = 400MPa
+n = 1.34
+'Proposed section
+'Name = HSS203x203x16
+A = 10300mm^2
+r_y = 76.1mm
+'Euler Buckling Stress
+F_e = (pi^2*E_mod)/((k*L/r_y)^2)
+'λ factor
+λ = (sqrt(F_y/F_e))^(2*n)
+'Axial resistance
+C_r = (φ_s*A*F_y)/((1 + λ)^(1/n))
+'Demand capacity ratio
+DCR = C_f/C_r

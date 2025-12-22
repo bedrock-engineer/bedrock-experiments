@@ -1,0 +1,168 @@
+{
+  "title": "Bore measurement variables",
+  "description": "Numeric measurement variables for GEF-BORE files",
+  "variables": {
+    "13": {
+      "unit": "m",
+      "description": "Voorgegraven diepte",
+      "category": "borehole_geometry",
+      "dataType": "float"
+    },
+    "14": {
+      "unit": "m",
+      "description": "GHG (gemiddeld hoogste grondwaterstand)",
+      "category": "groundwater",
+      "dataType": "float"
+    },
+    "15": {
+      "unit": "m",
+      "description": "GLG (gemiddeld laagste grondwaterstand)",
+      "category": "groundwater",
+      "dataType": "float"
+    },
+    "16": {
+      "unit": "m",
+      "description": "Einddiepte",
+      "category": "borehole_geometry",
+      "dataType": "float"
+    },
+    "17": {
+      "unit": "l",
+      "description": "Verbruik boor- en steunvloeistof",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "18": {
+      "unit": "m",
+      "description": "Grondwaterstand tijdens boren",
+      "category": "groundwater",
+      "dataType": "float"
+    },
+    "19": {
+      "unit": "-",
+      "description": "Aantal peilbuizen",
+      "category": "monitoring_wells",
+      "dataType": "integer"
+    },
+    "31": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 1",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "33": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 2",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "35": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 3",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "37": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 4",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "39": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 5",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "41": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 6",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "43": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 7",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "45": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 8",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "47": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 9",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "49": {
+      "unit": "m",
+      "description": "Diepte onderkant boortraject 10",
+      "category": "drilling_segments",
+      "dataType": "float"
+    },
+    "32": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 1",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "34": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 2",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "36": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 3",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "38": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 4",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "40": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 5",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "42": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 6",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "44": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 7",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "46": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 8",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "48": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 9",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    },
+    "50": {
+      "unit": "mm",
+      "description": "Boorbuisdiameter boortraject 10",
+      "category": "drilling_equipment",
+      "dataType": "float"
+    }
+  }
+}

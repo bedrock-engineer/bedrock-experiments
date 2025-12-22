@@ -1,0 +1,18 @@
+{
+  "table": "2.18",
+  "title": "Quantity numbers for layer characteristic columns",
+  "description": "Per GEF-BORE spec section 2.3.2.1",
+  "required_fields": {
+    "1": "DEPTH_TOP",
+    "2": "DEPTH_BOTTOM"
+  },
+  "optional_fields": {
+    "3": "CLAY_PERCENT - Lutum percentage",
+    "4": "SILT_PERCENT - Silt percentage",
+    "5": "SAND_PERCENT - Zand percentage",
+    "6": "GRAVEL_PERCENT - Grind percentage",
+    "7": "ORGANIC_PERCENT - Organische stof percentage",
+    "8": "SAND_MEDIAN - Zandmediaan",
+    "9": "GRAVEL_MEDIAN - Grindmediaan"
+  }
+}
