@@ -30,8 +30,6 @@ def _():
     from specklepy.transports.server import ServerTransport
 
     cwd = mo.notebook_location()
-    gpkg_path = cwd / "kaitak_gi.gpkg"
-    # gpkg_path = cwd / "wekahills_gi.gpkg"
     return (
         ColorProxy,
         CreateVersionInput,
@@ -39,10 +37,10 @@ def _():
         RenderMaterialProxy,
         ServerTransport,
         SpeckleClient,
+        cwd,
         get_default_account,
         get_local_accounts,
         gpd,
-        gpkg_path,
         mcolors,
         mo,
         np,
@@ -60,14 +58,15 @@ def _():
 
 
 @app.cell
-def _(gpkg_path, requests):
-    raw_githubusercontent_url = "https://raw.githubusercontent.com/bedrock-engineer/bedrock-ge/main/examples/hk_kaitak_ags3/kaitak_gi.gpkg"
+def _(cwd, requests):
+    gpkg_path = cwd / "wekahills_gi.gpkg"
+    raw_githubusercontent_url = "https://raw.githubusercontent.com/bedrock-engineer/bedrock-ge/main/examples/nz_weka_hills_leapfrog/wekahills_gi.gpkg"
     response = requests.get(raw_githubusercontent_url)
     response.raise_for_status()  # Check for request errors
 
     with open(gpkg_path, "wb") as gpkg:
         gpkg.write(response.content)
-    return
+    return (gpkg_path,)
 
 
 @app.cell
@@ -81,24 +80,61 @@ def _(gpd, gpkg_path):
 def _(gpd, gpkg_path, mo):
     lonlatheight = gpd.read_file(gpkg_path, layer="LonLatHeight")
 
-    spt = gpd.read_file(gpkg_path, layer="ISPT")
-    spt = spt.dropna(subset="ISPT_NVAL")
+    geology = gpd.read_file(gpkg_path, layer="Geology")
+    geology = geology.dropna(subset="Simple_Lith")
+
+    spt = gpd.read_file(gpkg_path, layer="SPT")
+    spt = spt.dropna(subset="SPT")
     # spt = spt[1000:1250]
 
-    weth = gpd.read_file(gpkg_path, layer="WETH").dropna(subset=["WETH_BASE"])
-    weth = weth[weth["WETH_GRAD"] != "V/III"]
-    mapping = {
-        "I/II": "II/I",
-        "II/III": "III/II",
-        "III/IV": "IV/III",
-        "IV/V": "V/IV",
-    }
-    weth["WETH_GRAD"] = weth["WETH_GRAD"].replace(mapping)
-    # weth = weth[1000:1250]
-
     # Output
-    mo.ui.tabs({"Map": lonlatheight.explore(), "SPT": spt, "Weathering": weth})
-    return spt, weth
+    mo.ui.tabs({"Map": lonlatheight.explore(), "Geology": geology, "SPT": spt})
+    return (geology,)
+
+
+@app.cell
+def _(geology, mo, pd, pl, uuid):
+    geology_spkl_props = (
+        pl.from_pandas(
+            pd.DataFrame(geology).assign(
+                coords=[list(g.coords) for g in geology.geometry],
+                geometry=geology.geometry.astype(str),
+            )
+        )
+        .rename({"geometry": "wkt_geometry"})
+        .with_columns(
+            pl.col("Simple_Lith")
+            .alias("material_name"),
+            pl.col("Simple_Lith")
+            .replace(
+                {
+                    "Limestone": "#5FBEF7",
+                    "Siltstone": "#4C9973",
+                    "Basement": "#852FC7",
+                    "Alluvium": "#FFD505",
+                    "Granodiorite": "#4DF756",
+                    "Vein 1": "#FFC0CB",
+                    "Vein 2": "#FF69B4",
+                }
+            )
+            .alias("color_hex"),
+        ).with_columns(
+            pl.concat_str(
+                [
+                    pl.lit("FF"),
+                    pl.col("color_hex").str.strip_prefix("#"),
+                ]
+            )
+            .str.to_integer(base=16)
+            .alias("rgba_int"),
+            pl.arange(0, pl.len())
+            .map_elements(lambda _: str(uuid.uuid4()))
+            .alias("application_id"),
+        )
+    )
+
+    mo.ui.table(geology_spkl_props, style_cell=lambda _r, _c, hex: {"backgroundColor": hex})
+    return (geology_spkl_props,)
 
 
 @app.cell
@@ -107,7 +143,7 @@ def _(mcolors, plt):
         norm = mcolors.Normalize(vmin=0, vmax=100, clip=True)
         cmap = plt.get_cmap("plasma")
         return mcolors.to_hex(cmap(norm(v)))
-    return (spt_n_to_hex,)
+    return
 
 
 @app.cell
@@ -130,7 +166,7 @@ def _(mcolors, plt):
         norm = mcolors.Normalize(vmin=1,vmax=6)
         cmap = plt.get_cmap("YlGnBu")
         return mcolors.to_hex(cmap(norm(v)))
-    return (weathering_grade_to_hex,)
+    return
 
 
 @app.cell
@@ -170,11 +206,12 @@ def _(np, sg):
 
 @app.cell
 def _(np, pv):
+    radius = 2
     def coords_to_pyvista_mesh(coords: list[list[float]]) -> pv.PolyData:
         if len(coords) == 1:
             return pv.Sphere(
                 center=np.array(coords[0]),
-                radius=0.7,
+                radius=radius + 0.1,
                 theta_resolution=10,
                 phi_resolution=10,
             )
@@ -182,7 +219,7 @@ def _(np, pv):
             return pv.Tube(
                 pointa=coords[0],
                 pointb=coords[1],
-                radius=0.6,
+                radius=radius,
                 n_sides=10,
                 capping=True
             ).triangulate()
@@ -234,76 +271,15 @@ def _(
 
 
 @app.cell
-def _(pd, pl, spt, spt_n_to_hex, uuid):
-    spt_spkl_props = (
-        pl.from_pandas(
-            pd.DataFrame(spt).assign(
-                coords=[list(g.coords) for g in spt.geometry],
-                geometry=spt.geometry.astype(str),
-            )
-        )
-        .rename({"geometry": "wkt_geometry"})
-        .with_columns(
-            pl.col("ISPT_NVAL")
-            .map_elements(spt_n_to_hex, return_dtype=str)
-            .alias("color"),
-            pl.arange(0, pl.len())
-            .map_elements(lambda _: str(uuid.uuid4()))
-            .alias("application_id"),
-        )
-    )
-    spt_spkl_props
-    return (spt_spkl_props,)
-
-
-@app.cell
-def _(pd, pl, uuid, weathering_grade_to_hex, weth):
-    weth_spkl_props = (
-        pl.from_pandas(
-            pd.DataFrame(weth).assign(
-                coords=[list(g.coords) for g in weth.geometry],
-                geometry=weth.geometry.astype(str),
-            )
-        )
-        .rename({"geometry": "wkt_geometry"})
-        .with_columns(
-            pl.col("WETH_GRAD")
-            .map_elements(weathering_grade_to_hex, return_dtype=str)
-            .alias("color"),
-            pl.arange(0, pl.len())
-            .map_elements(lambda _: str(uuid.uuid4()))
-            .alias("application_id"),
-        )
-    )
-    weth_spkl_props
-    return (weth_spkl_props,)
-
-
-@app.cell
-def _(pl, spt_spkl_props, weth_spkl_props):
-    color_proxies_df = pl.concat(
-        [
-            spt_spkl_props.select(
-                (
-                    pl.lit("SPT N-value: ")
-                    + pl.col("ISPT_NVAL").clip(0, 100).cast(int).cast(str)
-                ).alias("material_name"),
-                pl.col("color"),
+def _(geology_spkl_props, pl):
+    color_proxies_df = geology_spkl_props.select(
+                pl.col("material_name"),
+                pl.col("rgba_int"),
                 pl.col("application_id"),
-            ),
-            weth_spkl_props.select(
-                (pl.lit("Weathering grade: ") + pl.col("WETH_GRAD")).alias(
-                    "material_name"
-                ),
-                pl.col("color"),
-                pl.col("application_id"),
-            ),
-        ],
-        how="vertical",
-    )
+            )
 
     color_proxies_df = color_proxies_df.group_by("material_name").agg(
-        pl.first("color").str.strip_prefix("#").str.to_integer(base=16),
+        pl.first("rgba_int"),
         pl.col("application_id"),
     ).sort("material_name")
     color_proxies_df
@@ -317,7 +293,7 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
     for color_row in color_proxies_df.iter_rows(named=True):
         material_proxy = RenderMaterialProxy(
             value=RenderMaterial(
-                name=color_row["material_name"], diffuse=color_row["color"]
+                name=color_row["material_name"], diffuse=color_row["rgba_int"]
             ),
             objects=color_row["application_id"],
         )
@@ -325,7 +301,7 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
 
         color_proxy = ColorProxy(
             name=color_row["material_name"],
-            value=color_row["color"],
+            value=color_row["rgba_int"],
             objects=color_row["application_id"],
         )
         spkl_color_proxies.append(color_proxy)
@@ -333,31 +309,21 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
 
 
 @app.cell
-def _(props_df_to_speckle_collection, spt_spkl_props, weth_spkl_props):
-    spt_collection = props_df_to_speckle_collection(spt_spkl_props, obj_name="spt")
-    weathering_collection = props_df_to_speckle_collection(
-        weth_spkl_props, obj_name="weathering"
-    )
-    return spt_collection, weathering_collection
+def _(geology_spkl_props, props_df_to_speckle_collection):
+    geology_collection = props_df_to_speckle_collection(geology_spkl_props, obj_name="geology")
+    return (geology_collection,)
 
 
 @app.cell
-def _(weathering_collection):
-    # spt_collection.elements[10].displayValue[0].__dict__
-    weathering_collection.elements[10].displayValue[0].__dict__
+def _(geology_collection):
+    geology_collection.elements[10].__dict__
     return
 
 
 @app.cell
-def _(
-    sco,
-    spkl_color_proxies,
-    spkl_material_proxies,
-    spt_collection,
-    weathering_collection,
-):
+def _(geology_collection, sco, spkl_color_proxies, spkl_material_proxies):
     spkl_gi = sco.Collection(name="gi")
-    spkl_gi.elements = [spt_collection, weathering_collection]
+    spkl_gi.elements = [geology_collection]
     spkl_gi.renderMaterialProxies = spkl_material_proxies
     spkl_gi.colorProxies = spkl_color_proxies
     return (spkl_gi,)
@@ -413,12 +379,15 @@ def _(
     CreateVersionInput,
     ServerTransport,
     client,
+    mo,
     models_dd,
     operations,
     project,
     send_to_speckle,
     spkl_gi,
 ):
+    output = None
+
     if send_to_speckle.value:
         model = models_dd.value
         transport = ServerTransport(stream_id=project.id, client=client)
@@ -429,8 +398,15 @@ def _(
             object_id=object_id,
         )
         version = client.version.create(version_input)
-        print(f"✓ Created version: {version.id} of model {model.name} on project {project.name}")
-        print(f"View: https://app.speckle.systems/projects/{project.id}/models/{model.id}")
+
+        output = mo.md(rf"""
+        ✓ Created version: `{version.id}` of model `{model.name}` on project `{project.name}`
+
+        View online in the Speckle viewer:  
+        https://app.speckle.systems/projects/{project.id}/models/{model.id}
+        """)
+
+    output
     return
 
 
@@ -443,8 +419,8 @@ def _(mo):
 
 
 @app.cell
-def _(coords_to_pyvista_mesh, pl, weth_spkl_props):
-    pv_mesh_df = weth_spkl_props[1000:1250].with_columns(
+def _(coords_to_pyvista_mesh, geology_spkl_props, pl):
+    pv_mesh_df = geology_spkl_props.with_columns(
         pl.col("coords").map_elements(coords_to_pyvista_mesh, return_dtype=pl.Object).alias("pyvista_mesh")
     )
     pv_mesh_df
@@ -452,47 +428,38 @@ def _(coords_to_pyvista_mesh, pl, weth_spkl_props):
 
 
 @app.cell
-def _(line, pv):
-    ln = pv.Line(pointa=[0, 0, 0], pointb=[0, 0, 5], resolution=10)
+def _(mo):
+    plot_button = mo.ui.run_button(label="Press to plot")
+    plot_button
+    return (plot_button,)
 
-    # Create a tube around the line
-    tb = line.tube(radius=0.2, n_sides=20)
-    tb.strips
+
+@app.cell
+def _(plot_button, pv, pv_mesh_df):
+    if plot_button.value:
+        plotter = pv.Plotter()
+        for pv_row in pv_mesh_df.iter_rows(named=True):
+            plotter.add_mesh(pv_row["pyvista_mesh"], color=pv_row["color"])
+
+        plotter.show()
     return
 
 
 @app.cell
-def _(pv, pv_mesh_df):
-    plotter = pv.Plotter()
-    for pv_row in pv_mesh_df.iter_rows(named=True):
-        print(pv_row["pyvista_mesh"])
-        plotter.add_mesh(pv_row["pyvista_mesh"], color=pv_row["color"])
+def _(mo):
+    mo.md(r"""
+    1. Create Speckle Geometry
+    2. Create `displayValue` using PyVista
 
-    plotter.show()
-    return
+    For GI data there are two types of geospatial geometry:
+    1. POINT Z
+    2. LINESTRING Z
 
-
-@app.cell
-def _(np, pl, pv, spt_spkl_props):
-    pdata = pv.PolyData(
-        np.squeeze(spt_spkl_props["coords"].cast(pl.Array(pl.Array(float, 3), 1)))
-    )
-    pdata["spt_n"] = spt_spkl_props["ISPT_NVAL"]
-
-    sphere = pv.Sphere(radius=0.7, theta_resolution=10, phi_resolution=10)
-    spheres = pdata.glyph(orient=False, scale=False, geom=sphere)
-    vertices = spheres.points.flatten()
-    faces = spheres.faces
-
-    pltr = pv.Plotter()
-    pltr.add_mesh(spheres, scalars="spt_n", cmap="plasma", clim=(0, 100))
-    pltr.show()
-    return (spheres,)
-
-
-@app.cell
-def _(spheres):
-    spheres
+    In Speckle and PyVista these become three types of geometry:
+    1. POINT Z -> sg.Point + pv.Sphere
+    2. LINESTRING Z with 2 points -> sg.Line + pv.Tube
+    3. LINESTRING Z with more than 2 points -> sg.PolyLine +
+    """)
     return
 
 
@@ -520,31 +487,12 @@ def _(np, pv):
     line = polyline_from_points(points)
 
     # Make a tube (pipe) around the line
-    radius = 0.1  # pipe radius
-    tube = line.tube(radius=radius)  # returns PolyData (a tube mesh)
+    tube = line.tube(radius=0.1)  # returns PolyData (a tube mesh)
 
     # Visualize
     # tube.plot(smooth_shading=True)
 
     type(tube)
-    return (line,)
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""
-    1. Create Speckle Geometry
-    2. Create `displayValue` using PyVista
-
-    For GI data there are two types of geospatial geometry:
-    1. POINT Z
-    2. LINESTRING Z
-
-    In Speckle and PyVista these become three types of geometry:
-    1. POINT Z -> sg.Point + pv.Sphere
-    2. LINESTRING Z with 2 points -> sg.Line + pv.Tube
-    3. LINESTRING Z with more than 2 points -> sg.PolyLine +
-    """)
     return
 
 
