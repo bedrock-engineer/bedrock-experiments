@@ -3,6 +3,9 @@
 *.3dmbak
 *.bak
 
+# Rust
+**/target
+
 # marimo
 __marimo__/
 

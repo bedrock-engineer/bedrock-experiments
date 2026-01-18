@@ -1,0 +1,9 @@
+[package]
+name = "georust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+geo = "0.32.0"
+proj = "0.31.0"
+wkt = "0.14.0"
