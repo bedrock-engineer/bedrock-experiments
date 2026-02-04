@@ -1,6 +1,6 @@
 ﻿##Export summary details##
 
-Job start time: 2025-12-22 06:47:01 (GMT)
+Job start time: 2025-12-21 19:03:51 (GMT)
 Export version: 5.2.13
 Exort Description: 
 
@@ -18,7 +18,7 @@ Include generic attributes: No
 
 ##Appearence information##
 
-Use textures: No
+Use textures: Yes
 Texture appreance theme: Rotterdam
 
 ##Terrain details##
@@ -26,15 +26,15 @@ Texture appreance theme: Rotterdam
 Export terrain: Yes
 URL to terrain: https://www.3drotterdam.nl/datasource-data/8a5de86c-5ac4-41f5-a68a-c59426036eda/layer.json
 Terrain level: 16
-Texture terrain: No
-Terrain texture type:  
-Terrain texture level 
+Texture terrain: Yes
+Terrain texture type: WMS 
+Terrain texture level 23
 URL to TMS: 
-URL to WMS: 
+URL to WMS: https://diensten.rotterdam.nl/arcgis/services/LUCHTFOTO/luchtfoto_actueel/MapServer/WMSServer?FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.3.0&LAYERS=0
 
 ##Output details##
 
-Export Format(s) : OBJ
+Export Format(s) : GLTF
 Coordinate System (if not local): EPSG:28992
 Move to local coordinate system : Yes
 Tile output: No

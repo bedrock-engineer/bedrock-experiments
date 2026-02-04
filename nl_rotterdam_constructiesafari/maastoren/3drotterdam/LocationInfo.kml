@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <Model id="export.obj">
+    <Model id="export.glb">
     <altitudeMode>clampToGround</altitudeMode>
     <Location> 
       <longitude>4.493600470682538</longitude> 
@@ -19,7 +19,7 @@
       <z>1.0</z> 
     </Scale> 
     <Link> 
-      <href>export.obj</href> 
+      <href>export.glb</href> 
     </Link>   
   </Model>
   </Document>
