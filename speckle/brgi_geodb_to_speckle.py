@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.18.0"
+__generated_with = "0.19.7"
 app = marimo.App(width="medium")
 
 
@@ -18,6 +18,7 @@ def _():
     import pyvista as pv
     import requests
 
+    import specklepy
     from specklepy.api import operations
     from specklepy.api.client import SpeckleClient
     from specklepy.api.credentials import get_local_accounts, get_default_account
@@ -53,6 +54,7 @@ def _():
         sco,
         sdo,
         sg,
+        specklepy,
         uuid,
     )
 
@@ -247,12 +249,13 @@ def _(
     sdo,
 ):
     def props_df_to_speckle_collection(
-        props_df: pl.DataFrame, obj_name: str
+        props_df: pl.DataFrame, collection_name: str
     ) -> sco.Collection:
         spkl_data_objs = []
         for row in props_df.iter_rows(named=True):
             application_id = row.pop("application_id")
             coords = row.pop("coords")
+            obj_name = row.pop("material_name")
             pv_mesh = coords_to_pyvista_mesh(coords)
             # Create Speckle Data Object
             spkl_obj = sdo.DataObject(
@@ -266,7 +269,7 @@ def _(
 
             spkl_data_objs.append(spkl_obj)
 
-        return sco.Collection(name=obj_name, elements=spkl_data_objs)
+        return sco.Collection(name=collection_name, elements=spkl_data_objs)
     return (props_df_to_speckle_collection,)
 
 
@@ -310,7 +313,7 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
 
 @app.cell
 def _(geology_spkl_props, props_df_to_speckle_collection):
-    geology_collection = props_df_to_speckle_collection(geology_spkl_props, obj_name="geology")
+    geology_collection = props_df_to_speckle_collection(geology_spkl_props, collection_name="geology")
     return (geology_collection,)
 
 
@@ -330,12 +333,12 @@ def _(geology_collection, sco, spkl_color_proxies, spkl_material_proxies):
 
 
 @app.cell
-def _(SpeckleClient, get_default_account, get_local_accounts):
+def _(SpeckleClient, get_default_account, get_local_accounts, mo):
     # Get all locally stored accounts
     accounts = get_local_accounts()
 
     for account in accounts:
-        print(f"Server: {account.serverInfo.url}, User: {account.userInfo.name}")
+        print(f"Server: {account.serverInfo.url} , User: {account.userInfo.name}")
 
     # Get the default account
     account = get_default_account()
@@ -346,32 +349,40 @@ def _(SpeckleClient, get_default_account, get_local_accounts):
     print(
         f"Authenticated on {client.server.get().canonical_url} as {client.account.userInfo.name}"
     )
-    return (client,)
 
-
-@app.cell
-def _(client, mo):
     projects = client.active_user.get_projects()
     projects_dd = mo.ui.dropdown({proj.name: proj for proj in projects.items})
-    projects_dd
-    return (projects_dd,)
+    return client, projects_dd
 
 
 @app.cell
-def _(client, mo, projects_dd):
+def _(client, mo, projects_dd, specklepy):
     project = projects_dd.value
-
-    models = client.model.get_models(project.id)
-    models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
-    models_dd
+    if isinstance(project, specklepy.core.api.models.current.Project):
+        models = client.model.get_models(project.id)
+        models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
+    else:
+        models_dd = "Select a Speckle project first ↑"
     return models_dd, project
 
 
 @app.cell
-def _(mo):
-    send_to_speckle = mo.ui.run_button(label="Press to send GI to Speckle")
-    send_to_speckle
-    return (send_to_speckle,)
+def _(mo, models_dd, specklepy):
+    model = None
+    if isinstance(models_dd, mo.ui.dropdown):
+        model = models_dd.value
+
+    if isinstance(model, specklepy.core.api.models.current.Model):
+        send_to_speckle = mo.ui.run_button(label="Press to send GI to Speckle")
+    else:
+        send_to_speckle = "Select a Speckle model first ↑"
+    return model, send_to_speckle
+
+
+@app.cell
+def _(mo, models_dd, projects_dd, send_to_speckle):
+    mo.vstack([projects_dd, models_dd, send_to_speckle])
+    return
 
 
 @app.cell
@@ -380,7 +391,7 @@ def _(
     ServerTransport,
     client,
     mo,
-    models_dd,
+    model,
     operations,
     project,
     send_to_speckle,
@@ -389,7 +400,6 @@ def _(
     output = None
 
     if send_to_speckle.value:
-        model = models_dd.value
         transport = ServerTransport(stream_id=project.id, client=client)
         object_id = operations.send(base=spkl_gi, transports=[transport])
         version_input = CreateVersionInput(
@@ -399,14 +409,23 @@ def _(
         )
         version = client.version.create(version_input)
 
-        output = mo.md(rf"""
+        output = mo.vstack(
+            [
+                mo.md(rf"""
         ✓ Created version: `{version.id}` of model `{model.name}` on project `{project.name}`
-
-        View online in the Speckle viewer:  
-        https://app.speckle.systems/projects/{project.id}/models/{model.id}
-        """)
+        """),
+                mo.Html(
+                    rf'<iframe title="Speckle" src="https://app.speckle.systems/projects/{project.id}/models/{model.id}" width="800" height="500" frameborder="0"></iframe>'
+                ),
+            ]
+        )
 
     output
+    return
+
+
+@app.cell
+def _():
     return
 
 
