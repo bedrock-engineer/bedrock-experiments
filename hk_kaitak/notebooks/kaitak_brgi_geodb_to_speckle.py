@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.18.0"
+__generated_with = "0.19.7"
 app = marimo.App(width="medium")
 
 
@@ -18,6 +18,7 @@ def _():
     import pyvista as pv
     import requests
 
+    import specklepy
     from specklepy.api import operations
     from specklepy.api.client import SpeckleClient
     from specklepy.api.credentials import get_local_accounts, get_default_account
@@ -53,6 +54,7 @@ def _():
         sco,
         sdo,
         sg,
+        specklepy,
         uuid,
     )
 
@@ -302,7 +304,14 @@ def _(pl, spt_spkl_props, weth_spkl_props):
     )
 
     color_proxies_df = color_proxies_df.group_by("material_name").agg(
-        pl.first("color").str.strip_prefix("#").str.to_integer(base=16),
+        pl.concat_str(
+                [
+                    pl.lit("FF"),
+                    pl.first("color").str.strip_prefix("#"),
+                ]
+            )
+            .str.to_integer(base=16)
+            .alias("rgba_int"),
         pl.col("application_id"),
     ).sort("material_name")
     color_proxies_df
@@ -316,7 +325,7 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
     for color_row in color_proxies_df.iter_rows(named=True):
         material_proxy = RenderMaterialProxy(
             value=RenderMaterial(
-                name=color_row["material_name"], diffuse=color_row["color"]
+                name=color_row["material_name"], diffuse=color_row["rgba_int"]
             ),
             objects=color_row["application_id"],
         )
@@ -324,7 +333,7 @@ def _(ColorProxy, RenderMaterial, RenderMaterialProxy, color_proxies_df):
 
         color_proxy = ColorProxy(
             name=color_row["material_name"],
-            value=color_row["color"],
+            value=color_row["rgba_int"],
             objects=color_row["application_id"],
         )
         spkl_color_proxies.append(color_proxy)
@@ -355,15 +364,15 @@ def _(
     spt_collection,
     weathering_collection,
 ):
-    spkl_gi = sco.Collection(name="gi")
-    spkl_gi.elements = [spt_collection, weathering_collection]
-    spkl_gi.renderMaterialProxies = spkl_material_proxies
-    spkl_gi.colorProxies = spkl_color_proxies
-    return (spkl_gi,)
+    speckle_data = sco.Collection(name="gi")
+    speckle_data.elements = [spt_collection, weathering_collection]
+    speckle_data.renderMaterialProxies = spkl_material_proxies
+    speckle_data.colorProxies = spkl_color_proxies
+    return (speckle_data,)
 
 
 @app.cell
-def _(SpeckleClient, get_default_account, get_local_accounts):
+def _(SpeckleClient, get_default_account, get_local_accounts, mo):
     # Get all locally stored accounts
     accounts = get_local_accounts()
 
@@ -379,32 +388,40 @@ def _(SpeckleClient, get_default_account, get_local_accounts):
     print(
         f"Authenticated on {client.server.get().canonical_url} as {client.account.userInfo.name}"
     )
-    return (client,)
 
-
-@app.cell
-def _(client, mo):
     projects = client.active_user.get_projects()
     projects_dd = mo.ui.dropdown({proj.name: proj for proj in projects.items})
-    projects_dd
-    return (projects_dd,)
+    return client, projects_dd
 
 
 @app.cell
-def _(client, mo, projects_dd):
+def _(client, mo, projects_dd, specklepy):
     project = projects_dd.value
-
-    models = client.model.get_models(project.id)
-    models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
-    models_dd
+    if isinstance(project, specklepy.core.api.models.current.Project):
+        models = client.model.get_models(project.id)
+        models_dd = mo.ui.dropdown({mdl.name: mdl for mdl in models.items})
+    else:
+        models_dd = "Select a Speckle project first ↑"
     return models_dd, project
 
 
 @app.cell
-def _(mo):
-    send_to_speckle = mo.ui.run_button(label="Press to send GI to Speckle")
-    send_to_speckle
-    return (send_to_speckle,)
+def _(mo, models_dd, specklepy):
+    model = None
+    if isinstance(models_dd, mo.ui.dropdown):
+        model = models_dd.value
+
+    if isinstance(model, specklepy.core.api.models.current.Model):
+        send_to_speckle = mo.ui.run_button(label="Press to send GI to Speckle")
+    else:
+        send_to_speckle = "Select a Speckle model first ↑"
+    return model, send_to_speckle
+
+
+@app.cell
+def _(mo, models_dd, projects_dd, send_to_speckle):
+    mo.vstack([projects_dd, models_dd, send_to_speckle])
+    return
 
 
 @app.cell
@@ -412,24 +429,37 @@ def _(
     CreateVersionInput,
     ServerTransport,
     client,
-    models_dd,
+    mo,
+    model,
     operations,
     project,
     send_to_speckle,
-    spkl_gi,
+    speckle_data,
 ):
+    output = None
+
     if send_to_speckle.value:
-        model = models_dd.value
         transport = ServerTransport(stream_id=project.id, client=client)
-        object_id = operations.send(base=spkl_gi, transports=[transport])
+        object_id = operations.send(base=speckle_data, transports=[transport])
         version_input = CreateVersionInput(
             project_id=project.id,
             model_id=model.id,
             object_id=object_id,
         )
         version = client.version.create(version_input)
-        print(f"✓ Created version: {version.id} of model {model.name} on project {project.name}")
-        print(f"View: https://app.speckle.systems/projects/{project.id}/models/{model.id}")
+
+        output = mo.vstack(
+            [
+                mo.md(rf"""
+        ✓ Created version: `{version.id}` of model `{model.name}` on project `{project.name}`
+        """),
+                mo.Html(
+                    rf'<iframe title="Speckle" src="https://app.speckle.systems/projects/{project.id}/models/{model.id}" width="800" height="500" frameborder="0"></iframe>'
+                ),
+            ]
+        )
+
+    output
     return
 
 
