@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "bromodels>=0.0.1",
     "folium>=0.20.0",
     "geopandas>=1.1.1",
     "mapclassify>=2.10.0",
@@ -20,8 +21,9 @@ dependencies = [
     "sqlmodel>=0.0.27",
     "striplog>=0.9.2",
     "sympy>=1.14.0",
+    "trimesh>=4.11.1",
 ]
 
 [[tool.mypy.overrides]]
-module = "python_ags4.*"
+module = ["pandas", "geopandas", "specklepy.*", "python_ags4.*", "requests"]
 ignore_missing_imports = true
