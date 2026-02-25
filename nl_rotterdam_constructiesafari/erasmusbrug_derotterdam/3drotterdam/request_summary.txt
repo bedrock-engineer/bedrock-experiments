@@ -1,0 +1,42 @@
+﻿##Export summary details##
+
+Job start time: 2026-02-25 16:17:19 (GMT)
+Export version: 5.2.13
+Exort Description: 
+
+##Request Filter##
+
+Feature selection method: Polygon
+Request area coordinates: 93066.93655358508,435723.73251622176;93108.39151922516,435669.89445714623;93382.57635736212,435899.1956031971;92819.50233759428,436297.0263673666;92801.8887498799,436390.32332496;92679.16255426507,436378.6331308434;92685.04781789838,436219.7404545427;92884.5622066535,435960.5954880065;92927.62389254839,435904.66646049387;92948.81485603485,435877.1437607846
+Feature GML ID list:  
+
+##Feature Information##
+
+CityGML feature type(s) : 26,64,21,7
+Selected LOD: haLoD
+Include generic attributes: No
+
+##Appearence information##
+
+Use textures: Yes
+Texture appreance theme: Rotterdam
+
+##Terrain details##
+
+Export terrain: Yes
+URL to terrain: https://www.3drotterdam.nl/datasource-data/8a5de86c-5ac4-41f5-a68a-c59426036eda/layer.json
+Terrain level: 16
+Texture terrain: Yes
+Terrain texture type: WMS 
+Terrain texture level 23
+URL to TMS: 
+URL to WMS: https://diensten.rotterdam.nl/arcgis/services/LUCHTFOTO/luchtfoto_actueel/MapServer/WMSServer?FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.3.0&LAYERS=0
+
+##Output details##
+
+Export Format(s) : GLTF
+Coordinate System (if not local): EPSG:28992
+Move to local coordinate system : No
+Tile output: No
+Height mode: absolute
+
