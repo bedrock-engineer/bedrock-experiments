@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.18.0"
+__generated_with = "0.19.7"
 app = marimo.App(width="medium")
 
 
@@ -63,18 +63,34 @@ def _(mo, models_dd, projects_dd):
 
 @app.cell
 def _(ServerTransport, client, models_dd, operations, project):
+    # Get the model that was selected in the dropdown UI element
     model = models_dd.value
 
+    # Optionally manually specify the project ID
+    project_id = project.id
+    project_id = "8be1007be1"  # Speckle Demo Models ProjectID
+
+    # Optionally manually specify the model ID
+    model_id = model.id
+    model_id = {
+        "interiors": "87f3ba9541",
+        "furniture": "1c72499f69",
+        "roof": "cc878fae03",
+        "structure": "de46f47fc2",
+        "facade": "478d7a4664",
+    }
+    model_id = model_id["interiors"]
+
     latest_version = client.version.get_versions(
-        project_id=project.id, 
-        model_id=model.id,
-        limit=1 # only get the latest version
+        project_id=project_id,
+        model_id=model_id,
+        limit=1,  # only get the latest version
     )
 
-    server_transport = ServerTransport(stream_id=project.id, client=client)
+    server_transport = ServerTransport(stream_id=project_id, client=client)
     received_data = operations.receive(
         obj_id=latest_version.items[0].referenced_object,
-        remote_transport=server_transport
+        remote_transport=server_transport,
     )
 
     received_data.__dict__
