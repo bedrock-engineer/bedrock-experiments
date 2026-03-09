@@ -21,10 +21,6 @@ def _():
 def _(Path, os):
     speckle_datadb_path = Path(os.environ["APPDATA"]) / "Speckle" / "Data.db"
     speckle_objectsdb_path = Path(os.environ["APPDATA"]) / "Speckle" / "Objects.db"
-
-    hk_kaitak_brgi_gpkg_path = Path(
-        r"C:\Users\joost\ReposWindows\bedrock-ge\examples\hk_kaitak_ags3\kaitak_gi.gpkg"
-    )
     speckle_datadb_path
     return speckle_datadb_path, speckle_objectsdb_path
 
