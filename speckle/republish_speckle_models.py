@@ -1,71 +1,69 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo>=0.20",
+#     "specklepy>=3.0",
+# ]
+# ///
+
 import marimo
 
-__generated_with = "0.19.7"
+__generated_with = "0.20.4"
 app = marimo.App(width="medium")
 
 
-@app.cell
-def _(SpeckleClient, get_default_account, get_local_accounts):
+@app.cell(hide_code=True)
+def _(
+    SpeckleClient,
+    contextlib,
+    get_default_account,
+    get_local_accounts,
+    io,
+    mo,
+):
     # Get all locally stored accounts
     accounts = get_local_accounts()
 
-    for account in accounts:
-        print(f"Server: {account.serverInfo.url}, User: {account.userInfo.name}")
+    auth_stdout = io.StringIO()
+    with contextlib.redirect_stdout(auth_stdout):
+        print("**Accounts:**")
+        for i, account in enumerate(accounts):
+            print(f"{i+1}. Server: {account.serverInfo.url}, User: {account.userInfo.name}\n")
 
-    # Get the default account
-    account = get_default_account()
-    if account:
-        client = SpeckleClient(host=account.serverInfo.url)
-        client.authenticate_with_account(account)
+        # Get the default account
+        account = get_default_account()
+        if account:
+            client = SpeckleClient(host=account.serverInfo.url)
+            client.authenticate_with_account(account)
 
-    print(
-        f"Authenticated on {client.server.get().canonical_url} as {client.account.userInfo.name}"
-    )
+        print("**Authenticated with the default account:**")
+        print(f"- Server: {client.server.get().canonical_url}")
+        print(f"- User: {client.account.userInfo.name}")
 
     projects = client.active_user.get_projects()
+
+    mo.md(auth_stdout.getvalue())
     return client, projects
 
 
-@app.cell
-def _():
-    return
-
-
-@app.cell
-def _(projects):
+@app.cell(hide_code=True)
+def _(mo, projects):
     projects_dict = {proj.name: proj for proj in projects.items}
     project_names = list(projects_dict.keys())
-    project_names = [
-      "NL Amsterdam Noord",
-      "GroundIQ",
-      "Plaxis3D Output",
-      "NZ Weka Hills",
-      "Fluvial Channels",
-      "HK Kai Tak",
-    ]
-    return project_names, projects_dict
-
-
-@app.cell
-def _(mo, project_names, projects_dict):
-    projects_mselect = mo.ui.multiselect(
-        projects_dict,
-        value=project_names,
-        full_width=True,
-    )
+    project_names_tbl = mo.ui.table(data={"Projects": project_names})
     delete_old_vers = mo.ui.switch(value=True)
     mo.vstack(
         [
-            "Deselect the projects you don't want to republish:",
-            projects_mselect,
+            "Select the projects you want to republish:",
+            project_names_tbl,
             "Delete old versions?",
             delete_old_vers,
         ]
     )
-    return delete_old_vers, projects_mselect
+    return delete_old_vers, project_names_tbl, projects_dict
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     republish_button = mo.ui.run_button(label="Press to load and republish Speckle models for the selected projects")
     republish_button
@@ -80,12 +78,33 @@ def _(
     SpeckleException,
     client,
     delete_old_vers,
+    fmt,
+    io,
+    logging,
+    mo,
     operations,
-    projects_mselect,
+    project_names_tbl,
+    projects_dict,
     republish_button,
+    stdout_handler,
 ):
+    # Instantiate the logger and add the stdout and buffer handlers
+    repub_logger = logging.getLogger(__name__ + ".republish")
+    repub_logger.setLevel(logging.DEBUG)
+    # Create a file buffer for the logger to write the logs to
+    repub_buffer = io.StringIO()
+    buffer_handler = logging.StreamHandler(repub_buffer)
+    buffer_handler.setFormatter(logging.Formatter(fmt, datefmt="%H:%M:%S"))
+    # Add stdout and buffer handlers to the logger if the logger has no handlers yet
+    repub_logger.handlers.clear()
+    repub_logger.addHandler(buffer_handler)
+    repub_logger.addHandler(stdout_handler)
+
     if republish_button.value:
-        for proj in projects_mselect.value:
+        repub_projects = [
+            projects_dict[pn] for pn in project_names_tbl.value["Projects"]
+        ]
+        for proj in repub_projects:
             server_transport = ServerTransport(stream_id=proj.id, client=client)
             models = client.model.get_models(proj.id)
             for model in models.items:
@@ -95,8 +114,8 @@ def _(
                     limit=1,  # only get the latest version
                 )
                 source_app = latest_version.items[0].source_application
-                print(
-                    f"Trying to load data for model `{model.name}` of project `{proj.name}`"
+                repub_logger.info(
+                    f"↓ Trying to load data for model `{model.name}` of project `{proj.name}`"
                 )
                 try:
                     received_data = operations.receive(
@@ -104,14 +123,14 @@ def _(
                         remote_transport=server_transport,
                     )
                 except SpeckleException as se:
-                    print(
+                    repub_logger.warning(
                         f"⚠️ This model probably expired. Republish it manually first from the original source application: {source_app}."
                     )
-                    print(se, end="\n\n")
+                    repub_logger.warning(se)
                     continue
 
-                print(
-                    f"Trying to republish data for model `{model.name}` of project `{proj.name}`"
+                repub_logger.info(
+                    f"↑ Trying to republish data for model `{model.name}` of project `{proj.name}`"
                 )
                 try:
                     object_id = operations.send(
@@ -119,14 +138,14 @@ def _(
                     )
                 except SpeckleException as se:
                     if "Object too large" in str(se):
-                        print(
+                        repub_logger.warning(
                             f"⚠️ Model `{model.name}` of project `{proj.name}` is larger than 100 MB, and can therefore not be republished from Python."
                         )
-                        print(
-                            f"Instead republish manually from the original source application: {source_app}.\n"
+                        repub_logger.warning(
+                            f"Instead republish manually from the original source application: {source_app}."
                         )
                     else:
-                        print(se, end="\n\n")
+                        repub_logger.warning(se)
                     continue
 
                 version = client.version.create(
@@ -136,7 +155,7 @@ def _(
                         object_id=object_id,
                     )
                 )
-                print(
+                repub_logger.info(
                     f"✓ Created version: `{version.id}` of model `{model.name}` on project `{proj.name}`"
                 )
                 if delete_old_vers.value:
@@ -145,7 +164,7 @@ def _(
                         model_id=model.id,
                     )
                     old_versions = [v.id for v in all_versions.items[1:]]
-                    print(f"Deleting old versions: {old_versions}")
+                    repub_logger.info(f"Deleting old versions: {old_versions}")
                     client.version.delete(
                         DeleteVersionsInput(
                             project_id=proj.id, version_ids=old_versions
@@ -153,11 +172,34 @@ def _(
                     )
 
                 print("")
+
+    mo.md(f"""
+    ```txt
+    {repub_buffer.getvalue()}
+    ```
+    """)
     return
 
 
 @app.cell
+def _(logging, sys):
+    # fmt = "%(levelname)s %(asctime)s %(filename)s %(funcName)s %(lineno)d %(message)s"
+    fmt = "%(levelname)s %(asctime)s %(message)s"
+    formatter = logging.Formatter(fmt, datefmt="%H:%M:%S")
+
+    # stdout log handler
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(formatter)
+    return fmt, stdout_handler
+
+
+@app.cell
 def _():
+    import contextlib
+    import io
+    import logging
+    import sys
+
     import marimo as mo
 
     from specklepy.api import operations
@@ -166,22 +208,22 @@ def _():
     from specklepy.core.api.inputs.version_inputs import CreateVersionInput, DeleteVersionsInput
     from specklepy.logging.exceptions import SpeckleException
     from specklepy.transports.server import ServerTransport
+
     return (
         CreateVersionInput,
         DeleteVersionsInput,
         ServerTransport,
         SpeckleClient,
         SpeckleException,
+        contextlib,
         get_default_account,
         get_local_accounts,
+        io,
+        logging,
         mo,
         operations,
+        sys,
     )
-
-
-@app.cell
-def _():
-    return
 
 
 if __name__ == "__main__":
