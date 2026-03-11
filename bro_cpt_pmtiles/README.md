@@ -1,6 +1,6 @@
 # All BRO CPT Locations with PMTiles
 
-GeoPackage with all CPT locations from [PDOK Atom Feed](https://service.pdok.nl/bzk/brocptvolledigeset/atom/v1_0/index.xml)
+Download GeoPackage containing all CPT locations from [PDOK Atom Feed](https://service.pdok.nl/bzk/brocptvolledigeset/atom/v1_0/index.xml)
 
 ## Data Processing
 
