@@ -60,17 +60,10 @@ def _(mo, projects):
             delete_old_vers,
         ]
     )
-<<<<<<< HEAD
-    return delete_old_vers, projects_mselect
-
-
-@app.cell
-=======
     return delete_old_vers, project_names_tbl, projects_dict
 
 
 @app.cell(hide_code=True)
->>>>>>> speckle
 def _(mo):
     republish_button = mo.ui.run_button(label="Press to load and republish Speckle models for the selected projects")
     republish_button
@@ -85,14 +78,6 @@ def _(
     SpeckleException,
     client,
     delete_old_vers,
-<<<<<<< HEAD
-    operations,
-    projects_mselect,
-    republish_button,
-):
-    if republish_button.value:
-        for proj in projects_mselect.value:
-=======
     fmt,
     io,
     logging,
@@ -120,7 +105,6 @@ def _(
             projects_dict[pn] for pn in project_names_tbl.value["Projects"]
         ]
         for proj in repub_projects:
->>>>>>> speckle
             server_transport = ServerTransport(stream_id=proj.id, client=client)
             models = client.model.get_models(proj.id)
             for model in models.items:
@@ -130,13 +114,8 @@ def _(
                     limit=1,  # only get the latest version
                 )
                 source_app = latest_version.items[0].source_application
-<<<<<<< HEAD
-                print(
-                    f"Trying to load data for model `{model.name}` of project `{proj.name}`"
-=======
                 repub_logger.info(
                     f"↓ Trying to load data for model `{model.name}` of project `{proj.name}`"
->>>>>>> speckle
                 )
                 try:
                     received_data = operations.receive(
@@ -144,16 +123,6 @@ def _(
                         remote_transport=server_transport,
                     )
                 except SpeckleException as se:
-<<<<<<< HEAD
-                    print(
-                        f"⚠️ This model probably expired. Republish it manually first from the original source application: {source_app}."
-                    )
-                    print(se, end="\n\n")
-                    continue
-
-                print(
-                    f"Trying to republish data for model `{model.name}` of project `{proj.name}`"
-=======
                     repub_logger.warning(
                         f"⚠️ This model probably expired. Republish it manually first from the original source application: {source_app}."
                     )
@@ -162,7 +131,6 @@ def _(
 
                 repub_logger.info(
                     f"↑ Trying to republish data for model `{model.name}` of project `{proj.name}`"
->>>>>>> speckle
                 )
                 try:
                     object_id = operations.send(
@@ -170,16 +138,6 @@ def _(
                     )
                 except SpeckleException as se:
                     if "Object too large" in str(se):
-<<<<<<< HEAD
-                        print(
-                            f"⚠️ Model `{model.name}` of project `{proj.name}` is larger than 100 MB, and can therefore not be republished from Python."
-                        )
-                        print(
-                            f"Instead republish manually from the original source application: {source_app}.\n"
-                        )
-                    else:
-                        print(se, end="\n\n")
-=======
                         repub_logger.warning(
                             f"⚠️ Model `{model.name}` of project `{proj.name}` is larger than 100 MB, and can therefore not be republished from Python."
                         )
@@ -188,7 +146,6 @@ def _(
                         )
                     else:
                         repub_logger.warning(se)
->>>>>>> speckle
                     continue
 
                 version = client.version.create(
@@ -198,11 +155,7 @@ def _(
                         object_id=object_id,
                     )
                 )
-<<<<<<< HEAD
-                print(
-=======
                 repub_logger.info(
->>>>>>> speckle
                     f"✓ Created version: `{version.id}` of model `{model.name}` on project `{proj.name}`"
                 )
                 if delete_old_vers.value:
@@ -211,11 +164,7 @@ def _(
                         model_id=model.id,
                     )
                     old_versions = [v.id for v in all_versions.items[1:]]
-<<<<<<< HEAD
-                    print(f"Deleting old versions: {old_versions}")
-=======
                     repub_logger.info(f"Deleting old versions: {old_versions}")
->>>>>>> speckle
                     client.version.delete(
                         DeleteVersionsInput(
                             project_id=proj.id, version_ids=old_versions
@@ -223,22 +172,16 @@ def _(
                     )
 
                 print("")
-<<<<<<< HEAD
-=======
 
     mo.md(f"""
     ```txt
     {repub_buffer.getvalue()}
     ```
     """)
->>>>>>> speckle
     return
 
 
 @app.cell
-<<<<<<< HEAD
-def _():
-=======
 def _(logging, sys):
     # fmt = "%(levelname)s %(asctime)s %(filename)s %(funcName)s %(lineno)d %(message)s"
     fmt = "%(levelname)s %(asctime)s %(message)s"
@@ -257,7 +200,6 @@ def _():
     import logging
     import sys
 
->>>>>>> speckle
     import marimo as mo
 
     from specklepy.api import operations
@@ -266,30 +208,13 @@ def _():
     from specklepy.core.api.inputs.version_inputs import CreateVersionInput, DeleteVersionsInput
     from specklepy.logging.exceptions import SpeckleException
     from specklepy.transports.server import ServerTransport
-<<<<<<< HEAD
-=======
 
->>>>>>> speckle
     return (
         CreateVersionInput,
         DeleteVersionsInput,
         ServerTransport,
         SpeckleClient,
         SpeckleException,
-<<<<<<< HEAD
-        get_default_account,
-        get_local_accounts,
-        mo,
-        operations,
-    )
-
-
-@app.cell
-def _():
-    return
-
-
-=======
         contextlib,
         get_default_account,
         get_local_accounts,
@@ -301,6 +226,5 @@ def _():
     )
 
 
->>>>>>> speckle
 if __name__ == "__main__":
     app.run()
