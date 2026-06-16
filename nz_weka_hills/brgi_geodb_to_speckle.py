@@ -1,3 +1,16 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "folium>=0.12",
+#     "geopandas==1.1.3",
+#     "mapclassify==2.10.0",
+#     "marimo>=0.23.9",
+#     "matplotlib==3.11.0",
+#     "polars==1.41.2",
+#     "pyarrow==24.0.0",
+#     "pyvista==0.48.4",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.19.7"
