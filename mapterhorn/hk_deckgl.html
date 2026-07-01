@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/deck.gl@9/dist.min.js"></script>
+    <style>
+      html,body{margin:0;height:100%;width:100%}
+      #map{position:relative;height:100%;width:100%;background:#0b1021}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const brewin_path_lon = 114.154869
+      const brewin_path_lat = 22.273951
+
+      const TERRARIUM = { rScaler: 256, gScaler: 1, bScaler: 1 / 256, offset: -32768 };
+
+      // Mapterhorn DEM only exists to z12 -> cap maxZoom so deck.gl over-zooms the
+      // z12 tile instead of requesting missing tiles (which caused holes + spikes).
+      const terrain = new deck.TerrainLayer({
+          id: "terrain",
+          minZoom: 0,
+          maxZoom: 12,
+          elevationDecoder: TERRARIUM,
+          elevationData: "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+          texture: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          meshMaxError: 1,
+          operation: "terrain+draw"
+      });
+
+      // TerrainExtension in "offset" mode lifts each building's base onto the terrain.
+      const buildings = new deck.MVTLayer({
+          id: "buildings",
+          data: "https://tiles.openfreemap.org/planet/20260621_080001_pt/{z}/{x}/{y}.pbf",
+          minZoom: 0,
+          maxZoom: 14,
+          loadOptions: { mvt: { layers: ["building"] } },
+          extruded: true,
+          wireframe: false,
+          getElevation: f => f.properties.render_height || 3,
+          getFillColor: f => (f.properties.render_height ? [205, 208, 214, 255] : [0, 0, 0, 0]),
+          getLineColor: [0, 0, 0, 0],
+          lineWidthMinPixels: 0,
+          pointType: "circle",
+          getPointRadius: 0,
+          material: { ambient: 0.5, diffuse: 0.6, shininess: 32, specularColor: [60, 64, 70] },
+          extensions: [new deck._TerrainExtension()],
+          terrainDrawMode: "offset"
+      });
+
+      new deck.DeckGL({
+          container: "map",
+          initialViewState: {
+              longitude: brewin_path_lon,
+              latitude: brewin_path_lat,
+              zoom: 15,
+              pitch: 65,
+              bearing: 30,
+              maxPitch: 85
+          },
+          controller: true,
+          layers: [terrain, buildings]
+      });
+    </script>
+  </body>
+</html>
