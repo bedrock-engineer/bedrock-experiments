@@ -10,10 +10,37 @@
     <script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
     <style>
       html,body,#map{margin:0;height:100%;width:100%}
+      #underground{
+          position:absolute;top:10px;left:10px;z-index:1;
+          font:13px/1.4 system-ui,sans-serif;color:#fff;
+          background:rgba(0,0,0,.6);padding:8px 10px;border-radius:6px;
+          user-select:none;
+      }
+      #underground button{
+          font:inherit;cursor:pointer;margin:0 2px;padding:2px 8px;
+          border:0;border-radius:4px;background:#444;color:#fff;
+      }
+      #underground button:hover{background:#666}
+      #underground .hint{opacity:.7;font-size:11px}
     </style>
   </head>
   <body>
     <div id="map"></div>
+    <!-- Add controls such that the elevation of the camera can be set -->
+    <!-- The idea was that this would allow underground navigation, -->
+    <!-- but it doesn't reallt work... -->
+    <!-- The camera never really moves below zero. -->
+    <div id="underground">
+        <div>
+            Camera elevation: <span id="elev">–</span> m
+        </div>
+        <div style="margin-top:4px">
+            <button id="down">▼ Dive (Q)</button>
+            <button id="up">▲ Rise (E)</button>
+            <button id="reset">Surface</button>
+        </div>
+        <div class="hint">Terrain is opaque: looking up from below shows its underside.</div>
+    </div>
     <script>
       const brewin_path_lon = 114.154869
       const brewin_path_lat = 22.273951
@@ -24,7 +51,13 @@
           maxPitch: 180,
           center: [brewin_path_lon, brewin_path_lat],
           style: "https://tiles.openfreemap.org/styles/liberty",
-          maxZoom: 19
+          maxZoom: 19,
+          // Underground navigation: don't clamp the map center to the terrain
+          // surface, so the camera can descend below ground. Also required to
+          // keep the camera above ground when pitch > 90 (looking up from below).
+          // Note: MapLibre has no translucent-terrain equivalent to Cesium, so
+          // the surface stays opaque -- you move under it rather than see through it.
+          centerClampedToGround: false
       });
 
       map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }));
@@ -83,6 +116,39 @@
           new maplibregl.Marker()
               .setLngLat([brewin_path_lon, brewin_path_lat])
               .addTo(map);
+
+          // --- Underground camera navigation ---
+          // With centerClampedToGround:false the center elevation no longer
+          // snaps to the terrain, so we can drive it below the surface height
+          // to move the whole camera underground. Step in metres per press.
+          const STEP = 25;
+          const elevReadout = document.getElementById("elev");
+
+          function updateReadout() {
+              elevReadout.textContent = map.getCenterElevation().toFixed(0);
+          }
+
+          function nudge(delta) {
+              map.setCenterElevation(map.getCenterElevation() + delta);
+              updateReadout();
+          }
+
+          document.getElementById("down").onclick = () => nudge(-STEP);
+          document.getElementById("up").onclick = () => nudge(STEP);
+          document.getElementById("reset").onclick = () => {
+              // Snap center back to the terrain surface at the current center.
+              const c = map.getCenter();
+              map.setCenterElevation(map.queryTerrainElevation(c) ?? 0);
+              updateReadout();
+          };
+
+          window.addEventListener("keydown", (e) => {
+              if (e.key === "q" || e.key === "Q") nudge(-STEP);
+              if (e.key === "e" || e.key === "E") nudge(STEP);
+          });
+
+          map.on("move", updateReadout);
+          updateReadout();
       });
     </script>
   </body>
