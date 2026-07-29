@@ -1,19 +1,21 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "folium>=0.12",
-#     "geopandas==1.1.3",
-#     "mapclassify==2.10.0",
-#     "marimo>=0.23.9",
-#     "matplotlib==3.11.0",
-#     "polars==1.41.2",
-#     "pyarrow==24.0.0",
-#     "pyvista==0.48.4",
+#     "folium",
+#     "geopandas",
+#     "mapclassify",
+#     "marimo",
+#     "matplotlib",
+#     "polars",
+#     "pyarrow",
+#     "pyvista",
+#     "specklepy",
 # ]
 # ///
+
 import marimo
 
-__generated_with = "0.19.7"
+__generated_with = "0.23.15"
 app = marimo.App(width="medium")
 
 
@@ -52,7 +54,6 @@ def _():
         ServerTransport,
         SpeckleClient,
         cwd,
-        get_default_account,
         get_local_accounts,
         gpd,
         mcolors,
@@ -158,6 +159,7 @@ def _(mcolors, plt):
         norm = mcolors.Normalize(vmin=0, vmax=100, clip=True)
         cmap = plt.get_cmap("plasma")
         return mcolors.to_hex(cmap(norm(v)))
+
     return
 
 
@@ -181,6 +183,7 @@ def _(mcolors, plt):
         norm = mcolors.Normalize(vmin=1,vmax=6)
         cmap = plt.get_cmap("YlGnBu")
         return mcolors.to_hex(cmap(norm(v)))
+
     return
 
 
@@ -216,6 +219,7 @@ def _(np, sg):
             return sg.Polyline(
                 value=np.array(coords).flatten().tolist(), units="m"
             )
+
     return (coords_to_speckle_geom,)
 
 
@@ -238,6 +242,7 @@ def _(np, pv):
                 n_sides=10,
                 capping=True
             ).triangulate()
+
     return (coords_to_pyvista_mesh,)
 
 
@@ -249,6 +254,7 @@ def _(pv, sg):
             faces=pv_mesh.faces.tolist(),
             units="m"
         )
+
     return (pyvista_mesh_to_display_value,)
 
 
@@ -283,6 +289,7 @@ def _(
             spkl_data_objs.append(spkl_obj)
 
         return sco.Collection(name=collection_name, elements=spkl_data_objs)
+
     return (props_df_to_speckle_collection,)
 
 
@@ -346,18 +353,21 @@ def _(geology_collection, sco, spkl_color_proxies, spkl_material_proxies):
 
 
 @app.cell
-def _(SpeckleClient, get_default_account, get_local_accounts, mo):
-    # Get all locally stored accounts
+def _(get_local_accounts, mo):
+    # Get all locally stored Speckle accounts and create a dropdown
     accounts = get_local_accounts()
+    server_dd = mo.ui.dropdown(
+        {account.serverInfo.url: account for account in accounts},
+        value="https://speckle.bedrock.engineer",
+    )
+    server_dd
+    return (server_dd,)
 
-    for account in accounts:
-        print(f"Server: {account.serverInfo.url} , User: {account.userInfo.name}")
 
-    # Get the default account
-    account = get_default_account()
-    if account:
-        client = SpeckleClient(host=account.serverInfo.url)
-        client.authenticate_with_account(account)
+@app.cell
+def _(SpeckleClient, mo, server_dd):
+    client = SpeckleClient(host=server_dd.value.serverInfo.url)
+    client.authenticate_with_account(server_dd.value)
 
     print(
         f"Authenticated on {client.server.get().canonical_url} as {client.account.userInfo.name}"
@@ -428,7 +438,7 @@ def _(
         ✓ Created version: `{version.id}` of model `{model.name}` on project `{project.name}`
         """),
                 mo.Html(
-                    rf'<iframe title="Speckle" src="https://app.speckle.systems/projects/{project.id}/models/{model.id}" width="800" height="500" frameborder="0"></iframe>'
+                    rf'<iframe title="Speckle" src="{client.server.get().canonical_url}/projects/{project.id}/models/{model.id}" width="100%" height="500" frameborder="0"></iframe>'
                 ),
             ]
         )
@@ -437,12 +447,7 @@ def _(
     return
 
 
-@app.cell
-def _():
-    return
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     # Plot the display values (PyVista spheres & pipes)
