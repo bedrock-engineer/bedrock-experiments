@@ -1,6 +1,16 @@
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "duckdb==1.5.5",
+#     "marimo>=0.24.0",
+#     "polars==1.44.0",
+#     "sqlmodel==0.0.39",
+# ]
+# ///
+
 import marimo
 
-__generated_with = "0.18.0"
+__generated_with = "0.24.0"
 app = marimo.App(width="medium")
 
 
@@ -14,6 +24,7 @@ def _():
     import marimo as mo
     import polars as pl
     import sqlmodel
+
     return Path, duckdb, json, mo, os, pl, sqlmodel
 
 
@@ -40,13 +51,13 @@ def _(duckdb, speckle_datadb_path, speckle_objectsdb_path, sqlmodel):
 
 
 @app.cell
-def _(mo, objects, spkl_objectsdb_sqlite_engine):
+def _(mo, spkl_objectsdb_sqlite_engine):
     objs_df = mo.sql(
         f"""
         SELECT
             *
         FROM "objects"
-        LIMIT	50;
+        LIMIT	20;
         """,
         engine=spkl_objectsdb_sqlite_engine
     )
