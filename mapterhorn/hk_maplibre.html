@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
+    <style>
+      html,body,#map{margin:0;height:100%;width:100%}
+      #underground{
+          position:absolute;top:10px;left:10px;z-index:1;
+          font:13px/1.4 system-ui,sans-serif;color:#fff;
+          background:rgba(0,0,0,.6);padding:8px 10px;border-radius:6px;
+          user-select:none;
+      }
+      #underground button{
+          font:inherit;cursor:pointer;margin:0 2px;padding:2px 8px;
+          border:0;border-radius:4px;background:#444;color:#fff;
+      }
+      #underground button:hover{background:#666}
+      #underground .hint{opacity:.7;font-size:11px}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <!-- Add controls such that the elevation of the camera can be set -->
+    <!-- The idea was that this would allow underground navigation, -->
+    <!-- but it doesn't reallt work... -->
+    <!-- The camera never really moves below zero. -->
+    <div id="underground">
+        <div>
+            Camera elevation: <span id="elev">–</span> m
+        </div>
+        <div style="margin-top:4px">
+            <button id="down">▼ Dive (Q)</button>
+            <button id="up">▲ Rise (E)</button>
+            <button id="reset">Surface</button>
+        </div>
+        <div class="hint">Terrain is opaque: looking up from below shows its underside.</div>
+    </div>
+    <script>
+      const brewin_path_lon = 114.154869
+      const brewin_path_lat = 22.273951
+      const map = new maplibregl.Map({
+          container: "map",
+          zoom: 15,
+          pitch: 70,
+          maxPitch: 180,
+          center: [brewin_path_lon, brewin_path_lat],
+          style: "https://tiles.openfreemap.org/styles/liberty",
+          maxZoom: 19,
+          // Underground navigation: don't clamp the map center to the terrain
+          // surface, so the camera can descend below ground. Also required to
+          // keep the camera above ground when pitch > 90 (looking up from below).
+          // Note: MapLibre has no translucent-terrain equivalent to Cesium, so
+          // the surface stays opaque -- you move under it rather than see through it.
+          centerClampedToGround: false
+      });
+
+      map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }));
+
+      map.on("load", () => {
+          // --- 3D terrain (raster-dem) ---
+          map.addSource("terrainSource", {
+              type: "raster-dem",
+              url: "https://tiles.mapterhorn.com/tilejson.json"
+          });
+          map.addSource("hillshadeSource", {
+              type: "raster-dem",
+              url: "https://tiles.mapterhorn.com/tilejson.json"
+          });
+          map.addLayer({
+              id: "hills",
+              type: "hillshade",
+              source: "hillshadeSource",
+              layout: { visibility: "visible" },
+              paint: { "hillshade-shadow-color": "#473B24" }
+          });
+          map.setTerrain({ source: "terrainSource", exaggeration: 1 });
+          map.setSky({});
+          map.addControl(
+              new maplibregl.TerrainControl({ source: "terrainSource", exaggeration: 1 })
+          );
+
+          // --- 3D buildings (fill-extrusion from the openmaptiles vector source) ---
+          // insert beneath the first text label so labels stay readable
+          const layers = map.getStyle().layers;
+          let labelLayerId;
+          for (const layer of layers) {
+              if (layer.type === "symbol" && layer.layout && layer.layout["text-field"]) {
+                  labelLayerId = layer.id;
+                  break;
+              }
+          }
+          map.addLayer({
+              id: "3d-buildings",
+              source: "openmaptiles",
+              "source-layer": "building",
+              type: "fill-extrusion",
+              minzoom: 14,
+              paint: {
+                  "fill-extrusion-color": "#cfd2d6",
+                  "fill-extrusion-height": [
+                      "interpolate", ["linear"], ["zoom"],
+                      14, 0,
+                      15.5, ["get", "render_height"]
+                  ],
+                  "fill-extrusion-base": ["get", "render_min_height"],
+                  "fill-extrusion-opacity": 0.9
+              }
+          }, labelLayerId);
+
+          new maplibregl.Marker()
+              .setLngLat([brewin_path_lon, brewin_path_lat])
+              .addTo(map);
+
+          // --- Underground camera navigation ---
+          // With centerClampedToGround:false the center elevation no longer
+          // snaps to the terrain, so we can drive it below the surface height
+          // to move the whole camera underground. Step in metres per press.
+          const STEP = 25;
+          const elevReadout = document.getElementById("elev");
+
+          function updateReadout() {
+              elevReadout.textContent = map.getCenterElevation().toFixed(0);
+          }
+
+          function nudge(delta) {
+              map.setCenterElevation(map.getCenterElevation() + delta);
+              updateReadout();
+          }
+
+          document.getElementById("down").onclick = () => nudge(-STEP);
+          document.getElementById("up").onclick = () => nudge(STEP);
+          document.getElementById("reset").onclick = () => {
+              // Snap center back to the terrain surface at the current center.
+              const c = map.getCenter();
+              map.setCenterElevation(map.queryTerrainElevation(c) ?? 0);
+              updateReadout();
+          };
+
+          window.addEventListener("keydown", (e) => {
+              if (e.key === "q" || e.key === "Q") nudge(-STEP);
+              if (e.key === "e" || e.key === "E") nudge(STEP);
+          });
+
+          map.on("move", updateReadout);
+          updateReadout();
+      });
+    </script>
+  </body>
+</html>
