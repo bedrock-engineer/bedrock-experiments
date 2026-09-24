@@ -151,8 +151,8 @@ def _(Args, CliApp, ValidationError, mo, ui_args):
         try:
             params = CliApp.run(Args)
         except ValidationError as err:
-            for e in err.errors():
-                print(f"--{'.'.join(map(str, e['loc']))}: {e['msg']}")
+            for _e in err.errors():
+                print(f"--{'.'.join(map(str, _e['loc']))}: {_e['msg']}")
             raise SystemExit(2)
     else:
         mo.stop(ui_args.value is None, mo.md("Submit the form to run."))
