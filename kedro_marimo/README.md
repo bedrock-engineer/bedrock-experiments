@@ -28,6 +28,8 @@ raw_cpts (CSV) -> clean_cpts -> cpts_clean (Parquet) -> classify_cpts -> cpts_cl
     -> summarize_layers -> cpt_layers (CSV)
 ```
 
+![kedro CPT data processing pipeline](docs/kedro-cpt-data-processing-pipeline.png)
+
 ## How to run
 
 From `kedro_marimo/`:
