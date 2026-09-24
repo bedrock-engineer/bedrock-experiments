@@ -23,3 +23,8 @@ project_name = "cpt_pipeline"
 kedro_init_version = "1.6.0"
 # Project root, so the notebooks next to conf/ are importable (default: "src").
 source_dir = "."
+
+[tool.pytest.ini_options]
+# The notebooks and cpt_pipeline/ sit at the project root, not in an installed package.
+pythonpath = ["."]
+testpaths = ["tests"]
