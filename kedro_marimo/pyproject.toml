@@ -16,3 +16,10 @@ dependencies = [
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.kedro]
+package_name = "cpt_pipeline"
+project_name = "cpt_pipeline"
+kedro_init_version = "1.6.0"
+# Project root, so the notebooks next to conf/ are importable (default: "src").
+source_dir = "."
