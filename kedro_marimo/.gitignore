@@ -1,0 +1,9 @@
+.venv/
+__marimo__/
+.pytest_cache/
+.viz/
+# Kedro run outputs; only the raw input is committed.
+data/*/*
+!data/01_raw/
+!data/01_raw/cpts.csv
+!data/*/.gitkeep

@@ -1,0 +1,18 @@
+[project]
+name = "kedro-marimo"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "kedro>=1",
+    "kedro-datasets[pandas-csvdataset,pandas-parquetdataset]>=9.6.0",
+    "marimo>=0.25.0",
+    "pandas>=3.0.6",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
