@@ -1,0 +1,30 @@
+[project]
+name = "kedro-marimo"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "kedro>=1",
+    "kedro-datasets[pandas-csvdataset,pandas-parquetdataset]>=9.6.0",
+    "marimo>=0.25.0",
+    "pandas>=3.0.6",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.kedro]
+package_name = "cpt_pipeline"
+project_name = "cpt_pipeline"
+kedro_init_version = "1.6.0"
+# Project root, so the notebooks next to conf/ are importable (default: "src").
+source_dir = "."
+
+[tool.pytest.ini_options]
+# The notebooks and cpt_pipeline/ sit at the project root, not in an installed package.
+pythonpath = ["."]
+testpaths = ["tests"]

@@ -1,0 +1,22 @@
+raw_cpts:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/cpts.csv
+
+cpts_clean:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/cpts_clean.parquet
+
+cpts_classified:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/cpts_classified.parquet
+
+cpt_layers:
+  type: pandas.CSVDataset
+  filepath: data/08_reporting/cpt_layers.csv
+  save_args:
+    index: false
+
+# Output of the whole-notebook node (app.run), for comparison.
+cpts_clean_app_run:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/cpts_clean_app_run.parquet

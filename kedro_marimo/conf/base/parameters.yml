@@ -1,0 +1,6 @@
+clean:
+  area_ratio: 0.8
+classify:
+  min_layer_thickness: 0.3
+# Only used by the whole-notebook node, which reads its own input.
+raw_cpts_path: data/01_raw/cpts.csv
