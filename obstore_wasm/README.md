@@ -4,13 +4,16 @@ Experiment: does [obstore](https://github.com/developmentseed/obstore) work in a
 
 Why: the bedrock-geo tutorials should keep their example data on Cloudflare R2 and read it through an obstore store, as in marimo's [Drive storage](https://marimo.io/blog/drive-storage) post. The same tutorials should also run as WASM notebooks. obstore is a Rust extension, so it needs a wheel built for Pyodide.
 
-Short answer: **no.** There is no Pyodide wheel, and building one from source fails. The cause is not a missing build flag. obstore's HTTP stack (object_store, reqwest, hyper, tokio) only switches to the browser's `fetch` on `wasm32-unknown-unknown`. Pyodide is `wasm32-unknown-emscripten`, so those crates take the native socket path, which cannot compile there. Making it work means a fork with a fetch-based HTTP connector. Plain HTTPS reads through `pyodide.http.pyfetch` do work, including Range requests.
+A second notebook asks the follow-up: if not obstore, what does work for getting web data into a WASM notebook? fsspec, pandas, polars, DuckDB, geopandas and the plain HTTP clients, each tested in the browser. See [Part 2](#part-2-other-ways-to-read-web-data-in-wasm).
+
+Short answer for obstore: **no.** There is no Pyodide wheel, and building one from source fails. The cause is not a missing build flag. obstore's HTTP stack (object_store, reqwest, hyper, tokio) only switches to the browser's `fetch` on `wasm32-unknown-unknown`. Pyodide is `wasm32-unknown-emscripten`, so those crates take the native socket path, which cannot compile there. Making it work means a fork with a fetch-based HTTP connector. Plain HTTPS reads through `pyodide.http.pyfetch` do work, including Range requests.
 
 ## Layout
 
 ```
 obstore_wasm/
-├── obstore_probe_mo.py       # notebook: one cell per check, result table + JSON
+├── obstore_probe_mo.py       # notebook: obstore checks, result table + JSON
+├── web_data_probe_mo.py      # notebook: fsspec, pandas, polars, DuckDB, geopandas, HTTP clients
 ├── run_wasm_probe.py         # export to html-wasm, serve, run in headless Chromium
 ├── build_pyodide_wheel.sh    # try to build an obstore wheel with pyodide-build
 └── public/sample.txt         # same-origin file for the HTTPStore check
@@ -24,6 +27,8 @@ From `obstore_wasm/`:
 uv run obstore_probe_mo.py                       # native baseline, prints JSON
 uv run --with playwright playwright install chromium
 uv run run_wasm_probe.py                         # WASM: export, serve, run in Chromium
+uv run web_data_probe_mo.py                      # part 2, native baseline
+uv run run_wasm_probe.py --notebook web_data_probe_mo.py   # part 2 in Chromium
 uv run run_wasm_probe.py --wheel path/to/obstore-*.whl   # offer a locally built wheel
 ./build_pyodide_wheel.sh                         # toolchains go into .build/ (git-ignored)
 uv run marimo edit obstore_probe_mo.py           # interactive
@@ -99,3 +104,62 @@ The browser reads the same public objects over plain HTTPS with `pyodide.http.py
 ## Verdict
 
 obstore does not run in WASM marimo notebooks, and it will not without an upstream port. For the tutorials, use one small data-access helper. Natively it uses obstore against R2. In Pyodide (`sys.platform == "emscripten"`) it uses `pyfetch` against R2's public URL. Both paths point at the same objects, so the data lives in one place.
+
+## Part 2: other ways to read web data in WASM
+
+`web_data_probe_mo.py` tries every common way to read a URL, natively and in the same Chromium setup (marimo 0.25.0, Pyodide 314.0.0). All URLs are cross-origin. The CSV (`WH_collar_all.csv`, 5056 bytes) and GeoPackage (`wekahills_gi.gpkg`, 1.7 MB) are bedrock-ge tutorial data on raw.githubusercontent.com, which sends `Access-Control-Allow-Origin: *` and supports Range. The Parquet file is `WH_cpt_Alluvial.csv` written as 952,310 bytes in 10 row groups, served by `run_wasm_probe.py` from a second local port with CORS and Range. That server logs every request, so the runner shows how many bytes each reader pulled.
+
+Natively, every check passes. In Chromium:
+
+| Way in | WASM | Notes |
+|---|---|---|
+| `pyodide.http.pyfetch` (async) | ok | Browser `fetch`. The base for everything else |
+| `pyodide.http.open_url` (sync) | ok | Sync XHR, text only |
+| `urllib.request.urlopen` | ok | marimo calls `pyodide_http.patch_all()` at startup, so this is sync XHR |
+| `requests.get`, also with `Range` | ok | Same patch. Range gave HTTP 206 |
+| `aiohttp.ClientSession` | **fail** | `Cannot connect to host ... [Name does not resolve]`: needs sockets |
+| `pandas.read_csv(url)`, `read_parquet(url)` | ok | Downloads the whole file (952,310 bytes, no Range) |
+| `polars.read_csv(url)`, `read_parquet(url)` | ok | Whole file, no Range |
+| DuckDB `read_csv(url)`, `read_parquet(url)` | ok | Whole file, no Range. Even `select max(Depth)` pulls everything |
+| fsspec `https`, default filesystem | **breaks the kernel** | See finding 6 |
+| fsspec `http_sync` + `open` | ok, with a trap | Range reads work. Gzipped responses come back truncated, see finding 5 |
+| fsspec `http_sync` + pyarrow `ParquetFile.read_row_group(0, columns=["Depth"])` | ok | 3 requests (HEAD + 2 ranges), **137,292 of 952,310 bytes** |
+| `geopandas.read_file(url)` | fail | fiona's `/vsicurl/` has no network |
+| `geopandas.read_file(local .gpkg)` | **crashes Pyodide** | See finding 7 |
+| `read_gpkg_layer` (sqlite3 + shapely) | ok | The notebook's workaround, 0.5 s |
+
+### 5. fsspec `http_sync` truncates gzipped responses
+
+`import fsspec.implementations.http_sync` re-registers `http` and `https` with a synchronous filesystem built for Pyodide (sync XHR). Range reads work, and pyarrow reads one row group of one column with 137 KB of the 952 KB file.
+
+But `fsspec.open(CSV_URL).read()` returned 2016 bytes of a 5056-byte CSV, without an error. raw.githubusercontent.com sends `Content-Encoding: gzip` with `Content-Length: 2016`, the compressed size. fsspec takes `Content-Length` as the file size, the browser hands it the decompressed body, and fsspec stops reading at 2016 bytes. Browser code cannot set `Accept-Encoding`, so this cannot be turned off from Python. Binary formats (Parquet, GeoPackage, PMTiles) are usually served uncompressed and are not affected. Text files (CSV, GeoJSON, JSON) on a CDN that compresses are. Cloudflare compresses text types on proxied domains, so this is a risk for CSV on R2 behind a custom domain. Not tested on R2.
+
+### 6. fsspec's default `https` filesystem breaks marimo's WASM kernel
+
+fsspec's default HTTP filesystem is async and runs on aiohttp. `fsspec.filesystem("https")` alone, without reading anything, left marimo's event loop broken. The cell itself finished, but then the console showed `RuntimeError: loop <pyodide.webloop.WebLoop ...> is not the running loop` and `Cannot enter into task ... AsyncioThread._run_in_context()` (marimo's WASM threading shim in `marimo/_runtime/_wasm/_concurrency/_threading.py`), and no later cell finished. With the read attempt included, the read itself failed with `NotImplementedError: Calling sync() from within a running loop`, and in one run the next cell (`pandas.read_csv`) hung. The probe skips these checks unless `TRY_AIOHTTP_FSSPEC = True`. Without them, the full result rendered and no loop errors were logged.
+
+So in a WASM notebook, import `fsspec.implementations.http_sync` before anything creates an `https` filesystem, and be careful with libraries that create one internally.
+
+### 7. fiona crashes Pyodide on any GeoPackage
+
+Pyodide's geopandas uses fiona (1.9.5 with GDAL 3.8.3 in Pyodide 314.0.0, 1.10.1 in 314.0.7), not pyogrio. GeoJSON reads fine. Any GeoPackage access, reading (`fiona.listlayers`, `gpd.read_file`) or writing (`to_file(driver="GPKG")`), ends the whole runtime:
+
+```
+Pyodide has suffered a fatal error. Please report this to the Pyodide maintainers.
+RuntimeError: null function or function signature mismatch
+```
+
+Reproduced in Node with Pyodide 314.0.0 and 314.0.7, and in Chromium. It is a WASM-level trap, so `try/except` cannot catch it, and the marimo kernel dies with it.
+
+The workaround is in the notebook as the reusable function `read_gpkg_layer(path, layer)`. A GeoPackage is a SQLite file, so it reads the table with the stdlib `sqlite3`, strips the GeoPackage geometry header, decodes the WKB with `shapely.from_wkb`, and takes the CRS definition from `gpkg_spatial_ref_sys`. On the Weka Hills file it reads `Location` as 99 3D LineStrings in `NZGD2000 / New Zealand Transverse Mercator 2000 + NZVD2016 height`. It ignores extended geometry types and does not use the R-tree index, which is fine for tutorial-sized layers.
+
+### Part 2 verdict
+
+For tutorial data on R2:
+
+- **Small files (CSV, GeoJSON, a GeoPackage of a few MB):** download whole. `pandas.read_csv(url)`, `polars.read_csv(url)`, `requests.get(url)` and `pyfetch` all work, thanks to marimo's `pyodide_http` patch. These are the same calls that work natively, so most notebook code needs no WASM branch at all.
+- **GeoPackages:** download, then `read_gpkg_layer` instead of `gpd.read_file`, until Pyodide's fiona is fixed.
+- **Large Parquet where you want a subset:** fsspec `http_sync` + pyarrow is the only tested path that reads byte ranges in the browser. pandas, polars and DuckDB download the whole file.
+- **Avoid:** aiohttp, fsspec's default `https` filesystem, and anything built on them (s3fs, gcsfs, adlfs), plus `gpd.read_file` on a GeoPackage.
+
+Not tested in part 2: R2 itself, Cloudflare's compression on R2 custom domains, `httpx`, zarr/xarray over HTTP, DuckDB's `httpfs` extension (DuckDB read the URLs without loading it), and browsers other than Chromium.
