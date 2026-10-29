@@ -1,0 +1,10 @@
+[project]
+name = "geospeckle"
+version = "0.1.0"
+description = "Speckle's web viewer in a notebook widget, with an OSM ground map and 3D Tiles around the model"
+requires-python = ">=3.12"
+dependencies = ["anywidget>=0.9", "traitlets>=5"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
