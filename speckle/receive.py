@@ -49,18 +49,28 @@ def _():
 
 
 @app.cell
-def _(SpeckleClient, get_default_account, get_local_accounts, mo):
-    # Get all locally stored accounts
+def _(get_default_account, get_local_accounts, mo):
+    # The accounts stored locally by Speckle Manager or a connector, one per server login
     accounts = get_local_accounts()
 
-    for account in accounts:
-        print(f"Server: {account.serverInfo.url}, User: {account.userInfo.name}")
 
-    # Get the default account
-    account = get_default_account()
-    if account:
-        client = SpeckleClient(host=account.serverInfo.url)
-        client.authenticate_with_account(account)
+    def _label(acc):
+        return f"{acc.serverInfo.name} ({acc.serverInfo.url})"
+
+
+    server_dd = mo.ui.dropdown(
+        {_label(acc): acc for acc in accounts},
+        value=_label(get_default_account()),
+        label="Speckle server",
+    )
+    return (server_dd,)
+
+
+@app.cell
+def _(SpeckleClient, mo, server_dd):
+    account = server_dd.value
+    client = SpeckleClient(host=account.serverInfo.url)
+    client.authenticate_with_account(account)
 
     print(
         f"Authenticated on {client.server.get().canonical_url} as {client.account.userInfo.name}"
@@ -101,8 +111,8 @@ def _(mo):
 
 
 @app.cell
-def _(mo, models_dd, projects_dd, receive_route):
-    mo.vstack([projects_dd, models_dd, receive_route])
+def _(mo, models_dd, projects_dd, receive_route, server_dd):
+    mo.vstack([server_dd, projects_dd, models_dd, receive_route])
     return
 
 

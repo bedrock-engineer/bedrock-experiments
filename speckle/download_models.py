@@ -21,6 +21,7 @@ def _():
     import shutil
     import sqlite3
     import warnings
+    from contextlib import closing
     from datetime import datetime, timezone
     from pathlib import Path
 
@@ -43,6 +44,7 @@ def _():
         ServerTransport,
         SpeckleClient,
         bundle,
+        closing,
         datetime,
         get_local_accounts,
         json,
@@ -62,8 +64,8 @@ def _(mo):
     mo.md(r"""
     # Download Speckle models to SQLite and Parquet
 
-    Receives the latest version of each model in `speckle_targets` from
-    app.speckle.systems in two ways and stores both on disk, so other notebooks
+    Receives the latest version of each model in `speckle_targets` (app.speckle.systems
+    and Bedrock.engineer's self-hosted server) in two ways and stores both on disk, so other notebooks
     (`analyze_models.py`) can work with the data without receiving it again:
 
     1. **Bundle (2026.9 data model):** `bundle.receive` downloads the version's Parquet
@@ -76,6 +78,8 @@ def _(mo):
         - Versions that only exist as a bundle (server-side converters, 2026.9
           connectors) have no JSON on the server. Their v3 tree is projected from the
           bundle with `Model.to_base()` and serialized into SQLite (`v3_route = "projected"`).
+        - Self-hosted Speckle 2.x servers serve no bundles, so their versions only get
+          the v3 objects and have no bundle folder.
 
     `v3_objects.db` also holds a `versions` table: one row per downloaded version, with
     names, ids, source application, the v3 root object id, the route and the bundle folder.
@@ -113,79 +117,108 @@ def _(Path, env_config, mo, user_speckle_folder_path):
 
 @app.cell
 def _():
-    SPECKLE_SERVER = "https://app.speckle.systems"
-
+    # Server -> project id -> model ids
     speckle_targets = {
-        # (a) Speckle Demo Models, as listed in the vault note Clippings/Speckle's Demo Models.md
-        "8be1007be1": [
-            "06612622aa",  # revit/snowdon towers/structure
-            "13a2953168",  # revit/snowdon towers/architecture
-            "57b96dc670",  # revit/sample house/architecture
-            "974c745988",  # revit/speckle tower/rooms
-            "ca3fb98f70",  # revit/speckle tower/structure
-            "425506f1c6",  # revit/speckle tower/architecture
-            "65a12a0665",  # rhino/clubhouse/site
-            "87f3ba9541",  # rhino/clubhouse/interiors
-            "1c72499f69",  # rhino/clubhouse/furniture
-            "cc878fae03",  # rhino/clubhouse/roof elements
-            "de46f47fc2",  # rhino/clubhouse/structure
-            "478d7a4664",  # rhino/clubhouse/facade
-            "5d98221bf2",  # sketchup/modern family house
-        ],
-        # (b) rvt-advanced-sample
-        "461cc2a20f": [
-            "ef7cb591fc",  # rvt-advanced-sample-mep
-            "363cae173a",  # rvt-advanced-sample-arch
-            "35e9a2fa3b",  # rvt-advanced-sample-str
-        ],
-        # (c) Sixty5
-        "790844ad61": [
-            "7c0a2f7581",  # architecture
-            "a499835adf",  # facade
-            "4522b8f2c0",  # structure
-            "e780545d18",  # bouwplaats
-        ],
+        "https://app.speckle.systems": {
+            # (a) Speckle Demo Models, as listed in the vault note Clippings/Speckle's Demo Models.md
+            "8be1007be1": [
+                "06612622aa",  # revit/snowdon towers/structure
+                "13a2953168",  # revit/snowdon towers/architecture
+                "3d576547a0",  # revit/snowdon towers/Plumbing
+                "661df23d21",  # revit/snowdon towers/HVAC
+                "57b96dc670",  # revit/sample house/architecture
+                "974c745988",  # revit/speckle tower/rooms
+                "ca3fb98f70",  # revit/speckle tower/structure
+                "425506f1c6",  # revit/speckle tower/architecture
+                "65a12a0665",  # rhino/clubhouse/site
+                "87f3ba9541",  # rhino/clubhouse/interiors
+                "1c72499f69",  # rhino/clubhouse/furniture
+                "cc878fae03",  # rhino/clubhouse/roof elements
+                "de46f47fc2",  # rhino/clubhouse/structure
+                "478d7a4664",  # rhino/clubhouse/facade
+                "5d98221bf2",  # sketchup/modern family house
+                "eba58146c6",  # tekla/office
+            ],
+            # (b) rvt-advanced-sample
+            "461cc2a20f": [
+                "ef7cb591fc",  # rvt-advanced-sample-mep
+                "363cae173a",  # rvt-advanced-sample-arch
+                "35e9a2fa3b",  # rvt-advanced-sample-str
+            ],
+            # (c) Sixty5
+            "790844ad61": [
+                "7c0a2f7581",  # architecture
+                "a499835adf",  # facade
+                "4522b8f2c0",  # structure
+                "e780545d18",  # bouwplaats
+            ],
+        },
+        "https://speckle.bedrock.engineer": {
+            # (d) NL Eindhoven Sixty5, the IFC models published from ifcopenshell
+            "624814b0f9": [
+                "5b0c7e0b4e",  # facade
+                "b9116691f2",  # str
+            ],
+        },
     }
-    return SPECKLE_SERVER, speckle_targets
+    return (speckle_targets,)
 
 
 @app.cell
-def _(SPECKLE_SERVER, SpeckleClient, get_local_accounts, mo):
-    account = next(
-        _account
-        for _account in get_local_accounts()
-        if _account.serverInfo.url.rstrip("/") == SPECKLE_SERVER
+def _(SpeckleClient, get_local_accounts, mo, speckle_targets):
+    # One account and client per server. Self-hosted Speckle 2.x servers don't serve
+    # 2026.9 bundles, only the v3 JSON objects.
+    accounts, clients, serves_bundles = {}, {}, {}
+    _local_accounts = get_local_accounts()
+    for _server in speckle_targets:
+        _account = next(
+            _account
+            for _account in _local_accounts
+            if _account.serverInfo.url.rstrip("/") == _server
+        )
+        _client = SpeckleClient(host=_server)
+        _client.authenticate_with_account(_account)
+        accounts[_server], clients[_server] = _account, _client
+        serves_bundles[_server] = not _client.server.get().version.startswith("2.")
+
+    mo.md(
+        "\n".join(
+            f"- Authenticated on `{_server}` as **{accounts[_server].userInfo.name}**"
+            f"{'' if serves_bundles[_server] else ' (Speckle 2.x: no bundles)'}"
+            for _server in speckle_targets
+        )
     )
-    client = SpeckleClient(host=SPECKLE_SERVER)
-    client.authenticate_with_account(account)
-    mo.md(f"Authenticated on `{SPECKLE_SERVER}` as **{account.userInfo.name}**")
-    return account, client
+    return accounts, clients, serves_bundles
 
 
 @app.cell
-def _(client, mo, pl, speckle_targets):
+def _(clients, mo, pl, serves_bundles, speckle_targets):
     # Latest version of every target model. A referenced_object starting with "bundle."
     # means the version only exists as a bundle (no v3 JSON objects on the server).
     _rows = []
-    for _project_id, _model_ids in speckle_targets.items():
-        _project = client.project.get(_project_id)
-        for _model_id in _model_ids:
-            _model = client.model.get(_model_id, _project_id)
-            _version = client.version.get_versions(
-                project_id=_project_id, model_id=_model_id, limit=1
-            ).items[0]
-            _rows.append(
-                {
-                    "project_id": _project_id,
-                    "project_name": _project.name,
-                    "model_id": _model_id,
-                    "model_name": _model.name,
-                    "version_id": _version.id,
-                    "created_at": _version.created_at,
-                    "source_application": _version.source_application,
-                    "referenced_object": _version.referenced_object,
-                }
-            )
+    for _server, _projects in speckle_targets.items():
+        _client = clients[_server]
+        for _project_id, _model_ids in _projects.items():
+            _project = _client.project.get(_project_id)
+            for _model_id in _model_ids:
+                _model = _client.model.get(_model_id, _project_id)
+                _version = _client.version.get_versions(
+                    project_id=_project_id, model_id=_model_id, limit=1
+                ).items[0]
+                _rows.append(
+                    {
+                        "server": _server,
+                        "project_id": _project_id,
+                        "project_name": _project.name,
+                        "model_id": _model_id,
+                        "model_name": _model.name,
+                        "version_id": _version.id,
+                        "created_at": _version.created_at,
+                        "source_application": _version.source_application,
+                        "referenced_object": _version.referenced_object,
+                        "has_bundle": serves_bundles[_server],
+                    }
+                )
     latest_versions = pl.DataFrame(_rows).with_columns(
         bundle_only=pl.col("referenced_object").str.starts_with("bundle.")
     )
@@ -210,10 +243,11 @@ def _(mo, versions_table):
 def _(
     Path,
     ServerTransport,
-    account,
+    accounts,
     bundle,
     bundles_dir,
-    client,
+    clients,
+    closing,
     data_dir,
     datetime,
     operations,
@@ -224,6 +258,7 @@ def _(
     warnings,
 ):
     MANIFEST_COLUMNS = [
+        "server",
         "project_id",
         "project_name",
         "model_id",
@@ -244,30 +279,48 @@ def _(
         """The versions table of v3_objects.db, or an empty frame if nothing was downloaded yet."""
         if not db_path.exists():
             return pl.DataFrame(schema={column: pl.String for column in MANIFEST_COLUMNS})
-        with sqlite3.connect(db_path) as connection:
+        # closing(): a sqlite3 connection's own context manager commits but doesn't close,
+        # and an open connection keeps v3_objects.db from leaving WAL mode
+        with closing(sqlite3.connect(db_path)) as connection:
             has_table = connection.execute(
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'versions'"
             ).fetchone()
             if not has_table:
                 return pl.DataFrame(schema={column: pl.String for column in MANIFEST_COLUMNS})
-            return pl.read_database("SELECT * FROM versions", connection)
+            return pl.read_database(
+                f"SELECT {', '.join(MANIFEST_COLUMNS)} FROM versions", connection
+            )
 
 
     def write_manifest_row(db_path, row):
-        with sqlite3.connect(db_path) as connection:
+        with closing(sqlite3.connect(db_path)) as connection, connection:
             connection.execute(
                 f"CREATE TABLE IF NOT EXISTS versions ({', '.join(MANIFEST_COLUMNS)}, "
                 "PRIMARY KEY (version_id))"
             )
             connection.execute(
-                f"INSERT OR REPLACE INTO versions VALUES ({', '.join('?' * len(MANIFEST_COLUMNS))})",
+                f"INSERT OR REPLACE INTO versions ({', '.join(MANIFEST_COLUMNS)}) "
+                f"VALUES ({', '.join('?' * len(MANIFEST_COLUMNS))})",
                 [row[column] for column in MANIFEST_COLUMNS],
             )
+
+
+    def receive_v3(version, sqlite_transport):
+        """Cache a version's v3 JSON objects from its server into SQLite."""
+        operations.receive(
+            obj_id=version["referenced_object"],
+            remote_transport=ServerTransport(
+                stream_id=version["project_id"], client=clients[version["server"]]
+            ),
+            local_transport=sqlite_transport,
+        )
+        return version["referenced_object"]
 
 
     def download_version(version, sqlite_transport):
         """Store one version as a Parquet bundle and as v3 JSON objects in SQLite.
 
+        Versions on a server without bundles (Speckle 2.x) only get the v3 objects.
         Returns the manifest row; the caller writes it once both routes succeeded.
         """
         project_id, model_id, version_id = (
@@ -275,43 +328,45 @@ def _(
             version["model_id"],
             version["version_id"],
         )
-        bundle_dir = bundles_dir / project_id / model_id / version_id
+        bundle_dir, schema_version = None, None
         # The v3 JSON pipeline (ServerTransport, operations.send/receive) is deprecated
         # since 2026.9, which is exactly the route we want to keep a copy of.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
-            with bundle.receive(
-                account, project_id, model_id, version_id, mark_received=False
-            ) as model:
-                bundle_dir.mkdir(parents=True, exist_ok=True)
-                for path in map(Path, model.files):
-                    shutil.copy2(path, bundle_dir / path.name)
-                schema_version = pl.read_parquet(
-                    next(bundle_dir.glob("*.envelope.meta.parquet"))
-                )["schema_version"][0]
+            if not version["has_bundle"]:
+                v3_root_id, v3_route = receive_v3(version, sqlite_transport), "server"
+            else:
+                bundle_dir = bundles_dir / project_id / model_id / version_id
+                with bundle.receive(
+                    accounts[version["server"]],
+                    project_id,
+                    model_id,
+                    version_id,
+                    mark_received=False,
+                ) as model:
+                    bundle_dir.mkdir(parents=True, exist_ok=True)
+                    for path in map(Path, model.files):
+                        shutil.copy2(path, bundle_dir / path.name)
+                    schema_version = pl.read_parquet(
+                        next(bundle_dir.glob("*.envelope.meta.parquet"))
+                    )["schema_version"][0]
 
-                if version["referenced_object"].startswith("bundle."):
-                    v3_root_id = operations.send(
-                        model.to_base(),
-                        transports=[sqlite_transport],
-                        use_default_cache=False,
-                    )
-                    v3_route = "projected"
-                else:
-                    operations.receive(
-                        obj_id=version["referenced_object"],
-                        remote_transport=ServerTransport(stream_id=project_id, client=client),
-                        local_transport=sqlite_transport,
-                    )
-                    v3_root_id = version["referenced_object"]
-                    v3_route = "server"
+                    if version["bundle_only"]:
+                        v3_root_id = operations.send(
+                            model.to_base(),
+                            transports=[sqlite_transport],
+                            use_default_cache=False,
+                        )
+                        v3_route = "projected"
+                    else:
+                        v3_root_id, v3_route = receive_v3(version, sqlite_transport), "server"
 
         return {
             **version,
             "created_at": version["created_at"].isoformat(),
             "v3_root_id": v3_root_id,
             "v3_route": v3_route,
-            "bundle_dir": bundle_dir.relative_to(data_dir).as_posix(),
+            "bundle_dir": bundle_dir and bundle_dir.relative_to(data_dir).as_posix(),
             "bundle_schema_version": schema_version,
             "received_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -320,17 +375,22 @@ def _(
 
 
 @app.cell
-def _(json):
-    def write_bundle_index(manifest, bundles_dir, server):
+def _(json, pl):
+    def write_bundle_index(manifest, bundles_dir):
         """Write bundles/index.json and bundles/index.md: what each id folder is.
 
-        The folder layout is bundles/<project_id>/<model_id>/<version_id>/. Returns the
+        The folder layout is bundles/<project_id>/<model_id>/<version_id>/. Versions
+        without a bundle (Speckle 2.x servers) are only in the versions table. Returns the
         Markdown.
         """
-        rows = manifest.sort("project_name", "model_name").to_dicts()
+        rows = (
+            manifest.filter(pl.col("bundle_dir").is_not_null())
+            .sort("project_name", "model_name")
+            .to_dicts()
+        )
         index = {}
         for row in rows:
-            project_url = f"{server}/projects/{row['project_id']}"
+            project_url = f"{row['server']}/projects/{row['project_id']}"
             model_url = f"{project_url}/models/{row['model_id']}"
             project = index.setdefault(
                 row["project_id"],
@@ -363,7 +423,7 @@ def _(json):
             "|---|---|---|---|---|---|---|---|",
         ]
         for row in rows:
-            project_url = f"{server}/projects/{row['project_id']}"
+            project_url = f"{row['server']}/projects/{row['project_id']}"
             model_url = f"{project_url}/models/{row['model_id']}"
             folder = f"{row['project_id']}/{row['model_id']}/{row['version_id']}"
             lines.append(
@@ -386,6 +446,7 @@ def _(json):
 @app.cell
 def _(
     SQLiteTransport,
+    closing,
     data_dir,
     download_button,
     download_version,
@@ -431,9 +492,10 @@ def _(
                 _log.append(
                     {"version": _label(_version), "status": "failed", "error": repr(_error)}
                 )
+        _sqlite.close()
         # Fold the WAL into v3_objects.db and leave WAL mode, so the file alone is complete
         # when it is copied or synced
-        with sqlite3.connect(v3_db_path) as _connection:
+        with closing(sqlite3.connect(v3_db_path)) as _connection:
             _connection.execute("PRAGMA wal_checkpoint(TRUNCATE)")
             _connection.execute("PRAGMA journal_mode=DELETE")
     download_log = pl.DataFrame(_log)
@@ -441,9 +503,8 @@ def _(
     return (download_log,)
 
 
-@app.cell
+@app.cell(expand_output=True)
 def _(
-    SPECKLE_SERVER,
     bundles_dir,
     download_log,
     mo,
@@ -454,7 +515,7 @@ def _(
     # Rerun after a download: what is on disk now, plus bundles/index.json and index.md
     download_log
     manifest = read_manifest(v3_db_path)
-    mo.vstack([manifest, mo.md(write_bundle_index(manifest, bundles_dir, SPECKLE_SERVER))])
+    mo.vstack([manifest, mo.md(write_bundle_index(manifest, bundles_dir))])
     return
 
 

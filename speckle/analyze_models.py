@@ -181,6 +181,13 @@ def _(Path, pl, re):
 
 @app.cell
 def _(data_dir, mo, read_bundle_tables, selected_version):
+    mo.stop(
+        selected_version["bundle_dir"] is None,
+        mo.md(
+            "This version comes from a Speckle 2.x server, which serves no bundle. "
+            "Only its v3 objects are in `v3_objects.db`."
+        ),
+    )
     bundle_tables = read_bundle_tables(
         (data_dir / selected_version["bundle_dir"]).glob("*.parquet")
     )
