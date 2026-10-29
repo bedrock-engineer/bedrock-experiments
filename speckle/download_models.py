@@ -2,6 +2,7 @@
 # requires-python = ">=3.14"
 # dependencies = [
 #     "marimo",
+#     "marimo-lens==0.2.4",
 #     "polars==2.1.0",
 #     "specklepy[bundle]==2026.9.1",
 #     "tzdata==2026.5",
@@ -57,6 +58,16 @@ def _():
         user_speckle_folder_path,
         warnings,
     )
+
+
+@app.cell(hide_code=True)
+def _():
+    # marimo-lens: select a region of any output and add a note for the notebook agent
+    from marimo_lens import Lens
+
+    lens = Lens()
+    lens
+    return
 
 
 @app.cell(hide_code=True)
