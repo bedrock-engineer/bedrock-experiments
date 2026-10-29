@@ -34,6 +34,7 @@ def _():
     import math
     import sqlite3
     import struct
+    import urllib.parse
     import urllib.request
     import warnings
     from contextlib import closing
@@ -371,6 +372,27 @@ def _(mo):
 
 
 @app.cell
+def _(np, pyproj, to_etrs89):
+    # Site metres -> ECEF metres, linearised at the nulpunt (site 0, 0, 0)
+    _etrs89_to_ecef = pyproj.Transformer.from_crs(4937, 4978, always_xy=True)
+
+
+    def site_mm_to_ecef(xyz_mm):
+        lon, lat, h = to_etrs89.transform(*np.asarray(xyz_mm, dtype=float).T)
+        return np.column_stack(_etrs89_to_ecef.transform(lon, lat, h))
+
+
+    _origin, _x, _y, _z = site_mm_to_ecef(
+        [[0, 0, 0], [1000, 0, 0], [0, 1000, 0], [0, 0, 1000]]
+    )
+    site_to_ecef = np.eye(4)
+    site_to_ecef[:3, :3] = np.column_stack([_x - _origin, _y - _origin, _z - _origin])
+    site_to_ecef[:3, 3] = _origin
+    site_to_ecef
+    return site_mm_to_ecef, site_to_ecef
+
+
+@app.cell
 def _(engineering_crs, math, piles, pl, pyproj, to_rd_nap):
     pyproj.network.set_network_enabled(True)
     to_etrs89 = pyproj.Transformer.from_crs(engineering_crs, 4937, always_xy=True, allow_ballpark=False)
@@ -664,11 +686,21 @@ def _(Path, anywidget, closing, gzip, json, sqlite3, traitlets):
     import {
       CameraController,
       DefaultViewerParams,
+      Extension,
+      ObjectLayers,
       SelectionExtension,
       SpeckleLoader,
       Viewer,
       ViewerEvent,
     } from "https://esm.sh/@speckle/viewer@2.31.14";
+    // The viewer's own three.js module (same URL), so our objects share its classes
+    import * as THREE from "https://esm.sh/three@^0.140.0?target=es2022";
+    import maplibregl from "https://esm.sh/maplibre-gl@5.24.0";
+    // 0.3.46 is the last 3d-tiles-renderer for the viewer's three.js 0.140; built against
+    // three@0.140.2 it shares the viewer's three.js module
+    import { TilesRenderer } from "https://esm.sh/3d-tiles-renderer@0.3.46?deps=three@0.140.2";
+    import { GLTFLoader } from "https://esm.sh/three@0.140.2/examples/jsm/loaders/GLTFLoader?target=es2022";
+    import { MeshoptDecoder } from "https://esm.sh/three@0.140.2/examples/jsm/libs/meshopt_decoder.module?target=es2022";
     // Same specifier as the viewer's own import, so esm.sh serves one module instance
     import { ObjectLoader2Factory } from "https://esm.sh/@speckle/objectloader2@^2.31.14";
 
@@ -691,6 +723,202 @@ def _(Path, anywidget, closing, gzip, json, sqlite3, traitlets):
       return JSON.parse(await new Response(stream).text());
     }
 
+    const OSM_STYLE = {
+      version: 8,
+      sources: {
+        osm: {
+          type: "raster",
+          tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+          tileSize: 256,
+          maxzoom: 19,
+        },
+      },
+      layers: [{ id: "osm", type: "raster", source: "osm" }],
+    };
+
+    // An OpenStreetMap snapshot on a plane at the site's ground level. MapLibre renders the
+    // map once, off-screen and north up, over groundMap.bounds; the plane's corners are those
+    // bounds through groundMap.lnglat_to_world, an affine transform from lon/lat to world.
+    async function groundMapMesh(groundMap) {
+      const { bounds, width, height, lnglat_to_world: t, z, opacity } = groundMap;
+      const div = document.createElement("div");
+      div.style.cssText = `position: fixed; left: ${-2 * width}px; top: 0; width: ${width}px; height: ${height}px;`;
+      document.body.appendChild(div);
+      const map = new maplibregl.Map({
+        container: div,
+        style: OSM_STYLE,
+        bounds,
+        fitBoundsOptions: { padding: 0 },
+        interactive: false,
+        attributionControl: false,
+        pixelRatio: 1,
+        fadeDuration: 0,
+        canvasContextAttributes: { preserveDrawingBuffer: true },
+      });
+      await new Promise((resolve) => map.once("idle", resolve));
+      // Copy the map into a 2D canvas, so MapLibre and its WebGL context can go
+      const image = document.createElement("canvas");
+      image.width = map.getCanvas().width;
+      image.height = map.getCanvas().height;
+      image.getContext("2d").drawImage(map.getCanvas(), 0, 0);
+      const shown = map.getBounds();
+      map.remove();
+      div.remove();
+
+      const world = (lng, lat) => [t[0] * lng + t[1] * lat + t[2], t[3] * lng + t[4] * lat + t[5], z];
+      const corners = [
+        world(shown.getWest(), shown.getSouth()),
+        world(shown.getEast(), shown.getSouth()),
+        world(shown.getEast(), shown.getNorth()),
+        world(shown.getWest(), shown.getNorth()),
+      ];
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(corners.flat(), 3));
+      geometry.setAttribute("uv", new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2));
+      geometry.setIndex([0, 1, 2, 0, 2, 3]);
+      const texture = new THREE.CanvasTexture(image);
+      texture.encoding = THREE.sRGBEncoding;
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        transparent: opacity < 1,
+        opacity,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.layers.set(ObjectLayers.PROPS);
+      return mesh;
+    }
+
+    // The camera controller fits the near and far planes to the model alone; this keeps the
+    // ground map inside the far plane
+    class GroundInView extends Extension {
+      ground = null;
+
+      onLateUpdate() {
+        const camera = this.viewer.getRenderer().renderingCamera;
+        if (!this.ground || !camera) return;
+        const corners = this.ground.geometry.attributes.position;
+        const corner = new THREE.Vector3();
+        let farthest = 0;
+        for (let i = 0; i < corners.count; i++) {
+          farthest = Math.max(farthest, camera.position.distanceTo(corner.fromBufferAttribute(corners, i)));
+        }
+        if (camera.far < 1.05 * farthest) {
+          camera.far = 1.05 * farthest;
+          camera.updateProjectionMatrix();
+        }
+      }
+    }
+
+    // Even-odd point in polygon over all rings, so a point in a hole is outside
+    function insidePolygon(x, y, rings) {
+      let inside = false;
+      for (const ring of rings) {
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const [xi, yi] = ring[i];
+          const [xj, yj] = ring[j];
+          if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+        }
+      }
+      return inside;
+    }
+
+    // The factor that takes an attribute's stored values to its values: three.js 0.140 returns
+    // quantized (normalized integer) attributes as stored
+    function denormalizeScale(attribute) {
+      if (!attribute.normalized) return 1;
+      const array = attribute.array;
+      if (array instanceof Int8Array) return 1 / 127;
+      if (array instanceof Uint8Array) return 1 / 255;
+      if (array instanceof Int16Array) return 1 / 32767;
+      if (array instanceof Uint16Array) return 1 / 65535;
+      return 1;
+    }
+
+    // Drops the triangles of every feature (EXT_mesh_features id) with more than half of its
+    // vertices inside one of the polygons. matrix takes the mesh to the viewer's world.
+    function hideFeaturesWithin(mesh, matrix, polygons) {
+      const geometry = mesh.geometry;
+      const featureIds = geometry.getAttribute("_feature_id_0");
+      if (!featureIds || !geometry.index) return;
+      const position = geometry.getAttribute("position");
+      const scale = denormalizeScale(position);
+      const vertex = new THREE.Vector3();
+      const counts = new Map(); // feature id: [vertices inside, vertices]
+      for (let i = 0; i < position.count; i++) {
+        const id = featureIds.getX(i);
+        if (!counts.has(id)) counts.set(id, [0, 0]);
+        const count = counts.get(id);
+        vertex.fromBufferAttribute(position, i).multiplyScalar(scale).applyMatrix4(matrix);
+        if (polygons.some((rings) => insidePolygon(vertex.x, vertex.y, rings))) count[0]++;
+        count[1]++;
+      }
+      const hidden = new Set();
+      for (const [id, [inside, total]] of counts) if (inside > total / 2) hidden.add(id);
+      if (!hidden.size) return;
+      const index = geometry.index.array;
+      const kept = index.filter((_, i) => !hidden.has(featureIds.getX(index[i - (i % 3)])));
+      geometry.setIndex(new THREE.BufferAttribute(kept, 1));
+    }
+
+    // 3D Tiles in the viewer's world. Each entry holds a tileset (its JSON, with absolute
+    // content URLs) and ecef_to_world, a column-major 4x4 from ECEF (where the tiles are) to
+    // the viewer's world. Features mostly inside one of the hide_within polygons (rings of
+    // [x, y] in the viewer's world) are left out, to make room for the model itself. The
+    // tiles are updated for the viewer's camera every frame and request a render when a tile
+    // arrives.
+    class ContextTiles extends Extension {
+      tilesets = [];
+
+      setTilesets(tilesets) {
+        const scene = this.viewer.getRenderer().scene;
+        for (const tiles of this.tilesets) {
+          scene.remove(tiles.group);
+          tiles.dispose();
+          URL.revokeObjectURL(tiles.rootURL);
+        }
+        this.tilesets = tilesets.map(({ tileset, ecef_to_world, hide_within = [] }) => {
+          const tiles = new TilesRenderer(
+            URL.createObjectURL(new Blob([JSON.stringify(tileset)], { type: "application/json" }))
+          );
+          // PDOK's tiles need EXT_meshopt_compression
+          const gltfLoader = new GLTFLoader(tiles.manager);
+          gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+          tiles.manager.addHandler(/\.(gltf|glb)$/g, gltfLoader);
+          tiles.group.matrixAutoUpdate = false;
+          tiles.group.matrix.fromArray(ecef_to_world);
+          tiles.addEventListener("load-model", ({ scene: tileScene }) => {
+            tileScene.traverse((object) => {
+              object.layers.set(ObjectLayers.PROPS);
+              if (object.isMesh && hide_within.length) {
+                // The tile's scene is not under tiles.group yet
+                object.updateWorldMatrix(true, false);
+                const toWorld = tiles.group.matrix.clone().multiply(object.matrixWorld);
+                hideFeaturesWithin(object, toWorld, hide_within);
+              }
+            });
+            this.viewer.requestRender();
+          });
+          scene.add(tiles.group);
+          return tiles;
+        });
+        this.viewer.requestRender();
+      }
+
+      onEarlyUpdate() {
+        const renderer = this.viewer.getRenderer();
+        const camera = renderer.renderingCamera;
+        if (!camera) return;
+        for (const tiles of this.tilesets) {
+          tiles.setCamera(camera);
+          tiles.setResolutionFromRenderer(camera, renderer.renderer);
+          camera.updateMatrixWorld();
+          tiles.group.updateMatrixWorld(true);
+          tiles.update();
+        }
+      }
+    }
+
     async function render({ model, el }) {
       const container = document.createElement("div");
       container.style.cssText = `position: relative; width: 100%; height: ${model.get("height")}px;`;
@@ -700,6 +928,8 @@ def _(Path, anywidget, closing, gzip, json, sqlite3, traitlets):
       await viewer.init();
       viewer.createExtension(CameraController);
       const selection = viewer.createExtension(SelectionExtension);
+      const groundInView = viewer.createExtension(GroundInView);
+      const contextTiles = viewer.createExtension(ContextTiles);
       viewer.on(ViewerEvent.ObjectClicked, () => {
         // Read the extension's selection once it has handled the click (shift adds to it)
         setTimeout(() => {
@@ -721,6 +951,39 @@ def _(Path, anywidget, closing, gzip, json, sqlite3, traitlets):
       }
       model.on("change:objects_gz", load);
       await load();
+
+      let ground = null;
+      const attribution = document.createElement("div");
+      attribution.style.cssText =
+        "position: absolute; right: 4px; bottom: 2px; font: 11px sans-serif; color: #555; pointer-events: none;";
+      container.appendChild(attribution);
+      function updateAttribution() {
+        const credits = [
+          ...(model.get("ground_map").bounds ? ["\u00a9 OpenStreetMap contributors"] : []),
+          ...model.get("tilesets").map((entry) => entry.attribution).filter(Boolean),
+        ];
+        attribution.textContent = credits.join(" | ");
+      }
+      async function placeGroundMap() {
+        if (ground) {
+          viewer.getRenderer().scene.remove(ground);
+          ground = groundInView.ground = null;
+        }
+        const groundMap = model.get("ground_map");
+        updateAttribution();
+        if (!groundMap.bounds) return viewer.requestRender();
+        ground = groundInView.ground = await groundMapMesh(groundMap);
+        viewer.getRenderer().scene.add(ground);
+        viewer.requestRender();
+      }
+      model.on("change:ground_map", placeGroundMap);
+      await placeGroundMap();
+
+      contextTiles.setTilesets(model.get("tilesets"));
+      model.on("change:tilesets", () => {
+        contextTiles.setTilesets(model.get("tilesets"));
+        updateAttribution();
+      });
       return () => viewer.dispose();
     }
 
@@ -737,6 +1000,13 @@ def _(Path, anywidget, closing, gzip, json, sqlite3, traitlets):
         # Raw data of the selected objects (without displayValue, elements, __closure).
         # Shift-click adds to the selection; a click on nothing clears it.
         selected = traitlets.List([]).tag(sync=True)
+        # Optional OSM map under the model: bounds [west, south, east, north], width and
+        # height in pixels, lnglat_to_world (an affine [a, b, c, d, e, f]: x = a lon + b lat + c,
+        # y = d lon + e lat + f), z and opacity. Empty: no map.
+        ground_map = traitlets.Dict({}).tag(sync=True)
+        # Optional 3D Tiles: [{"tileset": tileset JSON, "ecef_to_world": column-major 4x4,
+        # "attribution": credit line, "hide_within": [polygon as rings of [x, y] in world]}]
+        tilesets = traitlets.List([]).tag(sync=True)
 
 
     def speckle_objects_gz(db_path, version_id):
@@ -1327,7 +1597,7 @@ def _(pl, shapely, sixty5_str_elements_gdf, sixty5_str_features):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     ### Simple features in the Speckle viewer
@@ -1470,12 +1740,198 @@ def _(
 
 
 @app.cell
+def _(math, mo, np, shapely, sixty5_str_features, to_etrs89):
+    # An OpenStreetMap snapshot under the model in the Speckle viewer: lon/lat bounds around
+    # the model with a margin, and one affine transform from lon/lat to the viewer's world
+    # (site coordinates in m; the viewer converts the mm). Over a few hundred meters one
+    # affine is enough; the residual against the exact transformation says how good.
+    _site_xy = shapely.get_coordinates(shapely.from_wkb(sixty5_str_features["geom"].to_numpy()))
+    _margin = 150_000  # mm
+    _x = [_site_xy[:, 0].min() - _margin, _site_xy[:, 0].max() + _margin]
+    _y = [_site_xy[:, 1].min() - _margin, _site_xy[:, 1].max() + _margin]
+    _lon, _lat, _ = to_etrs89.transform(
+        [_x[0], _x[1], _x[1], _x[0]], [_y[0], _y[0], _y[1], _y[1]], [0, 0, 0, 0]
+    )
+    _west, _east, _south, _north = min(_lon), max(_lon), min(_lat), max(_lat)
+
+    _lon_grid, _lat_grid = (
+        _grid.ravel() for _grid in np.meshgrid(np.linspace(_west, _east, 21), np.linspace(_south, _north, 21))
+    )
+    _ellh = to_etrs89.transform(0, 0, 0)[2]
+    _site_x, _site_y, _ = to_etrs89.transform(
+        _lon_grid, _lat_grid, np.full(_lon_grid.size, _ellh), direction="INVERSE"
+    )
+    _design = np.c_[_lon_grid, _lat_grid, np.ones(_lon_grid.size)]
+    _affine_x = np.linalg.lstsq(_design, np.asarray(_site_x) / 1000, rcond=None)[0]
+    _affine_y = np.linalg.lstsq(_design, np.asarray(_site_y) / 1000, rcond=None)[0]
+    _residual_mm = 1000 * np.hypot(_design @ _affine_x - np.asarray(_site_x) / 1000, _design @ _affine_y - np.asarray(_site_y) / 1000)
+
+    # Pixels in proportion to the bounds in Web Mercator, so MapLibre fills them exactly
+    _mercator_y = [math.log(math.tan(math.pi / 4 + math.radians(_phi) / 2)) for _phi in (_south, _north)]
+    _width = 2048
+    sixty5_ground_map = {
+        "bounds": [_west, _south, _east, _north],
+        "width": _width,
+        "height": round(_width * (_mercator_y[1] - _mercator_y[0]) / math.radians(_east - _west)),
+        "lnglat_to_world": [*_affine_x, *_affine_y],
+        "z": 0.0,  # site z = 0: the AHN ground level at the nulpunt
+        "opacity": 0.85,
+    }
+    mo.md(
+        f"Ground map: {(_x[1] - _x[0]) / 1000:.0f} x {(_y[1] - _y[0]) / 1000:.0f} m of site, "
+        f"{sixty5_ground_map['width']} x {sixty5_ground_map['height']} px. One affine transform from "
+        f"lon/lat to site is off by at most **{_residual_mm.max():.1f} mm** over the map."
+    )
+    return (sixty5_ground_map,)
+
+
+@app.cell
+def _(
+    json,
+    math,
+    mo,
+    np,
+    shapely,
+    site_to_ecef,
+    sixty5_ground_map,
+    sixty5_str_features,
+    to_etrs89,
+    urllib,
+):
+    def site_3d_tiles(tileset_url, bounds):
+        """A small tileset with only the finest tiles of tileset_url that overlap bounds.
+
+        bounds is [west, south, east, north] in degrees. The tree is walked only along tiles
+        whose region overlaps the bounds, fetching just the external tilesets on that path.
+        The result is one level: an empty root over the content tiles, each with its
+        accumulated transform and an absolute content URL. 3d-tiles-renderer 0.3.46 marks
+        every child of a tile without content as used, in view or not, so on the full PDOK
+        tree it would fetch the external tilesets of half the country.
+        """
+        west, south, east, north = (math.radians(value) for value in bounds)
+
+        def overlaps(region):
+            return region[0] <= east and region[2] >= west and region[1] <= north and region[3] >= south
+
+        def fetch(url):
+            with urllib.request.urlopen(url, timeout=30) as response:
+                return json.load(response)
+
+        leaves = []
+
+        def walk(tile, base_url, transform):
+            if not overlaps(tile["boundingVolume"]["region"]):
+                return
+            if "transform" in tile:
+                transform = transform @ np.array(tile["transform"]).reshape(4, 4, order="F")
+            uri = tile.get("content", {}).get("uri")
+            if uri and uri.split("?")[0].endswith(".json"):
+                external_url = urllib.parse.urljoin(base_url, uri)
+                walk(fetch(external_url)["root"], external_url, transform)
+                return
+            children = [child for child in tile.get("children", []) if overlaps(child["boundingVolume"]["region"])]
+            if uri and (not children or tile["geometricError"] == 0):
+                leaves.append(
+                    {
+                        "boundingVolume": tile["boundingVolume"],
+                        "geometricError": 0,
+                        "transform": transform.flatten(order="F").tolist(),
+                        "content": {"uri": urllib.parse.urljoin(base_url, uri)},
+                    }
+                )
+                return
+            for child in children:
+                walk(child, base_url, transform)
+
+        root = fetch(tileset_url)
+        walk(root["root"], tileset_url, np.eye(4))
+        regions = np.array([leaf["boundingVolume"]["region"] for leaf in leaves])
+        return {
+            "asset": {"version": "1.1"},
+            "geometricError": 1000,
+            "root": {
+                "boundingVolume": {"region": [*regions[:, :2].min(axis=0), *regions[:, 2:4].max(axis=0), regions[:, 4].min(), regions[:, 5].max()]},
+                "geometricError": 1000,
+                "refine": "ADD",
+                "children": leaves,
+            },
+        }
+
+
+    def bag_panden_under(footprint, to_crs84h):
+        """The BAG panden with more than half of their area inside footprint.
+
+        footprint is a 2D (multi)polygon in site coordinates and to_crs84h takes site
+        coordinates to lon, lat, h. Returns {identificatie: polygon in site coordinates},
+        from PDOK's BAG OGC API.
+        """
+        _, _, ground_h = to_crs84h.transform(0, 0, 0)
+
+        def to_site(lonlat):
+            x, y, _ = to_crs84h.transform(
+                lonlat[:, 0], lonlat[:, 1], np.full(len(lonlat), ground_h), direction="INVERSE"
+            )
+            return np.c_[x, y]
+
+        x0, y0, x1, y1 = footprint.bounds
+        lon, lat, _ = to_crs84h.transform([x0, x1, x1, x0], [y0, y0, y1, y1], [0, 0, 0, 0])
+        url = "https://api.pdok.nl/kadaster/bag/ogc/v2/collections/pand/items?" + urllib.parse.urlencode(
+            {"bbox": f"{min(lon)},{min(lat)},{max(lon)},{max(lat)}", "f": "json", "limit": 1000}
+        )
+        with urllib.request.urlopen(url, timeout=30) as response:
+            panden = json.load(response)["features"]
+        under = {}
+        for pand in panden:
+            polygon = shapely.transform(shapely.geometry.shape(pand["geometry"]), to_site)
+            if polygon.intersection(footprint).area > polygon.area / 2:
+                under[pand["properties"]["identificatie"]] = polygon
+        return under
+
+
+    # PDOK's 3D Basisvoorziening buildings (LoD 2.2) under the ground map. The tiles are in
+    # ECEF; the inverse of site_to_ecef brings them into the viewer's world (site m).
+    PDOK_3D_BUILDINGS = (
+        "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1/collections/gebouwen/3dtiles?f=json"
+    )
+    _tileset = site_3d_tiles(PDOK_3D_BUILDINGS, sixty5_ground_map["bounds"])
+
+    # Sixty5 itself is in the 3D BAG too. Its BAG pand, found under the footprint of the slabs
+    # and footings, hides it there; 0.5 m extra catches the vertices on its outline.
+    _surfaces = sixty5_str_features["kind"].is_in(["midplane", "bottom"]).to_numpy()
+    _footprint = shapely.union_all(
+        shapely.force_2d(shapely.from_wkb(sixty5_str_features["geom"].to_numpy()[_surfaces]))
+    )
+    _hidden = bag_panden_under(_footprint, to_etrs89)
+    _hide_within = [
+        [(np.asarray(_ring.coords) / 1000).tolist() for _ring in [_polygon.exterior, *_polygon.interiors]]
+        for _polygon in (_pand.buffer(500) for _pand in _hidden.values())
+    ]
+    sixty5_tilesets = [
+        {
+            "tileset": _tileset,
+            "ecef_to_world": np.linalg.inv(site_to_ecef).flatten(order="F").tolist(),
+            "attribution": "3D Basisvoorziening \u00a9 Kadaster (CC BY 4.0)",
+            "hide_within": _hide_within,
+        }
+    ]
+    mo.md(
+        f"3D Basisvoorziening under the ground map: {len(_tileset['root']['children'])} content tiles: "
+        + ", ".join(f"`{child['content']['uri'].split('gebouwen/')[-1]}`" for child in _tileset["root"]["children"])
+        + ". Hidden, as the BIM model takes its place: BAG pand "
+        + ", ".join(f"`{_identificatie}`" for _identificatie in _hidden)
+    )
+    return (sixty5_tilesets,)
+
+
+@app.cell
 def _(
     IFC_TYPE_COLORS,
     SpeckleViewer,
     mo,
     simple_features_to_speckle,
+    sixty5_ground_map,
     sixty5_str_features,
+    sixty5_tilesets,
     speckle_base_objects_gz,
 ):
     sixty5_str_features_viewer = mo.ui.anywidget(
@@ -1486,6 +1942,8 @@ def _(
                 )
             ),
             height=550,
+            ground_map=sixty5_ground_map,
+            tilesets=sixty5_tilesets,
         )
     )
     sixty5_str_features_viewer
@@ -1524,27 +1982,6 @@ def _(mo):
     EGM2008 geoid against AHN4 and RDNAPTRANS' NLGEO2018.
     """)
     return
-
-
-@app.cell
-def _(np, pyproj, to_etrs89):
-    # Site metres -> ECEF metres, linearised at the nulpunt (site 0, 0, 0)
-    _etrs89_to_ecef = pyproj.Transformer.from_crs(4937, 4978, always_xy=True)
-
-
-    def site_mm_to_ecef(xyz_mm):
-        lon, lat, h = to_etrs89.transform(*np.asarray(xyz_mm, dtype=float).T)
-        return np.column_stack(_etrs89_to_ecef.transform(lon, lat, h))
-
-
-    _origin, _x, _y, _z = site_mm_to_ecef(
-        [[0, 0, 0], [1000, 0, 0], [0, 1000, 0], [0, 0, 1000]]
-    )
-    site_to_ecef = np.eye(4)
-    site_to_ecef[:3, :3] = np.column_stack([_x - _origin, _y - _origin, _z - _origin])
-    site_to_ecef[:3, 3] = _origin
-    site_to_ecef
-    return site_mm_to_ecef, site_to_ecef
 
 
 @app.cell
