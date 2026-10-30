@@ -4,7 +4,6 @@
 #     "anywidget==0.11.0",
 #     "folium>=0.12",
 #     "geopandas==1.2.0",
-#     "geospeckle",
 #     "ifcopenshell>=0.8",
 #     "mapbox-earcut==2.1.0",
 #     "mapclassify==2.11.0",
@@ -17,11 +16,12 @@
 #     "pyproj>=3.7",
 #     "shapely==2.2.0",
 #     "specklepy==2026.9.1",
+#     "specklewidgets",
 #     "traitlets==5.16.1",
 # ]
 #
 # [tool.uv.sources]
-# geospeckle = { path = "../speckle/geospeckle", editable = true }
+# specklewidgets = { git = "https://github.com/bedrock-engineer/specklestuff" }
 # ///
 
 import marimo
@@ -56,7 +56,6 @@ def _():
     import pyproj
     import shapely
     import traitlets
-    from geospeckle import GeoSpeckleViewer, models_gz
     from specklepy.api import operations
     from specklepy.objects import data_objects as sdo
     from specklepy.objects import geometry as sg
@@ -64,6 +63,7 @@ def _():
     from specklepy.objects.other import RenderMaterial
     from specklepy.objects.proxies import ColorProxy, RenderMaterialProxy
     from specklepy.transports.memory import MemoryTransport
+    from specklewidgets import GeoSpeckleViewer, models_gz
 
     return (
         Collection,
@@ -496,12 +496,6 @@ def _(GeoSpeckleViewer, context_tilesets, ground_map, mo):
     viewer = mo.ui.anywidget(GeoSpeckleViewer(ground_map=ground_map, tilesets=context_tilesets))
     viewer
     return (viewer,)
-
-
-@app.cell
-def _(features_plan):
-    features_plan
-    return
 
 
 @app.cell(hide_code=True)

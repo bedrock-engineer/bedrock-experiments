@@ -3,7 +3,6 @@
 # dependencies = [
 #     "folium>=0.12",
 #     "geopandas==1.2.0",
-#     "geospeckle",
 #     "mapclassify==2.11.0",
 #     "marimo",
 #     "marimo-lens==0.2.4",
@@ -14,11 +13,12 @@
 #     "pyproj>=3.7",
 #     "shapely==2.2.0",
 #     "specklepy[bundle]==2026.9.1",
+#     "specklewidgets",
 #     "wigglystuff==0.5.36",
 # ]
 #
 # [tool.uv.sources]
-# geospeckle = { path = "../../speckle/geospeckle", editable = true }
+# specklewidgets = { git = "https://github.com/bedrock-engineer/specklestuff" }
 # ///
 
 import marimo
@@ -46,11 +46,11 @@ def _():
     import polars as pl
     import pyproj
     import shapely
-    from geospeckle import GeoSpeckleViewer, models_gz
     from specklepy.api.client import SpeckleClient
     from specklepy.api.credentials import get_local_accounts
     from specklepy.transports.memory import MemoryTransport
     from specklepy.transports.server import ServerTransport
+    from specklewidgets import GeoSpeckleViewer, models_gz
     from wigglystuff import EnvConfig
 
     return (
@@ -420,7 +420,7 @@ def _(mo):
     mo.md(r"""
     ## Implementation
 
-    The functions the cells above use. The viewer, `GeoSpeckleViewer`, is the `geospeckle` package in `speckle/geospeckle/`, shared with `nl_eindhoven_sixty5/sixty5_geobim.py`.
+    The functions the cells above use. The viewer, `GeoSpeckleViewer`, comes from [specklewidgets](https://github.com/bedrock-engineer/specklestuff).
     """)
     return
 

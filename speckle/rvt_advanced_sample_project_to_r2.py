@@ -1,9 +1,9 @@
 # /// script
 # requires-python = ">=3.14"
 # dependencies = [
+#     "bimpolars[geobim,speckle]",
 #     "folium==0.20.0",
 #     "geopandas==1.2.0",
-#     "geospeckle",
 #     "mapclassify==2.11.0",
 #     "marimo",
 #     "marimo-lens==0.2.4",
@@ -13,12 +13,14 @@
 #     "pyproj==3.8.0",
 #     "shapely==2.2.0",
 #     "specklepy[bundle]==2026.9.1",
+#     "specklewidgets",
 #     "tzdata==2026.5",
 #     "wigglystuff==0.5.36",
 # ]
 #
 # [tool.uv.sources]
-# geospeckle = { path = "geospeckle", editable = true }
+# bimpolars = { git = "https://github.com/bedrock-engineer/bimpolars" }
+# specklewidgets = { git = "https://github.com/bedrock-engineer/specklestuff" }
 # ///
 
 import marimo
@@ -43,7 +45,7 @@ def _():
     import obstore
     import polars as pl
     import shapely
-    from geospeckle import GeoSpeckleViewer, models_gz
+    from bimpolars import version_objects
     from marimo_lens import Lens
     from obstore.store import S3Store
     from pyproj import CRS, Transformer
@@ -56,6 +58,7 @@ def _():
     from specklepy.objects.models.units import get_scale_factor_from_string
     from specklepy.transports.memory import MemoryTransport
     from specklepy.transports.server import ServerTransport
+    from specklewidgets import SpeckleViewer
     from wigglystuff import EnvConfig
 
     return (
@@ -64,7 +67,6 @@ def _():
         Callable,
         Collection,
         EnvConfig,
-        GeoSpeckleViewer,
         Iterator,
         Lens,
         MemoryTransport,
@@ -72,6 +74,7 @@ def _():
         S3Store,
         ServerTransport,
         SpeckleClient,
+        SpeckleViewer,
         Transformer,
         UserProjectsFilter,
         bundle,
@@ -82,13 +85,13 @@ def _():
         io,
         json,
         mo,
-        models_gz,
         obstore,
         operations,
         os,
         pl,
         shapely,
         urlsplit,
+        version_objects,
         warnings,
     )
 
@@ -107,7 +110,7 @@ def _(mo):
     # Revit Advanced Sample Project to R2
 
     Receives Speckle model versions in both of Speckle's data models, pushes them to
-    Cloudflare R2, and reads them back from R2 into the GeoSpeckle Viewer.
+    Cloudflare R2, and reads them back from R2 into Speckle's viewer.
 
     1. **Speckle bundle (2026.9 data model):** the version's Parquet files (`eav.*`, `envelope.*`,
        `geometries`), as `bundle.receive` downloads them.
@@ -337,17 +340,13 @@ def _(received, speckle_v3_objects_frame):
 
 
 @app.cell
-def _(GeoSpeckleViewer, models_gz, speckle_v3_objects, version_objects_json):
+def _(SpeckleViewer, speckle_v3_objects, version_objects):
     # The received versions, straight from Speckle, before they go to R2
-    received_viewer = GeoSpeckleViewer(
-        objects_gz=models_gz(
-            *(
-                version_objects_json(speckle_v3_objects, _version_id, _model_name)
-                for _version_id, _model_name in speckle_v3_objects.select("version_id", "model_name")
-                .unique(maintain_order=True)
-                .iter_rows()
-            )
-        )
+    received_viewer = SpeckleViewer(
+        [
+            version_objects(speckle_v3_objects, _version_id)
+            for _version_id in speckle_v3_objects["version_id"].unique(maintain_order=True)
+        ]
     )
     received_viewer
     return
@@ -518,21 +517,12 @@ def _(io, obstore, pl, pushed, r2_prefix, r2_store):
 
 
 @app.cell
-def _(
-    GeoSpeckleViewer,
-    models_gz,
-    r2_speckle_v3_objects,
-    version_objects_json,
-):
-    r2_viewer = GeoSpeckleViewer(
-        objects_gz=models_gz(
-            *(
-                version_objects_json(r2_speckle_v3_objects, _version_id, _model_name)
-                for _version_id, _model_name in r2_speckle_v3_objects.select("version_id", "model_name")
-                .unique(maintain_order=True)
-                .iter_rows()
-            )
-        )
+def _(SpeckleViewer, r2_speckle_v3_objects, version_objects):
+    r2_viewer = SpeckleViewer(
+        [
+            version_objects(r2_speckle_v3_objects, _version_id)
+            for _version_id in r2_speckle_v3_objects["version_id"].unique(maintain_order=True)
+        ]
     )
     r2_viewer
     return
@@ -766,20 +756,6 @@ def _(
         )
 
 
-    def version_objects_json(speckle_v3_objects: pl.DataFrame, version_id: str, namespace: str) -> str:
-        """One version's v3 objects as JSON array text, root first, for models_gz.
-
-        Args:
-            speckle_v3_objects: A table as speckle_v3_objects_frame makes it.
-            version_id: Speckle version id.
-            namespace: Prefix for the instance definition ids (def-...), so that projected
-                bundles can share a viewer: rvt-oda-converter numbers them from def-1 in every
-                model.
-        """
-        contents = speckle_v3_objects.filter(pl.col("version_id") == version_id).sort("is_root", descending=True)["content"]
-        return ("[" + ",".join(contents) + "]").replace('"def-', f'"{namespace}/def-')
-
-
     def ground_slab_footprint(version: dict) -> dict:
         """The footprint of a version's ground floor slab, placed at its geolocation.
 
@@ -886,12 +862,7 @@ def _(
         }
 
 
-    return (
-        ground_slab_footprint,
-        receive_version,
-        speckle_v3_objects_frame,
-        version_objects_json,
-    )
+    return ground_slab_footprint, receive_version, speckle_v3_objects_frame
 
 
 if __name__ == "__main__":
