@@ -244,8 +244,10 @@ def _(
 
 
 @app.cell
-def _(mo, revit_elements_table, revit_viewer, viewer_selection):
-    _selected = viewer_selection(revit_viewer.value["selected"], revit_elements_table)
+def _(mo, pl, revit_elements_table, revit_viewer):
+    # A Revit element placed more than once is selected as <applicationId>-instance-<n>
+    _ids = [obj["applicationId"].split("-instance-")[0] for obj in revit_viewer.value["selected"]]
+    _selected = revit_elements_table.filter(pl.col("applicationId").is_in(_ids))
     mo.vstack([mo.md(f"**Selected in the viewer above**: {len(_selected)} (shift-click to add)"), _selected])
     return
 
@@ -383,8 +385,10 @@ def _(
 
 
 @app.cell
-def _(mo, site_elements_table, site_viewer, viewer_selection):
-    _selected = viewer_selection(site_viewer.value["selected"], site_elements_table)
+def _(mo, pl, site_elements_table, site_viewer):
+    # A Revit element placed more than once is selected as <applicationId>-instance-<n>
+    _ids = [obj["applicationId"].split("-instance-")[0] for obj in site_viewer.value["selected"]]
+    _selected = site_elements_table.filter(pl.col("applicationId").is_in(_ids))
     mo.vstack([mo.md(f"**Selected in the viewer above**: {len(_selected)} (shift-click to add)"), _selected])
     return
 
@@ -399,20 +403,6 @@ def _(site_viewer):
 def _(site_elements_table):
     site_elements_table
     return
-
-
-app._unparsable_cell(
-    r"""
-    mo.vstack(
-        [
-            selected_ids = [obj["applicationId"] for obj in site_viewer.value["selected"]]
-            mo.md(f"**Selected elements**: {len(selected_ids)}"),
-            element_data.filter(pl.col("global_id").is_in(selected_ids)),
-        ]
-    )
-    """,
-    name="_"
-)
 
 
 @app.cell(hide_code=True)
@@ -1012,32 +1002,12 @@ def _(
         return pl.DataFrame(rows, infer_schema_length=None)
 
 
-    def viewer_selection(selected: list[dict], elements: pl.DataFrame) -> pl.DataFrame:
-        """The rows of the elements selected in a GeoSpeckleViewer.
-
-        Args:
-            selected: GeoSpeckleViewer.selected, the raw selected objects.
-            elements: Elements with an applicationId column.
-
-        Returns:
-            The selected rows, in the order of the selection, without the columns that are
-            empty for all of them.
-        """
-        # An element with more than one placement gets <applicationId>-instance-<i> after the first
-        ids = [(obj.get("applicationId") or "").split("-instance-")[0] for obj in selected]
-        rows = (
-            pl.DataFrame({"applicationId": ids}, schema={"applicationId": pl.String})
-            .unique(maintain_order=True)
-            .join(elements, on="applicationId", how="inner", maintain_order="left")
-        )
-        return rows.select(column for column in rows.columns if rows[column].null_count() < len(rows))
 
     return (
         revit_instance_placement,
         speckle_object_properties,
         speckle_receive,
         speckle_transform,
-        viewer_selection,
     )
 
 
