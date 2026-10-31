@@ -493,14 +493,14 @@ def _(
 ):
     # The structure model's ground floor slab where the parameters below put it
     _georef = ams_noord_georef.value
-    _site_crs = bpl.site_crs(
+    _bim_crs = bpl.georeferenced_bim_crs(
         **_georef, unit="millimetre", name="Amsterdam Noord"
     )
     _to_compound = Transformer.from_crs(
-        _site_crs, _georef["compound_crs"], always_xy=True
+        _bim_crs, _georef["compound_crs"], always_xy=True
     )
     _slab = ground_slab(received_bims["rvt-advanced-sample-str"])
-    # From the structure model's survey point to the architecture model's, where the site CRS starts
+    # From the structure model's survey point to the architecture model's, where the georeferenced BIM CRS starts
     _shift = [
         _ref - _own
         for _ref, _own in zip(
@@ -599,14 +599,14 @@ def _(
     # RD New + NAP to WGS 84 follows RDNAPTRANS2018 only with the NSGI grids, which PROJ fetches
     pyproj.network.set_network_enabled(True)
 
-    # Each model in the architecture model's site CRS: its own CRS puts its survey point on the
+    # Each model in the architecture model's georeferenced BIM CRS: its own CRS puts its survey point on the
     # architecture model's, and to_crs moves its geometry from there
     _georef = get_placed_georef()
-    ams_noord_site_crs = bpl.site_crs(
+    ams_noord_bim_crs = bpl.georeferenced_bim_crs(
         **_georef, unit="millimetre", name="Amsterdam Noord"
     )
     _site_to_compound = Transformer.from_crs(
-        ams_noord_site_crs, _georef["compound_crs"], always_xy=True
+        ams_noord_bim_crs, _georef["compound_crs"], always_xy=True
     )
     _reference = survey_point(received["rvt-advanced-sample-arch"])
     ams_noord_models = {}
@@ -618,7 +618,7 @@ def _(
         _origin = _site_to_compound.transform(
             *(_ref - _own for _ref, _own in zip(_reference, _survey))
         )
-        _crs = bpl.site_crs(
+        _crs = bpl.georeferenced_bim_crs(
             _georef["compound_crs"],
             *_origin,
             _georef["rotation"],
@@ -626,7 +626,7 @@ def _(
             name=_name,
         )
         ams_noord_models[_name] = bpl.to_crs(
-            bpl.set_crs(_bim, _crs), ams_noord_site_crs
+            bpl.set_crs(_bim, _crs), ams_noord_bim_crs
         )
         _rows.append(
             {
@@ -638,13 +638,11 @@ def _(
             }
         )
 
-    # All models as one BimDataFrame in the site CRS, with the model each element comes from. Element
+    # All models as one BimDataFrame in the georeferenced BIM CRS, with the model each element comes from. Element
     # ids are unique across the models; only the synthetic level ids (level-3) repeat.
-    ams_noord_bim = ams_noord_models["rvt-advanced-sample-arch"].with_frame(
-        pl.concat(
-            [_bdf.frame.with_columns(model_name=pl.lit(_name)) for _name, _bdf in ams_noord_models.items()],
-            how="diagonal_relaxed",
-        )
+    ams_noord_bim = bpl.concat(
+        [_bdf.with_columns(model_name=pl.lit(_name)) for _name, _bdf in ams_noord_models.items()],
+        how="diagonal_relaxed",
     )
     pl.DataFrame(_rows)
     return ams_noord_bim, ams_noord_models

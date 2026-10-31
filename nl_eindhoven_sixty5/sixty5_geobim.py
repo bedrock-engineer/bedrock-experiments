@@ -101,8 +101,8 @@ def _(mo):
 
     The structural IFC model of Sixty5 (Blok S1, Strijp-S, Eindhoven) in a geospatial setting. This notebook
 
-    1. defines the model's site CRS: a compound of derived CRSs on RD New + NAP (EPSG:7415) that keeps the model's millimeters
-    2. turns every building element into a 3D simple feature, with `geom` in the site CRS and `geog` in OGC:CRS84h
+    1. defines the model's georeferenced BIM CRS: a compound of derived CRSs on RD New + NAP (EPSG:7415) that keeps the model's millimeters
+    2. turns every building element into a 3D simple feature, with `geom` in the georeferenced BIM CRS and `geog` in OGC:CRS84h
     3. shows the model in Speckle's viewer on an OpenStreetMap ground map among the 3D BAG buildings, with the selected elements on a map and in tables
     4. places the model on the globe in CesiumJS
 
@@ -154,11 +154,11 @@ def _(bpl, model):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## The site CRS
+    ## The georeferenced BIM CRS
 
     The georeferencing comes from the IFC-GeoReferencer export of the *architectural* model of the same project (`O-S1-BWK-BIM architectural - BIM bouwkundig.ifcgref.json` in the ifc-georeferencer-workshop repo). This assumes that the structural model shares the architectural model's project origin.
 
-    The site CRS is a compound of two derived CRSs:
+    The georeferenced BIM CRS is a compound of two derived CRSs:
 
     - horizontal: a `DerivedProjectedCRS` on RD New (EPSG:28992) with an *Affine parametric transformation* (EPSG:9624)
     - vertical: a `DerivedVerticalCRS` on NAP height (EPSG:5709) with a *Vertical Offset* (EPSG:9616)
@@ -207,19 +207,19 @@ def _(
     # The rotation from grid north, as IfcMapConversion gives it: the direction of the site x-axis
     # in the grid
     ROTATION = math.degrees(math.atan2(X_AXIS_ORDINATE, X_AXIS_ABSCISSA))
-    site_crs = bpl.site_crs(
+    bim_crs = bpl.georeferenced_bim_crs(
         "EPSG:7415", EASTINGS, NORTHINGS, ORTHOGONAL_HEIGHT, ROTATION, unit=bim, name="Sixty5"
     )
-    {"model unit": bim.crs.axis_info[0].unit_name, "rotation from grid north [deg]": ROTATION, "CRS type": site_crs.type_name}
-    return (site_crs,)
+    {"model unit": bim.crs.axis_info[0].unit_name, "rotation from grid north [deg]": ROTATION, "CRS type": bim_crs.type_name}
+    return (bim_crs,)
 
 
 @app.cell
-def _(mo, site_crs):
+def _(mo, bim_crs):
     mo.accordion(
         {
-            "WKT2": mo.md(f"```\n{site_crs.to_wkt(pretty=True)}\n```"),
-            "PROJJSON": mo.md(f"```json\n{site_crs.to_json(pretty=True)}\n```"),
+            "WKT2": mo.md(f"```\n{bim_crs.to_wkt(pretty=True)}\n```"),
+            "PROJJSON": mo.md(f"```json\n{bim_crs.to_json(pretty=True)}\n```"),
         }
     )
     return
@@ -236,14 +236,14 @@ def _(mo):
 
 
 @app.cell
-def _(bpl, math, mo, pyproj, site_crs):
-    _to_etrs89 = pyproj.Transformer.from_crs(site_crs, 4937, always_xy=True, allow_ballpark=False)
+def _(bpl, math, mo, pyproj, bim_crs):
+    _to_etrs89 = pyproj.Transformer.from_crs(bim_crs, 4937, always_xy=True, allow_ballpark=False)
     assert math.isfinite(_to_etrs89.transform(0, 0, 0)[0]), (
         "RDNAPTRANS grids unavailable: install them or allow PROJ network access"
     )
     # One 4x4 from site meters to ECEF meters (WGS 84 geocentric, which EPSG takes as equal to
     # ETRS89) for Cesium, linearized at the nulpunt (site 0, 0, 0)
-    site_to_ecef = bpl.linearized_site_to_ecef(site_crs)
+    site_to_ecef = bpl.linearized_site_to_ecef(bim_crs)
     mo.vstack([mo.md(f"`to_etrs89`: {_to_etrs89.description}"), site_to_ecef])
     return (site_to_ecef,)
 
@@ -314,8 +314,8 @@ def _(ifc, mo, model, pl):
 
 
 @app.cell(hide_code=True)
-def _(bim, bpl, pl, site_crs):
-    sixty5 = bpl.with_geog(bpl.simple_features(bpl.set_crs(bim, site_crs), lightbim=True))
+def _(bim, bpl, pl, bim_crs):
+    sixty5 = bpl.with_geog(bpl.simple_features(bpl.set_crs(bim, bim_crs), lightbim=True))
     sixty5.frame.filter(pl.col("lightbim").is_not_null()).group_by(
         "class",
         member=pl.col("lightbim_kind").struct.field("member"),
@@ -475,7 +475,7 @@ def _(mo):
 
     CesiumJS works in ECEF (EPSG:4978). The meshes stay in local site metres, as ifcopenshell
     tessellates them, and a single 4x4 model matrix places them on the globe. That matrix is
-    the exact chain (site CRS, RD New + NAP, RDNAPTRANS to ETRS89, ECEF) linearised at
+    the exact chain (georeferenced BIM CRS, RD New + NAP, RDNAPTRANS to ETRS89, ECEF) linearised at
     the `nulpunt`, the site origin (0, 0, 0). Over this model the linearisation is off by at
     most about 0.7 mm. Keeping the vertices small and the offset in the matrix also keeps
     them precise as glTF float32.
