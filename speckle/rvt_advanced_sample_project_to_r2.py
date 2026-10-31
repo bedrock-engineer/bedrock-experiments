@@ -639,12 +639,13 @@ def _(
             }
         )
 
-    # All models as one BimDataFrame in the georeferenced BIM CRS, with the model each element comes from. Element
-    # ids are unique across the models; only the synthetic level ids (level-3) repeat.
+    # All models as one BimDataFrame in the georeferenced BIM CRS, with the model each element comes
+    # from. Element ids are unique across the models; only the synthetic level ids (level-3) repeat.
+    # model_name goes first and the long Revit ids last, so that a table of it reads from the model.
     ams_noord_bim = bpl.concat(
-        [_bdf.with_columns(model_name=pl.lit(_name)) for _name, _bdf in ams_noord_models.items()],
+        [_bimdf.with_columns(model_name=pl.lit(_name)) for _name, _bimdf in ams_noord_models.items()],
         how="diagonal_relaxed",
-    )
+    ).select("model_name", pl.exclude("model_name", "id"), "id")
     pl.DataFrame(_rows)
     return ams_noord_bim, ams_noord_models
 
@@ -661,17 +662,73 @@ def _(ams_noord_models, osm_ground_map, pdok_3d_buildings):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Mix & match arch + str piles
+    ## Combine arch and str
+
+    - Remove topo and other "crap"
+    - All of str + (arch - where arch coincides with str) or arch + str foundation?
+      Verditct: All of str + some arch
     """)
     return
 
 
-@app.cell
-def _(ams_noord_models, mo):
-    ams_noord_str_bimtbl = mo.ui.table(
-        ams_noord_models["rvt-advanced-sample-str"].frame.drop("bim_crs")
+@app.cell(hide_code=True)
+def _(ams_noord_bim, mo, pl):
+    # The structure model's elements selected to start with. A marimo table can't start filtered, so
+    # the other models' rows stay in the table, to add to the selection.
+    # bim_crs stays out of the table: with_frame gives the selection the CRS all models share
+    ams_noord_bimtbl = mo.ui.table(
+        ams_noord_bim.frame.drop("bim_crs"),
+        initial_selection=ams_noord_bim.frame.with_row_index()
+        .filter(pl.col("model_name") == "rvt-advanced-sample-str")
+        .get_column("index")
+        .to_list(),
     )
-    ams_noord_str_bimtbl
+    ams_noord_bimtbl
+    return (ams_noord_bimtbl,)
+
+
+@app.cell(hide_code=True)
+def _(
+    GeoSpeckleViewer,
+    ams_noord_bim,
+    ams_noord_bimtbl,
+    ams_noord_ground_map,
+    ams_noord_tilesets,
+    mo,
+):
+    # The rows selected in the table above, in the CRS all the Amsterdam Noord models share, on their
+    # own on the same ground map and 3D BAG
+    ams_noord_selected_in_table = ams_noord_bim.with_frame(ams_noord_bimtbl.value)
+
+    ams_noord_single_model_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_selected_in_table,
+            ground_map=ams_noord_ground_map,
+            tilesets=ams_noord_tilesets,
+            height=525,
+        )
+    )
+    ams_noord_single_model_viewer
+    return (ams_noord_single_model_viewer,)
+
+
+@app.cell(hide_code=True)
+def _(ams_noord_bim, ams_noord_single_model_viewer, mo, pl):
+    # A BimDataFrame shows its CRS by name, not as PROJJSON
+    _sel_elements_bdf = ams_noord_bim.filter(
+        pl.col("id").is_in(
+            [
+                _obj["applicationId"]
+                for _obj in ams_noord_single_model_viewer.value["selected"]
+            ]
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(f"**Selected elements**: {len(_sel_elements_bdf)}"),
+            _sel_elements_bdf,
+        ]
+    )
     return
 
 
@@ -682,37 +739,121 @@ def _(
     ams_noord_models,
     ams_noord_tilesets,
     mo,
+    pl,
 ):
-    # The structure model on its own in Amsterdam Noord, on the same ground map and 3D BAG
-    ams_noord_str = ams_noord_models["rvt-advanced-sample-str"]
-    ams_noord_str_viewer = mo.ui.anywidget(
+    # The structure model's elements below ground level: those whose bbox tops out at or under the
+    # ground map, which lies at the site origin's height (z = 0, the placed orthometric height)
+    _str = ams_noord_models["rvt-advanced-sample-str"]
+    ams_noord_str_below_ground = _str.with_frame(
+        _str.frame.filter(pl.col("bbox").struct.field("zmax") <= 0)
+    )
+    ams_noord_str_below_ground_viewer = mo.ui.anywidget(
         GeoSpeckleViewer(
-            ams_noord_str,
+            ams_noord_str_below_ground,
+            # Translucent, since every element here lies under the map
+            ground_map={**ams_noord_ground_map, "opacity": 0.35},
+            tilesets=ams_noord_tilesets,
+            height=540,
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(
+                f"{len(ams_noord_str_below_ground)} of {len(_str)} elements of the structure model lie below ground level."
+            ),
+            ams_noord_str_below_ground_viewer,
+        ]
+    )
+    return
+
+
+@app.cell
+def _(ams_noord_models, mo, pl):
+    # Arch and str in one BimDataFrame: all of str, plus the arch elements that str doesn't model
+    # already. Arch's site and placeholder content goes first, and so does arch's own structure:
+    # str is the structural model, and arch's canopy, for one, is a different design (W250 columns
+    # and 8K1 joists against str's UC356 columns, UB beams and concrete deck). An arch element counts
+    # as modelled by str when at least 80 % of its bbox lies inside the bbox of a str element of the
+    # same class, like arch's hollow core planks inside str's 300 mm slabs and its core walls inside
+    # str's. Across classes the test is too coarse: mullions fall inside the bbox of a str slab.
+    ARCH_SITE_CLASSES = ["Topography", "Planting", "Parking", "Entourage", "Mass", "Rooms", "<Room Separation>", "Levels"]
+    ARCH_STRUCTURAL_CLASSES = ["Structural Columns", "Structural Framing", "Structural Beam Systems"]
+    # Arch's 75 mm canopy roof lay on arch's canopy joists; on str's concrete deck it would float
+    ARCH_CANOPY_ROOF_ID = "5d2f94ca-45eb-4b7a-a78b-f803f510b4c4-0003122e"
+    _arch = ams_noord_models["rvt-advanced-sample-arch"]
+    _str = ams_noord_models["rvt-advanced-sample-str"]
+    _arch_frame = _arch.frame.filter(
+        ~pl.col("class").cast(pl.String).is_in(ARCH_SITE_CLASSES + ARCH_STRUCTURAL_CLASSES),
+        pl.col("id") != ARCH_CANOPY_ROOF_ID,
+    )
+    _axes = ("xmin", "ymin", "zmin", "xmax", "ymax", "zmax")
+
+
+    def _boxes(frame, suffix):
+        return frame.filter(pl.col("bbox").is_not_null()).select(
+            pl.col("id").alias(f"id{suffix}"), pl.col("class").cast(pl.String), *(pl.col("bbox").struct.field(_axis).alias(f"{_axis}{suffix}") for _axis in _axes)
+        )
+
+
+    def _extent(axis):
+        return (
+            pl.min_horizontal(f"{axis}max_a", f"{axis}max_s") - pl.max_horizontal(f"{axis}min_a", f"{axis}min_s")
+        ).clip(0)
+
+
+    _arch_in_str = (
+        _boxes(_arch_frame, "_a")
+        .join(_boxes(_str.frame, "_s"), on="class")
+        .with_columns(
+            _inside=_extent("x") * _extent("y") * _extent("z")
+            / ((pl.col("xmax_a") - pl.col("xmin_a")) * (pl.col("ymax_a") - pl.col("ymin_a")) * (pl.col("zmax_a") - pl.col("zmin_a")))
+        )
+        .filter(pl.col("_inside") >= 0.8)
+        .get_column("id_a")
+        .unique()
+    )
+    ams_noord_arch_str = _str.with_frame(
+        pl.concat(
+            [
+                _str.frame.with_columns(model_name=pl.lit("rvt-advanced-sample-str")),
+                _arch_frame.filter(~pl.col("id").is_in(_arch_in_str.implode())).with_columns(
+                    model_name=pl.lit("rvt-advanced-sample-arch")
+                ),
+            ],
+            how="diagonal_relaxed",
+        )
+    )
+    mo.md(
+        f"""
+        {len(_arch.frame) - len(_arch_frame)} site, placeholder and structural elements of arch left out
+
+        {len(_arch_in_str)} arch elements modelled by str
+    
+        {len(ams_noord_arch_str)} elements combined
+        """
+    )
+    return (ams_noord_arch_str,)
+
+
+@app.cell
+def _(
+    GeoSpeckleViewer,
+    ams_noord_arch_str,
+    ams_noord_ground_map,
+    ams_noord_tilesets,
+    mo,
+):
+    # Arch and str combined in Amsterdam Noord, colored by the model each element comes from
+    ams_noord_arch_str_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_arch_str,
+            color="elevation",
             ground_map=ams_noord_ground_map,
             tilesets=ams_noord_tilesets,
             height=550,
         )
     )
-    ams_noord_str_viewer
-    return (ams_noord_str_viewer,)
-
-
-@app.cell
-def _(ams_noord_bim, ams_noord_str_viewer, mo, pl):
-    _sel_elements_bdf = ams_noord_bim.filter(
-        pl.col("id").is_in(
-            [
-                _obj["applicationId"]
-                for _obj in ams_noord_str_viewer.value["selected"]
-            ]
-        )
-    )
-    mo.vstack(
-        [
-            mo.md(f"**Selected elements**: {len(_sel_elements_bdf)}"),
-            _sel_elements_bdf,
-        ]
-    )
+    ams_noord_arch_str_viewer
     return
 
 
