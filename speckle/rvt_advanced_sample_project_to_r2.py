@@ -1,9 +1,9 @@
 # /// script
 # requires-python = ">=3.14"
 # dependencies = [
+#     "bimpolars[speckle]",
 #     "folium==0.20.0",
 #     "geopandas==1.2.0",
-#     "geospeckle",
 #     "mapclassify==2.11.0",
 #     "marimo",
 #     "marimo-lens==0.2.4",
@@ -13,12 +13,14 @@
 #     "pyproj==3.8.0",
 #     "shapely==2.2.0",
 #     "specklepy[bundle]==2026.9.1",
+#     "specklewidgets",
 #     "tzdata==2026.5",
 #     "wigglystuff==0.5.36",
 # ]
 #
 # [tool.uv.sources]
-# geospeckle = { path = "geospeckle", editable = true }
+# bimpolars = { git = "https://github.com/bedrock-engineer/bimpolars" }
+# specklewidgets = { git = "https://github.com/bedrock-engineer/specklestuff" }
 # ///
 
 import marimo
@@ -29,67 +31,58 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    import hashlib
     import io
     import json
     import os
-    import warnings
     from collections.abc import Callable, Iterator
-    from pathlib import Path
     from urllib.parse import urlsplit
 
+    import bimpolars as bpl
     import geopandas as gpd
     import marimo as mo
     import obstore
     import polars as pl
     import shapely
-    from geospeckle import GeoSpeckleViewer, models_gz
+    import shapely.affinity
     from marimo_lens import Lens
     from obstore.store import S3Store
+    import pyproj
     from pyproj import CRS, Transformer
-    from specklepy import bundle
-    from specklepy.api import operations
-    from specklepy.api.client import SpeckleClient
-    from specklepy.api.credentials import Account, get_local_accounts
+    from specklepy.api.credentials import get_local_accounts
     from specklepy.api.inputs.user_inputs import UserProjectsFilter
-    from specklepy.objects.models.collections.collection import Collection
     from specklepy.objects.models.units import get_scale_factor_from_string
-    from specklepy.transports.memory import MemoryTransport
-    from specklepy.transports.server import ServerTransport
+    from specklewidgets import GeoSpeckleViewer, SpeckleViewer
+    from specklewidgets import server as speckle_server
+    from specklewidgets.geo import osm_ground_map, pdok_3d_buildings
     from wigglystuff import EnvConfig
 
     return (
-        Account,
         CRS,
         Callable,
-        Collection,
         EnvConfig,
         GeoSpeckleViewer,
         Iterator,
         Lens,
-        MemoryTransport,
-        Path,
         S3Store,
-        ServerTransport,
-        SpeckleClient,
+        SpeckleViewer,
         Transformer,
         UserProjectsFilter,
-        bundle,
+        bpl,
         get_local_accounts,
         get_scale_factor_from_string,
         gpd,
-        hashlib,
         io,
         json,
         mo,
-        models_gz,
         obstore,
-        operations,
         os,
+        osm_ground_map,
+        pdok_3d_buildings,
         pl,
+        pyproj,
         shapely,
+        speckle_server,
         urlsplit,
-        warnings,
     )
 
 
@@ -107,13 +100,13 @@ def _(mo):
     # Revit Advanced Sample Project to R2
 
     Receives Speckle model versions in both of Speckle's data models, pushes them to
-    Cloudflare R2, and reads them back from R2 into the GeoSpeckle Viewer.
+    Cloudflare R2, and reads them back from R2 into Speckle's viewer.
 
     1. **Speckle bundle (2026.9 data model):** the version's Parquet files (`eav.*`, `envelope.*`,
-       `geometries`), as `bundle.receive` downloads them.
+       `geometries`), as Speckle serves them.
     2. **Speckle v3 objects (pre-2026.9 object graph):** every object's JSON. Versions that only
-       exist as a bundle have no JSON on the server; their objects are projected from the
-       bundle with `Model.to_base()`.
+       exist as a bundle have no JSON on the server; specklewidgets builds their objects
+       from the bundle with bimpolars' `bundle_objects`.
 
     The defaults pick the three models of Autodesk's Revit Advanced Sample Project on
     app.speckle.systems: architecture, structure and MEP.
@@ -139,22 +132,15 @@ def _(get_local_accounts, mo):
     )
     server_picker = mo.ui.dropdown(_servers, value="https://app.speckle.systems", label="Server")
     server_picker
-    return local_accounts, server_picker
+    return (server_picker,)
 
 
 @app.cell
-def _(
-    EnvConfig,
-    local_accounts,
-    local_speckle_client,
-    mo,
-    server_picker,
-    token_speckle_client,
-):
-    # A local account for the server if there is one that works, else a personal access token
-    local_client = local_speckle_client(local_accounts, server_picker.value)
+def _(EnvConfig, mo, server_picker, speckle_server):
+    # This machine's Speckle account for the server if one works, else a personal access token
+    local_client = speckle_server.local_client(server_picker.value)
     speckle_token = mo.ui.anywidget(
-        EnvConfig({"SPECKLE_TOKEN": lambda _token: token_speckle_client(server_picker.value, _token)})
+        EnvConfig({"SPECKLE_TOKEN": lambda _token: speckle_server.token_client(_token, server_picker.value)})
     )
     None if local_client else mo.vstack(
         [mo.md(f"No working local account for `{server_picker.value}`: paste a personal access token."), speckle_token]
@@ -163,9 +149,9 @@ def _(
 
 
 @app.cell
-def _(local_client, mo, server_picker, speckle_token, token_speckle_client):
+def _(local_client, mo, server_picker, speckle_server, speckle_token):
     mo.stop(local_client is None and not speckle_token.all_valid)
-    speckle_client = local_client or token_speckle_client(server_picker.value, speckle_token["SPECKLE_TOKEN"])
+    speckle_client = local_client or speckle_server.token_client(speckle_token["SPECKLE_TOKEN"], server_picker.value)
     # Self-hosted Speckle 2.x servers have neither bundles nor workspaces
     _server = speckle_client.server.get()
     serves_bundles = not _server.version.startswith("2.")
@@ -242,7 +228,7 @@ def _(all_items, mo, project_picker, speckle_client):
             ).models
         )
     }
-    _rvt_advanced_sample = {"ef7cb591fc", "363cae173a", "35e9a2fa3b"}
+    _rvt_advanced_sample = {"e7f5f7f943", "ef7cb591fc", "363cae173a", "35e9a2fa3b"}
     # One checkbox per model, stacked: the value maps each model id to whether it is picked
     model_picker = mo.ui.dictionary(
         {
@@ -296,59 +282,64 @@ def _(
 
 
 @app.cell
-def _(
-    latest_versions,
-    mo,
-    pl,
-    receive_button,
-    receive_version,
-    speckle_client,
-):
+def _(latest_versions, mo, pl, receive_button, speckle_client, speckle_server):
     mo.stop(not receive_button.value, mo.md("Press **Receive these versions**."))
-    received = [
-        receive_version(speckle_client, _version)
-        for _version in mo.status.progress_bar(
-            latest_versions.to_dicts(), title="Receiving", show_eta=True
+    # Each version as its bundle, in a temporary folder, and as v3 objects: the server's, or
+    # built from the bundle when the version only exists as a bundle
+    received = {
+        _version["model_name"]: speckle_server.receive(
+            speckle_client, _version["project_id"], _version["model_id"], _version["version_id"]
         )
-    ]
+        for _version in mo.status.progress_bar(latest_versions.to_dicts(), title="Receiving", show_eta=True)
+    }
+    bundle_files = {
+        _name: sorted(_path for _path in _version.bundle.iterdir() if _path.is_file()) if _version.bundle else []
+        for _name, _version in received.items()
+    }
     pl.DataFrame(
         [
             {
-                "model_name": _version["model_name"],
-                "version_id": _version["version_id"],
-                "v3_route": _version["v3_route"],
-                "speckle_bundle_files": len(_version["speckle_bundle"]),
-                "speckle_bundle_mb": sum(map(len, _version["speckle_bundle"].values())) / 1e6,
-                "speckle_v3_objects": len(_version["speckle_v3_objects"]),
-                "speckle_v3_mb": sum(map(len, _version["speckle_v3_objects"])) / 1e6,
+                "model_name": _name,
+                "version_id": _version.version_id,
+                "v3_route": _version.v3_route,
+                "speckle_bundle_files": len(bundle_files[_name]),
+                "speckle_bundle_mb": sum(_path.stat().st_size for _path in bundle_files[_name]) / 1e6,
+                "speckle_v3_objects": len(_version.objects),
             }
-            for _version in received
+            for _name, _version in received.items()
         ]
     )
-    return (received,)
+    return bundle_files, received
 
 
 @app.cell
-def _(received, speckle_v3_objects_frame):
+def _(json, pl, received):
     # One row per v3 object of every received version, each version's root first
-    speckle_v3_objects = speckle_v3_objects_frame(received)
+    speckle_v3_objects = pl.DataFrame(
+        [
+            {
+                "server": _version.server,
+                "project_id": _version.project_id,
+                "model_id": _version.model_id,
+                "model_name": _name,
+                "version_id": _version.version_id,
+                "v3_route": _version.v3_route,
+                "object_id": _object["id"],
+                "is_root": _index == 0,
+                "content": json.dumps(_object, separators=(",", ":")),
+            }
+            for _name, _version in received.items()
+            for _index, _object in enumerate(_version.objects)
+        ]
+    )
     speckle_v3_objects.drop("content")
     return (speckle_v3_objects,)
 
 
 @app.cell
-def _(GeoSpeckleViewer, models_gz, speckle_v3_objects, version_objects_json):
+def _(SpeckleViewer, received):
     # The received versions, straight from Speckle, before they go to R2
-    received_viewer = GeoSpeckleViewer(
-        objects_gz=models_gz(
-            *(
-                version_objects_json(speckle_v3_objects, _version_id, _model_name)
-                for _version_id, _model_name in speckle_v3_objects.select("version_id", "model_name")
-                .unique(maintain_order=True)
-                .iter_rows()
-            )
-        )
-    )
+    received_viewer = SpeckleViewer([_version.objects for _version in received.values()])
     received_viewer
     return
 
@@ -367,10 +358,10 @@ def _(mo):
     return
 
 
-@app.cell
-def _(gpd, ground_slab_footprint, mo, received):
+@app.cell(hide_code=True)
+def _(gpd, ground_slab_footprint, mo, received, received_bims):
     # The ground floor slab of each model, at the geolocation of its survey point
-    slab_footprints = gpd.GeoDataFrame([ground_slab_footprint(_version) for _version in received], crs="EPSG:4326")
+    slab_footprints = gpd.GeoDataFrame([ground_slab_footprint(_name, _version, received_bims[_name]) for _name, _version in received.items()], crs="EPSG:4326")
     slab_model = mo.ui.radio(
         options=["All models", *slab_footprints["model_name"]],
         value=slab_footprints["model_name"].iloc[0],
@@ -401,11 +392,504 @@ def _(gpd, slab_footprints, slab_model):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Cloudflare R2
+    ## Aligning the Revit advanced sample models in Amsterdam Noord
 
-    The Speckle bundles go to `<prefix>/speckle-bundle/<model_id>/<version_id>/<file>`, and the
-    Speckle v3 objects of all versions to `<prefix>/speckle-v3-objects.parquet`. The R2
-    credentials come from the environment or the widget below, and are never written to disk.
+    The black dots above are the survey points. The architecture and structure models share theirs,
+    at the bottom left of the ground floor slab, and their columns coincide to the millimeter. The MEP
+    model's survey point was never set: it still sits on the internal origin, and its geolocation is
+    Munich. Fitting MEP's structural columns onto the architecture model's puts the shared survey point
+    at (-12.28, -12.31) m in MEP's internal coordinates, give or take 10 cm, as MEP drew its columns
+    again by hand.
+
+    With the survey points lined up, all three models go to Amsterdam Noord with the parameters
+    `amsterdam_noord_geobim.py` fits from the Rhino placement of the structure model: where the
+    architecture model's internal origin lies in RD New + NAP height (EPSG:7415), and how far it is
+    rotated from grid north.
+    """)
+    return
+
+
+@app.cell
+def _():
+    # The MEP model's survey point, which Revit left on the internal origin, in internal mm
+    SURVEY_POINT_CORRECTIONS = {
+        "rvt-advanced-sample-mep": (-12275.0, -12309.0, 0.0)
+    }
+    # The architecture model's internal origin in RD New + NAP height, from amsterdam_noord_geobim.py
+    AMS_NOORD_GEOREF_PARAMS = {
+        "compound_crs": "EPSG:7415",
+        "easting": 122096,
+        "northing": 488756,
+        "orthometric_height": 3.3,
+        "rotation": -160,
+    }
+    return AMS_NOORD_GEOREF_PARAMS, SURVEY_POINT_CORRECTIONS
+
+
+@app.cell
+def _(received, received_speckle_version_to_bimdataframe_with_lightbim):
+    # The received versions with footprints and LightBIM features, read once, so that editing the
+    # placement does not read them again
+    received_bims = {_name: received_speckle_version_to_bimdataframe_with_lightbim(_version) for _name, _version in received.items()}
+    return (received_bims,)
+
+
+@app.cell
+def _(AMS_NOORD_GEOREF_PARAMS, mo):
+    # To edit: the map below follows every change, the GeoSpeckleViewer only the Place button
+    ams_noord_georef = mo.ui.dictionary(
+        {
+            "compound_crs": mo.ui.text(
+                value=AMS_NOORD_GEOREF_PARAMS["compound_crs"], 
+                disabled=True
+            ),
+            "easting": mo.ui.number(
+                value=AMS_NOORD_GEOREF_PARAMS["easting"],
+                step=1,
+                debounce=True,
+            ),
+            "northing": mo.ui.number(
+                value=AMS_NOORD_GEOREF_PARAMS["northing"],
+                step=1,
+                debounce=True,
+            ),
+            "orthometric_height": mo.ui.number(       
+                value=AMS_NOORD_GEOREF_PARAMS["orthometric_height"],
+                step=0.2,
+                debounce=True,
+            ),
+            "rotation": mo.ui.number(
+                value=AMS_NOORD_GEOREF_PARAMS["rotation"],
+                step=2,
+                debounce=True,
+            ),
+        },
+        label="amsterdam_noord_georef_params",
+    )
+    # The parameters the models in the GeoSpeckleViewer are placed with: the ones above as they were when
+    # Place was last pressed
+    get_placed_georef, set_placed_georef = mo.state(AMS_NOORD_GEOREF_PARAMS)
+    ams_noord_place = mo.ui.button(
+        label="Place the models in the GeoSpeckleViewer",
+        on_click=lambda _: set_placed_georef(ams_noord_georef.value),
+    )
+    return ams_noord_georef, ams_noord_place, get_placed_georef
+
+
+@app.cell(hide_code=True)
+def _(
+    CRS,
+    Transformer,
+    ams_noord_georef,
+    ams_noord_place,
+    bpl,
+    gpd,
+    ground_slab,
+    mo,
+    received,
+    received_bims,
+    shapely,
+    survey_point,
+):
+    # The structure model's ground floor slab where the parameters below put it
+    _georef = ams_noord_georef.value
+    _bim_crs = bpl.georeferenced_bim_crs(
+        **_georef, unit="millimetre", name="Amsterdam Noord"
+    )
+    _to_compound = Transformer.from_crs(
+        _bim_crs, _georef["compound_crs"], always_xy=True
+    )
+    _slab = ground_slab(received_bims["rvt-advanced-sample-str"])
+    # From the structure model's survey point to the architecture model's, where the georeferenced BIM CRS starts
+    _shift = [
+        _ref - _own
+        for _ref, _own in zip(
+            survey_point(received["rvt-advanced-sample-arch"]),
+            survey_point(received["rvt-advanced-sample-str"]),
+        )
+    ]
+    _outline = shapely.affinity.translate(
+        shapely.force_3d(shapely.from_wkb(_slab["footprint"])), *_shift
+    )
+    _outline = shapely.force_2d(
+        shapely.transform(
+            _outline, _to_compound.transform, include_z=True, interleaved=False
+        )
+    )
+    _map = gpd.GeoDataFrame(
+        [
+            {
+                "slab": _slab["name"],
+                "level": _slab["level"],
+                "area_m2": round(_slab["area_m2"]),
+            }
+        ],
+        geometry=[_outline],
+        crs=CRS(_georef["compound_crs"]).sub_crs_list[0],
+    ).explore(style_kwds={"fillOpacity": 0.5})
+    mo.vstack([_map, ams_noord_georef, ams_noord_place])
+    return
+
+
+@app.cell(hide_code=True)
+def _(
+    GeoSpeckleViewer,
+    ams_noord_bim,
+    ams_noord_ground_map,
+    ams_noord_tilesets,
+    mo,
+    received,
+    survey_point,
+):
+    # All models in Amsterdam Noord as one BimDataFrame, with axes at the shared survey point
+    ams_noord_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_bim,
+            ground_map=ams_noord_ground_map,
+            tilesets=ams_noord_tilesets,
+            markers=[
+                {
+                    "name": "Survey Point",
+                    "position": [
+                        _value / 1000
+                        for _value in survey_point(
+                            received["rvt-advanced-sample-arch"]
+                        )
+                    ],
+                }
+            ],
+            height=550
+        )
+    )
+    ams_noord_viewer
+    return (ams_noord_viewer,)
+
+
+@app.cell(hide_code=True)
+def _(ams_noord_bim, ams_noord_viewer, mo, pl):
+    # A BimDataFrame's table names each row's CRS, instead of showing its PROJJSON
+    selected_elements_bdf = ams_noord_bim.filter(
+        pl.col("id").is_in(
+            [
+                _obj["applicationId"]
+                for _obj in ams_noord_viewer.value["selected"]
+            ]
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(f"**Selected elements**: {len(selected_elements_bdf)}"),
+            selected_elements_bdf,
+        ]
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(
+    SURVEY_POINT_CORRECTIONS,
+    Transformer,
+    bpl,
+    get_placed_georef,
+    pl,
+    pyproj,
+    received,
+    received_bims,
+    survey_point,
+):
+    # RD New + NAP to WGS 84 follows RDNAPTRANS2018 only with the NSGI grids, which PROJ fetches
+    pyproj.network.set_network_enabled(True)
+
+    # Each model in the architecture model's georeferenced BIM CRS: its own CRS puts its survey point on the
+    # architecture model's, and to_crs moves its geometry from there
+    _georef = get_placed_georef()
+    ams_noord_bim_crs = bpl.georeferenced_bim_crs(
+        **_georef, unit="millimetre", name="Amsterdam Noord"
+    )
+    _site_to_compound = Transformer.from_crs(
+        ams_noord_bim_crs, _georef["compound_crs"], always_xy=True
+    )
+    _reference = survey_point(received["rvt-advanced-sample-arch"])
+    ams_noord_models = {}
+    _rows = []
+    for _name, _bim in received_bims.items():
+        _survey = SURVEY_POINT_CORRECTIONS.get(
+            _name, survey_point(received[_name])
+        )
+        _origin = _site_to_compound.transform(
+            *(_ref - _own for _ref, _own in zip(_reference, _survey))
+        )
+        _crs = bpl.georeferenced_bim_crs(
+            _georef["compound_crs"],
+            *_origin,
+            _georef["rotation"],
+            unit=_bim,
+            name=_name,
+        )
+        ams_noord_models[_name] = bpl.to_crs(
+            bpl.set_crs(_bim, _crs), ams_noord_bim_crs
+        )
+        _rows.append(
+            {
+                "model_name": _name,
+                "survey_point_mm": [round(_value, 1) for _value in _survey],
+                "internal_origin_easting": round(_origin[0], 3),
+                "internal_origin_northing": round(_origin[1], 3),
+                "internal_origin_height": round(_origin[2], 3),
+            }
+        )
+
+    # All models as one BimDataFrame in the georeferenced BIM CRS, with the model each element comes
+    # from. Element ids are unique across the models; only the synthetic level ids (level-3) repeat.
+    # model_name goes first and the long Revit ids last, so that a table of it reads from the model.
+    ams_noord_bim = bpl.concat(
+        [_bimdf.with_columns(model_name=pl.lit(_name)) for _name, _bimdf in ams_noord_models.items()],
+        how="diagonal_relaxed",
+    ).select("model_name", pl.exclude("model_name", "id"), "id")
+    pl.DataFrame(_rows)
+    return ams_noord_bim, ams_noord_models
+
+
+@app.cell
+def _(ams_noord_models, osm_ground_map, pdok_3d_buildings):
+    # OpenStreetMap 150 m around the architecture model, and the 3D BAG over the same area
+    _arch = ams_noord_models["rvt-advanced-sample-arch"]
+    ams_noord_ground_map = osm_ground_map(_arch)
+    ams_noord_tilesets = [pdok_3d_buildings(_arch, ams_noord_ground_map["bounds"])]
+    return ams_noord_ground_map, ams_noord_tilesets
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Combine arch and str
+
+    - Remove topo and other "crap"
+    - All of str + (arch - where arch coincides with str) or arch + str foundation?
+      Verditct: All of str + some arch
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(ams_noord_bim, json, mo, pl):
+    # The structure model's elements selected to start with. A marimo table can't start filtered, so
+    # the other models' rows stay in the table, to add to the selection.
+    # bim_crs shows each row's CRS by name, and the selected rows keep it
+    ams_noord_bimtbl = mo.ui.table(
+        ams_noord_bim.frame,
+        initial_selection=ams_noord_bim.frame.with_row_index()
+        .filter(pl.col("model_name") == "rvt-advanced-sample-str")
+        .get_column("index")
+        .to_list(),
+        format_mapping={"bim_crs": lambda _crs: json.loads(_crs)["name"]},
+    )
+    ams_noord_bimtbl
+    return (ams_noord_bimtbl,)
+
+
+@app.cell(hide_code=True)
+def _(
+    GeoSpeckleViewer,
+    ams_noord_bimtbl,
+    ams_noord_ground_map,
+    ams_noord_tilesets,
+    bpl,
+    mo,
+):
+    # The rows selected in the table above, in the CRS their bim_crs gives (the one all the Amsterdam
+    # Noord models share), on their own on the same ground map and 3D BAG
+    ams_noord_selected_in_table = bpl.BimDataFrame(ams_noord_bimtbl.value)
+
+    ams_noord_selected_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_selected_in_table,
+            ground_map=ams_noord_ground_map,
+            tilesets=ams_noord_tilesets,
+            height=525,
+        )
+    )
+    ams_noord_selected_viewer
+    return (ams_noord_selected_viewer,)
+
+
+@app.cell(hide_code=True)
+def _(ams_noord_bim, ams_noord_selected_viewer, mo, pl):
+    # A BimDataFrame shows its CRS by name, not as PROJJSON
+    _sel_elements_bdf = ams_noord_bim.filter(
+        pl.col("id").is_in(
+            [
+                _obj["applicationId"]
+                for _obj in ams_noord_selected_viewer.value["selected"]
+            ]
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(f"**Selected elements**: {len(_sel_elements_bdf)}"),
+            _sel_elements_bdf,
+        ]
+    )
+    return
+
+
+@app.cell
+def _(
+    GeoSpeckleViewer,
+    ams_noord_ground_map,
+    ams_noord_models,
+    ams_noord_tilesets,
+    mo,
+    pl,
+):
+    # The structure model's elements below ground level: those whose bbox tops out at or under the
+    # ground map, which lies at the site origin's height (z = 0, the placed orthometric height)
+    _str = ams_noord_models["rvt-advanced-sample-str"]
+    ams_noord_str_below_ground = _str.with_frame(
+        _str.frame.filter(pl.col("bbox").struct.field("zmax") <= 0)
+    )
+    ams_noord_str_below_ground_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_str_below_ground,
+            # Translucent, since every element here lies under the map
+            ground_map={**ams_noord_ground_map, "opacity": 0.35},
+            tilesets=ams_noord_tilesets,
+            height=540,
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(
+                f"{len(ams_noord_str_below_ground)} of {len(_str)} elements of the structure model lie below ground level."
+            ),
+            ams_noord_str_below_ground_viewer,
+        ]
+    )
+    return
+
+
+@app.cell
+def _(ams_noord_models, mo, pl):
+    # Arch and str in one BimDataFrame: all of str, plus the arch elements that str doesn't model
+    # already. Arch's site and placeholder content goes first, and so does arch's own structure:
+    # str is the structural model, and arch's canopy, for one, is a different design (W250 columns
+    # and 8K1 joists against str's UC356 columns, UB beams and concrete deck). An arch element counts
+    # as modelled by str when at least 80 % of its bbox lies inside the bbox of a str element of the
+    # same class, like arch's hollow core planks inside str's 300 mm slabs and its core walls inside
+    # str's. Across classes the test is too coarse: mullions fall inside the bbox of a str slab.
+    ARCH_SITE_CLASSES = ["Topography", "Planting", "Parking", "Entourage", "Mass", "Rooms", "<Room Separation>", "Levels"]
+    ARCH_STRUCTURAL_CLASSES = ["Structural Columns", "Structural Framing", "Structural Beam Systems"]
+    # Arch's 75 mm canopy roof lay on arch's canopy joists; on str's concrete deck it would float
+    ARCH_CANOPY_ROOF_ID = "5d2f94ca-45eb-4b7a-a78b-f803f510b4c4-0003122e"
+    _arch = ams_noord_models["rvt-advanced-sample-arch"]
+    _str = ams_noord_models["rvt-advanced-sample-str"]
+    _arch_frame = _arch.frame.filter(
+        ~pl.col("class").cast(pl.String).is_in(ARCH_SITE_CLASSES + ARCH_STRUCTURAL_CLASSES),
+        pl.col("id") != ARCH_CANOPY_ROOF_ID,
+    )
+    _axes = ("xmin", "ymin", "zmin", "xmax", "ymax", "zmax")
+
+
+    def _boxes(frame, suffix):
+        return frame.filter(pl.col("bbox").is_not_null()).select(
+            pl.col("id").alias(f"id{suffix}"), pl.col("class").cast(pl.String), *(pl.col("bbox").struct.field(_axis).alias(f"{_axis}{suffix}") for _axis in _axes)
+        )
+
+
+    def _extent(axis):
+        return (
+            pl.min_horizontal(f"{axis}max_a", f"{axis}max_s") - pl.max_horizontal(f"{axis}min_a", f"{axis}min_s")
+        ).clip(0)
+
+
+    _arch_in_str = (
+        _boxes(_arch_frame, "_a")
+        .join(_boxes(_str.frame, "_s"), on="class")
+        .with_columns(
+            _inside=_extent("x") * _extent("y") * _extent("z")
+            / ((pl.col("xmax_a") - pl.col("xmin_a")) * (pl.col("ymax_a") - pl.col("ymin_a")) * (pl.col("zmax_a") - pl.col("zmin_a")))
+        )
+        .filter(pl.col("_inside") >= 0.8)
+        .get_column("id_a")
+        .unique()
+    )
+    ams_noord_arch_str = _str.with_frame(
+        pl.concat(
+            [
+                _str.frame.with_columns(model_name=pl.lit("rvt-advanced-sample-str")),
+                _arch_frame.filter(~pl.col("id").is_in(_arch_in_str.implode())).with_columns(
+                    model_name=pl.lit("rvt-advanced-sample-arch")
+                ),
+            ],
+            how="diagonal_relaxed",
+        )
+    )
+    mo.md(
+        f"""
+        {len(_arch.frame) - len(_arch_frame)} site, placeholder and structural elements of arch left out
+
+        {len(_arch_in_str)} arch elements modelled by str
+
+        {len(ams_noord_arch_str)} elements combined
+        """
+    )
+    return (ams_noord_arch_str,)
+
+
+@app.cell
+def _(
+    GeoSpeckleViewer,
+    ams_noord_arch_str,
+    ams_noord_ground_map,
+    ams_noord_tilesets,
+    mo,
+):
+    # Arch and str combined in Amsterdam Noord, colored by the model each element comes from
+    ams_noord_arch_str_viewer = mo.ui.anywidget(
+        GeoSpeckleViewer(
+            ams_noord_arch_str,
+            color="class",
+            ground_map=ams_noord_ground_map,
+            tilesets=ams_noord_tilesets,
+            height=550,
+        )
+    )
+    ams_noord_arch_str_viewer
+    return (ams_noord_arch_str_viewer,)
+
+
+@app.cell
+def _(ams_noord_arch_str_viewer, ams_noord_bim, mo, pl):
+    _sel_elements_bdf = ams_noord_bim.filter(
+        pl.col("id").is_in(
+            [
+                _obj["applicationId"]
+                for _obj in ams_noord_arch_str_viewer.value["selected"]
+            ]
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(f"**Selected elements**: {len(_sel_elements_bdf)}"),
+            _sel_elements_bdf,
+        ]
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Pushing BIM-data to Cloudflare R2 object storage
+
+    - BimDataFrame GeoParquets of every model and of arch+str, in the Amsterdam Noord georeferenced
+      BIM CRS, go to `<prefix>/<model_name>-bdf.parquet`
+    - Speckle bundles go to `<prefix>/speckle-bundle/<model_id>/<version_id>/<file>`
+    - Speckle v3 objects of all versions go to `<prefix>/speckle-v3-objects.parquet`, and those of
+      arch+str, which has no Speckle version and so no bundle, to
+      `<prefix>/rvt-advanced-sample-combined-arch-str-speckle-v3-objects.parquet`
+
+    The R2 credentials come from the environment or the widget below, and are never written to disk.
     `R2_S3_API` is the bucket's S3 API URL as the Cloudflare dashboard shows it under R2, the
     bucket, Settings: `https://<account id>.eu.r2.cloudflarestorage.com/<bucket>`.
     """)
@@ -453,16 +937,67 @@ def _(S3Store, mo, r2_config, r2_s3_api, urlsplit):
 
 
 @app.cell
-def _(io, mo, pl, r2_prefix, received, speckle_v3_objects):
-    # What goes to R2: every Speckle bundle file, and the Speckle v3 objects as one Parquet file
+def _(ams_noord_arch_str, json, pl):
+    # Arch+str has no Speckle version, so its v3 objects come from the BimDataFrame: content hashes
+    # as ids, and no server, project, model or version
+    from specklewidgets.bim import bim_objects
+
+    ARCH_STR_MODEL_NAME = "rvt-advanced-sample-combined-arch-str"
+    ams_noord_arch_str_v3_objects = pl.DataFrame(
+        [
+            {
+                "model_name": ARCH_STR_MODEL_NAME,
+                "object_id": _object["id"],
+                "is_root": _index == 0,
+                "content": json.dumps(_object, separators=(",", ":")),
+            }
+            for _index, _object in enumerate(bim_objects(ams_noord_arch_str, name=ARCH_STR_MODEL_NAME))
+        ]
+    )
+    ams_noord_arch_str_v3_objects.drop("content")
+    return ARCH_STR_MODEL_NAME, ams_noord_arch_str_v3_objects
+
+
+@app.cell
+def _(
+    ARCH_STR_MODEL_NAME,
+    ams_noord_arch_str,
+    ams_noord_arch_str_v3_objects,
+    ams_noord_models,
+    bundle_files,
+    io,
+    mo,
+    pl,
+    r2_prefix,
+    received,
+    speckle_v3_objects,
+):
+    # What goes to R2: every Speckle bundle file, the Speckle v3 objects as Parquet files, and every
+    # model and arch+str as a GeoParquet in the Amsterdam Noord georeferenced BIM CRS
     _prefix = r2_prefix.value.strip("/")
-    _parquet = io.BytesIO()
-    speckle_v3_objects.write_parquet(_parquet, compression="zstd")
-    r2_uploads = {
-        f"{_prefix}/speckle-bundle/{_version['model_id']}/{_version['version_id']}/{_name}": _data
-        for _version in received
-        for _name, _data in _version["speckle_bundle"].items()
-    } | {f"{_prefix}/speckle-v3-objects.parquet": _parquet.getvalue()}
+
+
+    def _parquet_bytes(frame):
+        _buffer = io.BytesIO()
+        frame.write_parquet(_buffer, compression="zstd")
+        return _buffer.getvalue()
+
+
+    r2_uploads = (
+        {
+            f"{_prefix}/speckle-bundle/{_version.model_id}/{_version.version_id}/{_path.name}": _path.read_bytes()
+            for _name, _version in received.items()
+            for _path in bundle_files[_name]
+        }
+        | {
+            f"{_prefix}/speckle-v3-objects.parquet": _parquet_bytes(speckle_v3_objects),
+            f"{_prefix}/{ARCH_STR_MODEL_NAME}-speckle-v3-objects.parquet": _parquet_bytes(ams_noord_arch_str_v3_objects),
+        }
+        | {
+            f"{_prefix}/{_name}-bdf.parquet": _parquet_bytes(_bimdf)
+            for _name, _bimdf in (ams_noord_models | {ARCH_STR_MODEL_NAME: ams_noord_arch_str}).items()
+        }
+    )
     push_button = mo.ui.run_button(label=f"Push {len(r2_uploads)} files to R2")
     mo.vstack(
         [
@@ -518,21 +1053,12 @@ def _(io, obstore, pl, pushed, r2_prefix, r2_store):
 
 
 @app.cell
-def _(
-    GeoSpeckleViewer,
-    models_gz,
-    r2_speckle_v3_objects,
-    version_objects_json,
-):
-    r2_viewer = GeoSpeckleViewer(
-        objects_gz=models_gz(
-            *(
-                version_objects_json(r2_speckle_v3_objects, _version_id, _model_name)
-                for _version_id, _model_name in r2_speckle_v3_objects.select("version_id", "model_name")
-                .unique(maintain_order=True)
-                .iter_rows()
-            )
-        )
+def _(SpeckleViewer, bpl, r2_speckle_v3_objects):
+    r2_viewer = SpeckleViewer(
+        [
+            bpl.version_objects(r2_speckle_v3_objects, _version_id)
+            for _version_id in r2_speckle_v3_objects["version_id"].unique(maintain_order=True)
+        ]
     )
     r2_viewer
     return
@@ -547,7 +1073,7 @@ def _(mo):
 
 
 @app.cell
-def _(Account, Callable, Iterator, SpeckleClient):
+def _(Callable, Iterator):
     def all_items(fetch: Callable) -> Iterator:
         """Every item of a paginated Speckle collection.
 
@@ -563,310 +1089,96 @@ def _(Account, Callable, Iterator, SpeckleClient):
                 return
 
 
-    def local_speckle_client(accounts: list[Account], server_url: str) -> SpeckleClient | None:
-        """A client signed in with the local account for a server, or None if it has none
-        or its token no longer works."""
-        account = next(
-            (account for account in accounts if account.serverInfo.url.rstrip("/") == server_url), None
+
+    return (all_items,)
+
+
+@app.cell
+def _(bpl, pl, shapely):
+    def received_speckle_version_to_bimdataframe_with_lightbim(version):
+        """A received version as a BimDataFrame with footprints and LightBIM features.
+
+        Args:
+            version: A ReceivedVersion with its bundle, from speckle_server.receive.
+
+        Returns:
+            The BimDataFrame of bpl.simple_features(..., lightbim=True), in the model's own CRS.
+        """
+        bim = version.bimdataframe()
+        # Speckle's IFC converter leaves category empty, so take the class from the IFC entity
+        ifc_type = pl.col("properties").struct.field("object").struct.field("ifcType")
+        if "ifcType" in bim.frame.lazy().select(pl.col("properties").struct.field("object").struct.unnest()).collect_schema():
+            bim = bim.with_frame(
+                bim.frame.with_columns(pl.coalesce(ifc_type, pl.col("class").cast(pl.String)).cast(pl.Categorical).alias("class"))
+            )
+        return bpl.simple_features(bim, lightbim=True)
+
+
+    def ground_slab(bdf) -> dict:
+        """A model's ground floor slab: the largest slab on the lowest level, as LightBIM classifies them.
+
+        Args:
+            bdf: A BimDataFrame from received_speckle_version_to_bimdataframe_with_lightbim.
+
+        Returns:
+            The slab's row, with its level's name as level and its footprint's area as area_m2.
+        """
+        to_m = bdf.crs.axis_info[0].unit_conversion_factor
+        levels = bdf.frame.filter(pl.col("elevation").is_not_null()).select(
+            pl.col("id").alias("footprint_ref"), pl.col("name").alias("level")
         )
-        if account is None:
-            return None
-        client = SpeckleClient(host=server_url)
-        client.authenticate_with_account(account)
-        try:
-            client.active_user.get()
-        except Exception:
-            return None
-        return client
+        slabs = bdf.frame.filter(pl.col("lightbim_kind").struct.field("role") == "slab").join(
+            levels, on="footprint_ref", how="left"
+        )
+        slabs = slabs.with_columns(
+            bottom=pl.col("bbox").struct.field("zmin"),
+            area_m2=pl.Series(shapely.area(shapely.from_wkb(slabs["footprint"].to_numpy())) * to_m**2),
+        )
+        lowest = slabs.sort("bottom").row(0, named=True)["footprint_ref"]
+        return slabs.filter(pl.col("footprint_ref") == lowest).sort("area_m2", descending=True).row(0, named=True)
 
-
-    def token_speckle_client(server_url: str, token: str) -> SpeckleClient:
-        """A client signed in with a personal access token; raises if the token doesn't work."""
-        client = SpeckleClient(host=server_url)
-        client.authenticate_with_token(token)
-        user = client.active_user.get()
-        if user is None:
-            raise ValueError(f"The token is not valid on {server_url}")
-        return client
-
-    return all_items, local_speckle_client, token_speckle_client
+    return ground_slab, received_speckle_version_to_bimdataframe_with_lightbim
 
 
 @app.cell
 def _(
     CRS,
-    Collection,
-    MemoryTransport,
-    Path,
-    ServerTransport,
     Transformer,
-    bundle,
     get_scale_factor_from_string,
-    hashlib,
-    io,
-    json,
-    operations,
-    pl,
+    ground_slab,
+    model_placement,
     shapely,
-    warnings,
 ):
-    def _memory_objects(memory: MemoryTransport, root_id: str) -> list[str]:
-        """The JSON of every object in a MemoryTransport, root first."""
-        return [memory.objects[root_id], *(text for key, text in memory.objects.items() if key != root_id)]
-
-
-    def _bundle_table(files: dict[str, bytes], table: str) -> pl.DataFrame:
-        """One table of a bundle, such as eav.objects or envelope.nodes."""
-        (name,) = [name for name in files if name.endswith(f".{table}.parquet")]
-        return pl.read_parquet(io.BytesIO(files[name]))
-
-
-    def _with_all_materials(objects: list[str], files: dict[str, bytes]) -> list[str]:
-        """Adds the materials specklepy's bundle projection leaves out.
-
-        `to_base` gives materials only to geometry that belongs to an element, so the geometry
-        of family instances, which lives in instance definitions, renders in the viewer's
-        default gray. This rebuilds the root's renderMaterialProxies from the bundle's
-        envelope: DISPLAY relations (1) map an object to its geometry, HAS_MATERIAL (5) a
-        geometry to its material node.
-        """
-        root = json.loads(objects[0])
-        nodes = _bundle_table(files, "envelope.nodes")
-        relations = _bundle_table(files, "envelope.relations")
-        app_ids = dict(_bundle_table(files, "eav.objects").iter_rows())
-        owner = dict(relations.filter(pl.col("rel") == 1).select("dst", "src").iter_rows())
-        materials = {}
-        for geometry, material in relations.filter(pl.col("rel") == 5).select("src", "dst").iter_rows():
-            target = app_ids[owner[geometry]] if geometry in owner else f"def-geo-{geometry}"
-            materials.setdefault(material, set()).add(target)
-        proxies = []
-        for row in nodes.filter(pl.col("kind") == 3, pl.col("id").is_in(list(materials))).iter_rows(named=True):
-            value = {
-                "speckle_type": "Objects.Other.RenderMaterial",
-                "applicationId": f"mat-{row['id']}",
-                "name": row["name"] or "material",
-                "diffuse": row["argb"] if row["argb"] is not None else -1,
-                "opacity": row["opacity"] if row["opacity"] is not None else 1.0,
-                "metalness": row["metalness"] or 0.0,
-                "roughness": row["roughness"] if row["roughness"] is not None else 1.0,
-                "emissive": row["emissive"] or 0,
-            }
-            value["id"] = hashlib.md5(json.dumps(value, sort_keys=True).encode()).hexdigest()
-            proxies.append(
-                {
-                    "id": hashlib.md5(value["id"].encode()).hexdigest(),
-                    "speckle_type": "Objects.Other.RenderMaterialProxy",
-                    "applicationId": value["applicationId"],
-                    "objects": sorted(materials[row["id"]]),
-                    "value": value,
-                }
-            )
-        root["renderMaterialProxies"] = proxies
-        return [json.dumps(root), *objects[1:]]
-
-
-    def _to_base_with_element_geometry(model) -> Collection:
-        """specklepy's bundle projection, keeping the geometry of placed elements.
-
-        `to_base` turns an element with instance placements (DISPLAY_INSTANCE, relation 8)
-        into InstanceProxy objects only, and drops the element's own DISPLAY geometry. Revit
-        structural framing, columns and foundations keep their geometry on the element, in
-        model coordinates, and get an empty instance definition, so they vanish. This adds that
-        geometry as a DataObject under the element's applicationId, right before its first
-        placement, which becomes `<applicationId>-instance-0`.
-
-        Uses specklepy's private `_geometry_object`, so it is tied to the pinned specklepy.
-        """
-        root = model.to_base()
-        elements = {}
-        for object_k in {edge.src for edge in model.bundle.relations.display_instance_edges}:
-            app_id = model.bundle.object_app_ids.get(object_k)
-            element = app_id and bundle.base_projection._geometry_object(model, object_k, app_id)
-            if element is not None:
-                elements[app_id] = element
-
-        def with_element_geometry(collection: Collection) -> None:
-            children = []
-            for child in collection.elements:
-                if isinstance(child, Collection):
-                    with_element_geometry(child)
-                elif child.applicationId in elements:
-                    children.append(elements[child.applicationId])
-                    child.applicationId = child.id = f"{child.applicationId}-instance-0"
-                children.append(child)
-            collection.elements = children
-
-        with_element_geometry(root)
-        return root
-
-
-    def receive_version(client, version: dict) -> dict:
-        """Receives one version as a bundle and as v3 objects.
-
-        Args:
-            client: An authenticated SpeckleClient for the version's server.
-            version: A row of latest_versions.
-
-        Returns:
-            The version row plus speckle_bundle (file name to bytes; empty on a server without
-            bundles), speckle_v3_objects (JSON texts, root first) and v3_route: "server" when the
-            server has the v3 objects, "projected" when they come from the bundle.
-        """
-        memory = MemoryTransport()
-        speckle_bundle = {}
-        # The v3 JSON pipeline (ServerTransport, MemoryTransport, operations.send) is
-        # deprecated since 2026.9, and it is exactly the route we want a copy of.
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            if version["has_bundle"]:
-                with bundle.receive(
-                    client.account,
-                    version["project_id"],
-                    version["model_id"],
-                    version["version_id"],
-                    mark_received=False,
-                ) as model:
-                    speckle_bundle = {path.name: path.read_bytes() for path in map(Path, model.files)}
-                    if version["bundle_only"]:
-                        root_id = operations.send(_to_base_with_element_geometry(model), transports=[memory], use_default_cache=False)
-            if not version["bundle_only"]:
-                root_id = version["referenced_object"]
-                ServerTransport(stream_id=version["project_id"], client=client).copy_object_and_children(
-                    root_id, memory
-                )
-        objects = _memory_objects(memory, root_id)
-        if version["bundle_only"]:
-            objects = _with_all_materials(objects, speckle_bundle)
-        return {
-            **version,
-            "speckle_bundle": speckle_bundle,
-            "speckle_v3_objects": objects,
-            "v3_route": "projected" if version["bundle_only"] else "server",
-        }
-
-
-    def speckle_v3_objects_frame(received: list[dict]) -> pl.DataFrame:
-        """The v3 objects of received versions as one table, each version's root first."""
-        return pl.DataFrame(
-            [
-                {
-                    "server": version["server"],
-                    "project_id": version["project_id"],
-                    "model_id": version["model_id"],
-                    "model_name": version["model_name"],
-                    "version_id": version["version_id"],
-                    "v3_route": version["v3_route"],
-                    "object_id": json.loads(text)["id"],
-                    "is_root": index == 0,
-                    "content": text,
-                }
-                for version in received
-                for index, text in enumerate(version["speckle_v3_objects"])
-            ]
-        )
-
-
-    def version_objects_json(speckle_v3_objects: pl.DataFrame, version_id: str, namespace: str) -> str:
-        """One version's v3 objects as JSON array text, root first, for models_gz.
-
-        Args:
-            speckle_v3_objects: A table as speckle_v3_objects_frame makes it.
-            version_id: Speckle version id.
-            namespace: Prefix for the instance definition ids (def-...), so that projected
-                bundles can share a viewer: rvt-oda-converter numbers them from def-1 in every
-                model.
-        """
-        contents = speckle_v3_objects.filter(pl.col("version_id") == version_id).sort("is_root", descending=True)["content"]
-        return ("[" + ",".join(contents) + "]").replace('"def-', f'"{namespace}/def-')
-
-
-    def ground_slab_footprint(version: dict) -> dict:
+    def ground_slab_footprint(model_name: str, version, bdf) -> dict:
         """The footprint of a version's ground floor slab, placed at its geolocation.
 
-        The ground floor slab is the largest floor on the lowest level: a Revit floor, or an
-        IfcSlab of type FLOOR or BASESLAB. Its geometry is the floor's own DISPLAY geometry,
-        or, for a placed element such as an IfcSlab, its definition's geometry under each
-        placement's transform. A Revit bundle's sharedCoordinates transform then puts the
-        survey point at 0,0 with the axes to true north; an IFC bundle has none, and its
-        geolocation (from IfcSite) refers to the model's origin. A transverse Mercator
-        projection centered on the geolocation finally gives longitude and latitude.
+        The ground floor slab comes from ground_slab, with its footprint in model coordinates. A
+        Revit bundle's sharedCoordinates transform then puts the survey point at 0,0 with the axes to true
+        north; an IFC bundle has none, and its geolocation (from IfcSite) refers to the model's
+        origin. A transverse Mercator projection centered on the geolocation finally gives
+        longitude and latitude.
 
         Args:
-            version: A received version with its Speckle bundle (from receive_version).
+            model_name: The version's model name.
+            version: A ReceivedVersion with its bundle, from speckle_server.receive.
+            bdf: The version's BimDataFrame, from received_speckle_version_to_bimdataframe_with_lightbim.
 
         Returns:
             model_name, slab, level, area_m2, the geolocation's latitude and longitude, and the
             footprint as a shapely Polygon or MultiPolygon in longitude and latitude.
         """
-        files = version["speckle_bundle"]
-        eav = _bundle_table(files, "eav.eav").join(_bundle_table(files, "eav.paths"), on="path_index")
-        placement = {
-            path: text if text is not None else number
-            for path, text, number in _bundle_table(files, "eav.model").select("path", "value_string", "value_double").iter_rows()
-        }
-        relations = _bundle_table(files, "envelope.relations")
-        nodes = _bundle_table(files, "envelope.nodes")
-        geometries = dict(_bundle_table(files, "geometries").select("geometryIndex", "content").iter_rows())
+        to_m = bdf.crs.axis_info[0].unit_conversion_factor
+        slab = ground_slab(bdf)
 
-        def attribute(path: str) -> dict:
-            return dict(eav.filter(pl.col("path") == path).select("object_index", "value_string").iter_rows())
-
-        names, category, ifc_type = attribute("name"), attribute("category"), attribute("ifcType")
-        predefined = attribute("properties.Attributes.PredefinedType")
-        levels = dict(nodes.filter(pl.col("kind") == 5).select("id", "name").iter_rows())
-        level_of = dict(relations.filter(pl.col("rel") == 7).select("src", "dst").iter_rows())
-        instances = {row["id"]: row for row in nodes.filter(pl.col("kind") == 2).iter_rows(named=True)}
+        placement = model_placement(version)
         identity = "1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1"
-        shared = [float(value) for value in placement.get("modelPlacement.options.sharedCoordinates.transform", identity).split(",")]
+        m = [float(value) for value in placement.get("modelPlacement.options.sharedCoordinates.transform", identity).split(",")]
         shared_to_m = get_scale_factor_from_string(placement.get("modelPlacement.units", "m"), "m")
-
-        def sources(element: int) -> list[tuple[int, list[float], float]]:
-            """Each geometry of an element, with the 4x4 into model coordinates and that 4x4's unit in m."""
-            own = [(g, [float(v) for v in identity.split(",")], 1.0) for g in relations.filter(pl.col("rel") == 1, pl.col("src") == element)["dst"]]
-            placed = []
-            for instance_k in relations.filter(pl.col("rel") == 8, pl.col("src") == element)["dst"]:
-                instance = instances[instance_k]
-                transform = [float(v) for v in (instance["transform"] or identity).split(",")]
-                to_m = get_scale_factor_from_string(instance["units"] or "m", "m")
-                for g in relations.filter(pl.col("rel") == 4, pl.col("src") == instance["def_ref"])["dst"]:
-                    placed.append((g, transform, to_m))
-            return own + placed
-
-        floors = []
-        for element in set(category) | set(ifc_type):
-            is_floor = category.get(element) == "Floors" or (
-                ifc_type.get(element) == "IfcSlab" and predefined.get(element) in ("FLOOR", "BASESLAB")
-            )
-            if not is_floor:
-                continue
-            faces, bottom = [], float("inf")
-            for geometry, transform, transform_to_m in sources(element):
-                mesh = bundle.sgeo.decode(geometries[geometry])
-                mesh_to_m = get_scale_factor_from_string(mesh.units, "m")
-                xy = []
-                for i in range(0, len(mesh.vertices), 3):
-                    x, y, z = (value * mesh_to_m for value in mesh.vertices[i : i + 3])
-                    # Into model coordinates, then shared coordinates; both 4x4s are row-major
-                    mx, my, mz = (
-                        transform[r] * x + transform[r + 1] * y + transform[r + 2] * z + transform[r + 3] * transform_to_m
-                        for r in (0, 4, 8)
-                    )
-                    bottom = min(bottom, mz)
-                    xy.append(
-                        tuple(shared[r] * mx + shared[r + 1] * my + shared[r + 2] * mz + shared[r + 3] * shared_to_m for r in (0, 4))
-                    )
-                i = 0
-                while i < len(mesh.faces):
-                    n = mesh.faces[i]
-                    face = shapely.Polygon([xy[j] for j in mesh.faces[i + 1 : i + 1 + n]])
-                    if face.area > 1e-6:
-                        faces.append(face)
-                    i += n + 1
-            if faces:
-                outline = shapely.union_all(faces)
-                floors.append((level_of.get(element), bottom, outline.area, element, outline))
-        lowest = min(floors, key=lambda floor: floor[1])[0]
-        level, _bottom, area, floor, outline = max((f for f in floors if f[0] == lowest), key=lambda floor: floor[2])
+        # Model units to shared metres: the row-major 4x4's plan part, its translation in its own units
+        outline = shapely.affinity.affine_transform(
+            shapely.force_2d(shapely.from_wkb(slab["footprint"])),
+            [m[0] * to_m, m[1] * to_m, m[4] * to_m, m[5] * to_m, m[3] * shared_to_m, m[7] * shared_to_m],
+        )
 
         latitude = placement["geolocation.anchor.latitude"]
         longitude = placement["geolocation.anchor.longitude"]
@@ -876,22 +1188,50 @@ def _(
             always_xy=True,
         )
         return {
-            "model_name": version["model_name"],
-            "slab": names.get(floor),
-            "level": levels.get(level),
-            "area_m2": round(area),
+            "model_name": model_name,
+            "slab": slab["name"],
+            "level": slab["level"],
+            "area_m2": round(slab["area_m2"]),
             "latitude": latitude,
             "longitude": longitude,
             "geometry": shapely.transform(outline, to_lonlat.transform, interleaved=False),
         }
 
+    return (ground_slab_footprint,)
 
-    return (
-        ground_slab_footprint,
-        receive_version,
-        speckle_v3_objects_frame,
-        version_objects_json,
-    )
+
+@app.cell
+def _(pl):
+    def model_placement(version) -> dict:
+        """The model-level placement values of a version's bundle, such as its reference points.
+
+        Args:
+            version: A ReceivedVersion with its bundle, from speckle_server.receive.
+
+        Returns:
+            Each path of the bundle's model table, such as geolocation.anchor.latitude, with its
+            value: the text, or the number when there is no text.
+        """
+        (model_table,) = version.bundle.glob("*.eav.model.parquet")
+        return {
+            path: text if text is not None else number
+            for path, text, number in pl.read_parquet(model_table).select("path", "value_string", "value_double").iter_rows()
+        }
+
+
+    def survey_point(version) -> tuple[float, float, float]:
+        """A Revit version's survey point in internal coordinates, in the bundle's placement unit.
+
+        Args:
+            version: A ReceivedVersion with its bundle, from speckle_server.receive.
+
+        Returns:
+            x, y and z of the survey point, 0 where the bundle has none.
+        """
+        placement = model_placement(version)
+        return tuple(float(placement.get(f"referencePoints.surveyPoint.position.{axis}", 0.0)) for axis in "xyz")
+
+    return model_placement, survey_point
 
 
 if __name__ == "__main__":
