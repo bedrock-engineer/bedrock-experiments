@@ -567,7 +567,7 @@ def _(
 
 @app.cell(hide_code=True)
 def _(ams_noord_bim, ams_noord_viewer, mo, pl):
-    # A BimDataFrame shows its CRS name once, above a table without the bim_crs column
+    # A BimDataFrame's table names each row's CRS, instead of showing its PROJJSON
     selected_elements_bdf = ams_noord_bim.filter(
         pl.col("id").is_in(
             [
@@ -672,16 +672,17 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(ams_noord_bim, mo, pl):
+def _(ams_noord_bim, json, mo, pl):
     # The structure model's elements selected to start with. A marimo table can't start filtered, so
     # the other models' rows stay in the table, to add to the selection.
-    # bim_crs stays out of the table: with_frame gives the selection the CRS all models share
+    # bim_crs shows each row's CRS by name, and the selected rows keep it
     ams_noord_bimtbl = mo.ui.table(
-        ams_noord_bim.frame.drop("bim_crs"),
+        ams_noord_bim.frame,
         initial_selection=ams_noord_bim.frame.with_row_index()
         .filter(pl.col("model_name") == "rvt-advanced-sample-str")
         .get_column("index")
         .to_list(),
+        format_mapping={"bim_crs": lambda _crs: json.loads(_crs)["name"]},
     )
     ams_noord_bimtbl
     return (ams_noord_bimtbl,)
@@ -696,8 +697,8 @@ def _(
     ams_noord_tilesets,
     mo,
 ):
-    # The rows selected in the table above, in the CRS all the Amsterdam Noord models share, on their
-    # own on the same ground map and 3D BAG
+    # The rows selected in the table above, in the CRS their bim_crs gives (the one all the Amsterdam
+    # Noord models share), on their own on the same ground map and 3D BAG
     ams_noord_selected_in_table = ams_noord_bim.with_frame(ams_noord_bimtbl.value)
 
     ams_noord_single_model_viewer = mo.ui.anywidget(
