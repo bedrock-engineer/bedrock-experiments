@@ -2,10 +2,10 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "anywidget==0.11.0",
-#     "bimpolars[geobim]",
+#     "bimpolars[ifc]",
 #     "folium>=0.12",
 #     "geopandas==1.2.0",
-#     "ifcopenshell>=0.8",
+#     "ifcopenshell==0.9.0.post1",
 #     "mapbox-earcut==2.1.0",
 #     "mapclassify==2.11.0",
 #     "marimo",
@@ -17,7 +17,7 @@
 #     "pyproj>=3.7",
 #     "shapely==2.2.0",
 #     "specklepy==2026.9.1",
-#     "specklewidgets[bim,geo]",
+#     "specklewidgets",
 #     "traitlets==5.16.1",
 # ]
 #
@@ -40,9 +40,6 @@ def _():
 
     import anywidget
     import bimpolars as bpl
-    # bimpolars does not import its data and geobim modules itself (bimpolars#31)
-    import bimpolars.data
-    import bimpolars.geobim
     import geopandas as gpd
     import ifcopenshell as ifc
     import mapbox_earcut as earcut
@@ -56,8 +53,8 @@ def _():
     from specklepy.objects import geometry as sgeo
     from specklepy.objects.proxies import ColorProxy
     from specklepy.transports.memory import MemoryTransport
-    from specklewidgets import GeoSpeckleViewer, models_gz
-    from specklewidgets.bim import bim_collection, bim_objects
+    from specklewidgets import GeoSpeckleViewer
+    from specklewidgets.bim import bim_collection
     from specklewidgets.geo import bag_panden_under, osm_ground_map, pdok_3d_buildings
 
     return (
@@ -67,7 +64,6 @@ def _():
         anywidget,
         bag_panden_under,
         bim_collection,
-        bim_objects,
         bpl,
         earcut,
         gpd,
@@ -75,7 +71,6 @@ def _():
         json,
         math,
         mo,
-        models_gz,
         np,
         operations,
         osm_ground_map,
@@ -106,8 +101,8 @@ def _(mo):
 
     The structural IFC model of Sixty5 (Blok S1, Strijp-S, Eindhoven) in a geospatial setting. This notebook
 
-    1. defines the model's Engineering CRS: a derived compound CRS on RD New + NAP (EPSG:7415) that keeps the model's millimeters
-    2. turns every building element into a 3D simple feature, with `geom` in the Engineering CRS and `geog` in OGC:CRS84h
+    1. defines the model's site CRS: a compound of derived CRSs on RD New + NAP (EPSG:7415) that keeps the model's millimeters
+    2. turns every building element into a 3D simple feature, with `geom` in the site CRS and `geog` in OGC:CRS84h
     3. shows the model in Speckle's viewer on an OpenStreetMap ground map among the 3D BAG buildings, with the selected elements on a map and in tables
     4. places the model on the globe in CesiumJS
 
@@ -156,14 +151,14 @@ def _(bpl, model):
     return (bim,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## The Engineering CRS
+    ## The site CRS
 
     The georeferencing comes from the IFC-GeoReferencer export of the *architectural* model of the same project (`O-S1-BWK-BIM architectural - BIM bouwkundig.ifcgref.json` in the ifc-georeferencer-workshop repo). This assumes that the structural model shares the architectural model's project origin.
 
-    The Engineering CRS is a compound of two derived CRSs:
+    The site CRS is a compound of two derived CRSs:
 
     - horizontal: a `DerivedProjectedCRS` on RD New (EPSG:28992) with an *Affine parametric transformation* (EPSG:9624)
     - vertical: a `DerivedVerticalCRS` on NAP height (EPSG:5709) with a *Vertical Offset* (EPSG:9616)
@@ -206,24 +201,25 @@ def _(
     math,
     pyproj,
 ):
+    # RD New + NAP to ETRS89 follows RDNAPTRANS2018 only with the NSGI grids, which PROJ fetches. On here,
+    # in the cell every geo cell depends on, so no transformation runs before it with NAP as ellipsoidal height
+    pyproj.network.set_network_enabled(True)
     # The rotation from grid north, as IfcMapConversion gives it: the direction of the site x-axis
     # in the grid
     ROTATION = math.degrees(math.atan2(X_AXIS_ORDINATE, X_AXIS_ABSCISSA))
-    engineering_crs = pyproj.CRS.from_json_dict(
-        bpl.geobim.derived_engineering_crs(
-            "EPSG:7415", EASTINGS, NORTHINGS, ORTHOGONAL_HEIGHT, ROTATION, unit=bpl.linear_unit(bim.crs), name="Sixty5"
-        )
+    site_crs = bpl.site_crs(
+        "EPSG:7415", EASTINGS, NORTHINGS, ORTHOGONAL_HEIGHT, ROTATION, unit=bim, name="Sixty5"
     )
-    {"model unit": bpl.linear_unit(bim.crs), "rotation from grid north [deg]": ROTATION, "CRS type": engineering_crs.type_name}
-    return (engineering_crs,)
+    {"model unit": bim.crs.axis_info[0].unit_name, "rotation from grid north [deg]": ROTATION, "CRS type": site_crs.type_name}
+    return (site_crs,)
 
 
 @app.cell
-def _(engineering_crs, mo):
+def _(mo, site_crs):
     mo.accordion(
         {
-            "WKT2": mo.md(f"```\n{engineering_crs.to_wkt(pretty=True)}\n```"),
-            "PROJJSON": mo.md(f"```json\n{engineering_crs.to_json(pretty=True)}\n```"),
+            "WKT2": mo.md(f"```\n{site_crs.to_wkt(pretty=True)}\n```"),
+            "PROJJSON": mo.md(f"```json\n{site_crs.to_json(pretty=True)}\n```"),
         }
     )
     return
@@ -240,15 +236,14 @@ def _(mo):
 
 
 @app.cell
-def _(bpl, engineering_crs, math, mo, pyproj):
-    pyproj.network.set_network_enabled(True)
-    _to_etrs89 = pyproj.Transformer.from_crs(engineering_crs, 4937, always_xy=True, allow_ballpark=False)
+def _(bpl, math, mo, pyproj, site_crs):
+    _to_etrs89 = pyproj.Transformer.from_crs(site_crs, 4937, always_xy=True, allow_ballpark=False)
     assert math.isfinite(_to_etrs89.transform(0, 0, 0)[0]), (
         "RDNAPTRANS grids unavailable: install them or allow PROJ network access"
     )
     # One 4x4 from site meters to ECEF meters (WGS 84 geocentric, which EPSG takes as equal to
     # ETRS89) for Cesium, linearized at the nulpunt (site 0, 0, 0)
-    site_to_ecef = bpl.geobim.linearized_site_to_ecef(engineering_crs)
+    site_to_ecef = bpl.linearized_site_to_ecef(site_crs)
     mo.vstack([mo.md(f"`to_etrs89`: {_to_etrs89.description}"), site_to_ecef])
     return (site_to_ecef,)
 
@@ -319,8 +314,8 @@ def _(ifc, mo, model, pl):
 
 
 @app.cell(hide_code=True)
-def _(bim, bpl, engineering_crs, pl):
-    sixty5 = bpl.geobim.with_geog(bpl.simple_features(bpl.geobim.set_crs(bim, engineering_crs), lightbim=True))
+def _(bim, bpl, pl, site_crs):
+    sixty5 = bpl.with_geog(bpl.simple_features(bpl.set_crs(bim, site_crs), lightbim=True))
     sixty5.frame.filter(pl.col("lightbim").is_not_null()).group_by(
         "class",
         member=pl.col("lightbim_kind").struct.field("member"),
@@ -330,13 +325,17 @@ def _(bim, bpl, engineering_crs, pl):
 
 
 @app.cell
-def _(engineering_crs, gpd, pl, shapely, sixty5):
-    # Every element's footprint in plan, in the 2D site grid: the horizontal part of the Engineering CRS
-    _rows = sixty5.frame.filter(pl.col("footprint").is_not_null() & (pl.col("class") != "IfcOpeningElement"))
-    _footprints = shapely.force_2d(shapely.from_wkb(_rows["footprint"].to_numpy()))
+def _(gpd, pl, shapely, sixty5):
+    # Every element's footprint as bimpolars' geog: in longitude, latitude and ellipsoidal height
+    # (OGC:CRS84h), what web maps and GeoJSON take
+    _rows = sixty5.frame.filter(
+        pl.col("geog").is_not_null(), pl.col("class") != "IfcOpeningElement"
+    )
     features_plan = gpd.GeoDataFrame(
-        _rows.select("id", "class", "name").to_pandas(), geometry=_footprints, crs=engineering_crs.sub_crs_list[0]
-    )[~shapely.is_empty(_footprints)]
+        _rows.select("id", "class", "name").to_pandas(),
+        geometry=shapely.from_wkb(_rows["geog"].to_numpy()),
+        crs="OGC:CRS84h",
+    )
     features_plan.explore()
     return (features_plan,)
 
@@ -371,8 +370,18 @@ def _(bag_panden_under, mo, osm_ground_map, pdok_3d_buildings, pl, sixty5):
     # around the model, and the 3D BAG over the same area without Sixty5's own building, the BAG
     # pand under the slabs and footings
     ground_map = osm_ground_map(sixty5)
-    _panden = bag_panden_under(sixty5.with_frame(sixty5.frame.filter(pl.col("class").is_in(["IfcSlab", "IfcFooting"]))))
-    context_tilesets = [pdok_3d_buildings(sixty5, ground_map["bounds"], hide_within=_panden.values())]
+    _panden = bag_panden_under(
+        sixty5.with_frame(
+            sixty5.frame.filter(
+                pl.col("class").is_in(["IfcSlab", "IfcFooting"])
+            )
+        )
+    )
+    context_tilesets = [
+        pdok_3d_buildings(
+            sixty5, ground_map["bounds"], hide_within=_panden.values()
+        )
+    ]
     mo.md(
         f"Ground map: {ground_map['width']} x {ground_map['height']} px. "
         f"3D BAG: {len(context_tilesets[0]['tileset']['root']['children'])} tiles, without BAG pand "
@@ -383,50 +392,71 @@ def _(bag_panden_under, mo, osm_ground_map, pdok_3d_buildings, pl, sixty5):
 
 
 @app.cell
-def _(bim_objects, lightbim_objects, models_gz, sixty5):
-    # The two geometries the viewer can show, packed for GeoSpeckleViewer.objects_gz
-    viewer_objects = {
-        "IFC geometry": models_gz(bim_objects(sixty5)),
-        "LightBIM": models_gz(lightbim_objects(sixty5)),
-    }
-    return (viewer_objects,)
+def _(lightbim_objects, sixty5):
+    # The two geometries the viewer can show: the BimDataFrame itself, and the LightBIM features
+    # as v3 objects
+    viewer_models = {"IFC geometry": sixty5, "LightBIM": lightbim_objects(sixty5)}
+    return (viewer_models,)
 
 
 @app.cell
-def _(mo, viewer_objects):
-    geometry_choice = mo.ui.radio(list(viewer_objects), value="IFC geometry", inline=True)
+def _(mo, viewer_models):
+    geometry_choice = mo.ui.radio(list(viewer_models), value="IFC geometry", inline=True)
     geometry_choice
     return (geometry_choice,)
 
 
 @app.cell(hide_code=True)
-def _(GeoSpeckleViewer, context_tilesets, ground_map, mo):
-    viewer = mo.ui.anywidget(GeoSpeckleViewer(ground_map=ground_map, tilesets=context_tilesets))
-    viewer
-    return (viewer,)
+def _(
+    GeoSpeckleViewer,
+    context_tilesets,
+    geometry_choice,
+    ground_map,
+    mo,
+    viewer_models,
+):
+    geospeckle_widget = mo.ui.anywidget(
+        GeoSpeckleViewer(viewer_models[geometry_choice.value], ground_map=ground_map, tilesets=context_tilesets)
+    )
+    geospeckle_widget
+    return (geospeckle_widget,)
 
 
 @app.cell(hide_code=True)
-def _(features_plan, selected_ids):
+def _(features_plan, geospeckle_widget):
     # All elements in plan in gray, the selected ones on top in color and in view
     _map = features_plan.explore(
-        color="#9a9a9a", tooltip=["class", "name"], style_kwds={"weight": 1, "fill": False}, name="All elements"
+        color="#9a9a9a",
+        tooltip=["class", "name"],
+        style_kwds={"weight": 1, "fill": False},
+        name="All elements",
     )
+    selected_ids = [
+        _obj["applicationId"] for _obj in geospeckle_widget.value["selected"]
+    ]
     _selected = features_plan[features_plan["id"].isin(selected_ids)]
     if len(_selected):
-        _selected.explore(m=_map, column="class", tooltip=["class", "name", "id"], name="Selected")
-        _west, _south, _east, _north = _selected.to_crs(4326).total_bounds
+        _selected.explore(
+            m=_map,
+            column="class",
+            tooltip=["class", "name", "id"],
+            name="Selected",
+        )
+        _west, _south, _east, _north = _selected.total_bounds
         _map.fit_bounds([[_south, _west], [_north, _east]], max_zoom=21)
     _map
-    return
+    return (selected_ids,)
 
 
 @app.cell(hide_code=True)
-def _(element_data, mo, pl, selected_ids):
+def _(mo, pl, selected_ids, sixty5):
+    selected_elements_bdf = sixty5.frame.filter(
+        pl.col("id").is_in(selected_ids)
+    )
     mo.vstack(
         [
-            mo.md(f"**Selected elements**: {len(selected_ids)}"),
-            element_data.filter(pl.col("id").is_in(selected_ids)),
+            mo.md(f"**Selected elements**: {len(selected_elements_bdf)}"),
+            selected_elements_bdf,
         ]
     )
     return
@@ -438,21 +468,6 @@ def _(element_data, mo):
     return
 
 
-@app.cell
-def _(geometry_choice, viewer, viewer_objects):
-    # Swap the geometry in the viewer that is already there, so the ground map and the 3D BAG
-    # stay loaded
-    viewer.widget.objects_gz = viewer_objects[geometry_choice.value]
-    return
-
-
-@app.cell
-def _(viewer):
-    # The GlobalIds of the elements selected in the viewer: applicationId in both geometries
-    selected_ids = [obj["applicationId"] for obj in viewer.value["selected"]]
-    return (selected_ids,)
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -460,7 +475,7 @@ def _(mo):
 
     CesiumJS works in ECEF (EPSG:4978). The meshes stay in local site metres, as ifcopenshell
     tessellates them, and a single 4x4 model matrix places them on the globe. That matrix is
-    the exact chain (Engineering CRS, RD New + NAP, RDNAPTRANS to ETRS89, ECEF) linearised at
+    the exact chain (site CRS, RD New + NAP, RDNAPTRANS to ETRS89, ECEF) linearised at
     the `nulpunt`, the site origin (0, 0, 0). Over this model the linearisation is off by at
     most about 0.7 mm. Keeping the vertices small and the offset in the matrix also keeps
     them precise as glTF float32.
@@ -583,7 +598,7 @@ def _(
             The parsed objects, as models_gz takes them.
         """
         members = bdf.with_frame(bdf.frame.filter(pl.col("lightbim").is_not_null()))
-        root = bim_collection(members, color="class", name=f"{bdf.crs['name']} LightBIM")
+        root = bim_collection(members, color="class", name=f"{bdf.crs.name} LightBIM")
         geoms = dict(zip(members.frame["id"], shapely.from_wkb(members.frame["lightbim"].to_numpy())))
         for collection in root.elements:
             for element in collection.elements:
