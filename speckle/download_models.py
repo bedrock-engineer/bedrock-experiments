@@ -87,8 +87,8 @@ def _(mo):
         - Versions published before 2026.9 still have their JSON objects on the
           server; `operations.receive` caches them into the SQLite file (`v3_route = "server"`).
         - Versions that only exist as a bundle (server-side converters, 2026.9
-          connectors) have no JSON on the server. Their v3 tree is projected from the
-          bundle with `Model.to_base()` and serialized into SQLite (`v3_route = "projected"`).
+          connectors) have no JSON on the server. Their v3 tree is built from the
+          bundle with `Model.to_base()` and serialized into SQLite (`v3_route = "bundle"`).
         - Self-hosted Speckle 2.x servers serve no bundles, so their versions only get
           the v3 objects and have no bundle folder.
 
@@ -368,7 +368,7 @@ def _(
                             transports=[sqlite_transport],
                             use_default_cache=False,
                         )
-                        v3_route = "projected"
+                        v3_route = "bundle"
                     else:
                         v3_root_id, v3_route = receive_v3(version, sqlite_transport), "server"
 

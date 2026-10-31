@@ -338,7 +338,7 @@ def _(mo):
 
     `base_to_bundle` converts `received_data` (the v3 tree from `v3_objects.db`), and the
     result is compared with the server's bundle of the same version (`bundle_tables`).
-    For a `projected` version the v3 tree was itself made from that bundle, so the
+    For a `bundle` version the v3 tree was itself built from that bundle, so the
     comparison is a round trip. Instance proxies, duplicate applicationIds and geometry
     SGEO can't encode are skipped and counted.
     """)
