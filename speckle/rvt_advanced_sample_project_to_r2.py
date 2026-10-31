@@ -427,10 +427,10 @@ def _():
 
 
 @app.cell
-def _(lightbim_dataframe, received):
+def _(received, received_speckle_version_to_bimdataframe_with_lightbim):
     # The received versions with footprints and LightBIM features, read once, so that editing the
     # placement does not read them again
-    received_bims = {_name: lightbim_dataframe(_version) for _name, _version in received.items()}
+    received_bims = {_name: received_speckle_version_to_bimdataframe_with_lightbim(_version) for _name, _version in received.items()}
     return (received_bims,)
 
 
@@ -691,17 +691,17 @@ def _(ams_noord_bim, json, mo, pl):
 @app.cell(hide_code=True)
 def _(
     GeoSpeckleViewer,
-    ams_noord_bim,
     ams_noord_bimtbl,
     ams_noord_ground_map,
     ams_noord_tilesets,
+    bpl,
     mo,
 ):
     # The rows selected in the table above, in the CRS their bim_crs gives (the one all the Amsterdam
     # Noord models share), on their own on the same ground map and 3D BAG
-    ams_noord_selected_in_table = ams_noord_bim.with_frame(ams_noord_bimtbl.value)
+    ams_noord_selected_in_table = bpl.BimDataFrame(ams_noord_bimtbl.value)
 
-    ams_noord_single_model_viewer = mo.ui.anywidget(
+    ams_noord_selected_viewer = mo.ui.anywidget(
         GeoSpeckleViewer(
             ams_noord_selected_in_table,
             ground_map=ams_noord_ground_map,
@@ -709,18 +709,18 @@ def _(
             height=525,
         )
     )
-    ams_noord_single_model_viewer
-    return (ams_noord_single_model_viewer,)
+    ams_noord_selected_viewer
+    return (ams_noord_selected_viewer,)
 
 
 @app.cell(hide_code=True)
-def _(ams_noord_bim, ams_noord_single_model_viewer, mo, pl):
+def _(ams_noord_bim, ams_noord_selected_viewer, mo, pl):
     # A BimDataFrame shows its CRS by name, not as PROJJSON
     _sel_elements_bdf = ams_noord_bim.filter(
         pl.col("id").is_in(
             [
                 _obj["applicationId"]
-                for _obj in ams_noord_single_model_viewer.value["selected"]
+                for _obj in ams_noord_selected_viewer.value["selected"]
             ]
         )
     )
@@ -829,7 +829,7 @@ def _(ams_noord_models, mo, pl):
         {len(_arch.frame) - len(_arch_frame)} site, placeholder and structural elements of arch left out
 
         {len(_arch_in_str)} arch elements modelled by str
-    
+
         {len(ams_noord_arch_str)} elements combined
         """
     )
@@ -848,13 +848,32 @@ def _(
     ams_noord_arch_str_viewer = mo.ui.anywidget(
         GeoSpeckleViewer(
             ams_noord_arch_str,
-            color="elevation",
+            color="class",
             ground_map=ams_noord_ground_map,
             tilesets=ams_noord_tilesets,
             height=550,
         )
     )
     ams_noord_arch_str_viewer
+    return (ams_noord_arch_str_viewer,)
+
+
+@app.cell
+def _(ams_noord_arch_str_viewer, ams_noord_bim, mo, pl):
+    _sel_elements_bdf = ams_noord_bim.filter(
+        pl.col("id").is_in(
+            [
+                _obj["applicationId"]
+                for _obj in ams_noord_arch_str_viewer.value["selected"]
+            ]
+        )
+    )
+    mo.vstack(
+        [
+            mo.md(f"**Selected elements**: {len(_sel_elements_bdf)}"),
+            _sel_elements_bdf,
+        ]
+    )
     return
 
 
@@ -863,9 +882,12 @@ def _(mo):
     mo.md(r"""
     ## Pushing BIM-data to Cloudflare R2 object storage
 
-    - BimDataFrame GeoParquets go to `<model_name>-bdf.parquet`
+    - BimDataFrame GeoParquets of every model and of arch+str, in the Amsterdam Noord georeferenced
+      BIM CRS, go to `<prefix>/<model_name>-bdf.parquet`
     - Speckle bundles go to `<prefix>/speckle-bundle/<model_id>/<version_id>/<file>`
-    - Speckle v3 objects of all versions to `<prefix>/speckle-v3-objects.parquet`
+    - Speckle v3 objects of all versions go to `<prefix>/speckle-v3-objects.parquet`, and those of
+      arch+str, which has no Speckle version and so no bundle, to
+      `<prefix>/rvt-advanced-sample-combined-arch-str-speckle-v3-objects.parquet`
 
     The R2 credentials come from the environment or the widget below, and are never written to disk.
     `R2_S3_API` is the bucket's S3 API URL as the Cloudflare dashboard shows it under R2, the
@@ -915,16 +937,67 @@ def _(S3Store, mo, r2_config, r2_s3_api, urlsplit):
 
 
 @app.cell
-def _(bundle_files, io, mo, pl, r2_prefix, received, speckle_v3_objects):
-    # What goes to R2: every Speckle bundle file, and the Speckle v3 objects as one Parquet file
+def _(ams_noord_arch_str, json, pl):
+    # Arch+str has no Speckle version, so its v3 objects come from the BimDataFrame: content hashes
+    # as ids, and no server, project, model or version
+    from specklewidgets.bim import bim_objects
+
+    ARCH_STR_MODEL_NAME = "rvt-advanced-sample-combined-arch-str"
+    ams_noord_arch_str_v3_objects = pl.DataFrame(
+        [
+            {
+                "model_name": ARCH_STR_MODEL_NAME,
+                "object_id": _object["id"],
+                "is_root": _index == 0,
+                "content": json.dumps(_object, separators=(",", ":")),
+            }
+            for _index, _object in enumerate(bim_objects(ams_noord_arch_str, name=ARCH_STR_MODEL_NAME))
+        ]
+    )
+    ams_noord_arch_str_v3_objects.drop("content")
+    return ARCH_STR_MODEL_NAME, ams_noord_arch_str_v3_objects
+
+
+@app.cell
+def _(
+    ARCH_STR_MODEL_NAME,
+    ams_noord_arch_str,
+    ams_noord_arch_str_v3_objects,
+    ams_noord_models,
+    bundle_files,
+    io,
+    mo,
+    pl,
+    r2_prefix,
+    received,
+    speckle_v3_objects,
+):
+    # What goes to R2: every Speckle bundle file, the Speckle v3 objects as Parquet files, and every
+    # model and arch+str as a GeoParquet in the Amsterdam Noord georeferenced BIM CRS
     _prefix = r2_prefix.value.strip("/")
-    _parquet = io.BytesIO()
-    speckle_v3_objects.write_parquet(_parquet, compression="zstd")
-    r2_uploads = {
-        f"{_prefix}/speckle-bundle/{_version.model_id}/{_version.version_id}/{_path.name}": _path.read_bytes()
-        for _name, _version in received.items()
-        for _path in bundle_files[_name]
-    } | {f"{_prefix}/speckle-v3-objects.parquet": _parquet.getvalue()}
+
+
+    def _parquet_bytes(frame):
+        _buffer = io.BytesIO()
+        frame.write_parquet(_buffer, compression="zstd")
+        return _buffer.getvalue()
+
+
+    r2_uploads = (
+        {
+            f"{_prefix}/speckle-bundle/{_version.model_id}/{_version.version_id}/{_path.name}": _path.read_bytes()
+            for _name, _version in received.items()
+            for _path in bundle_files[_name]
+        }
+        | {
+            f"{_prefix}/speckle-v3-objects.parquet": _parquet_bytes(speckle_v3_objects),
+            f"{_prefix}/{ARCH_STR_MODEL_NAME}-speckle-v3-objects.parquet": _parquet_bytes(ams_noord_arch_str_v3_objects),
+        }
+        | {
+            f"{_prefix}/{_name}-bdf.parquet": _parquet_bytes(_bimdf)
+            for _name, _bimdf in (ams_noord_models | {ARCH_STR_MODEL_NAME: ams_noord_arch_str}).items()
+        }
+    )
     push_button = mo.ui.run_button(label=f"Push {len(r2_uploads)} files to R2")
     mo.vstack(
         [
@@ -1022,7 +1095,7 @@ def _(Callable, Iterator):
 
 @app.cell
 def _(bpl, pl, shapely):
-    def lightbim_dataframe(version):
+    def received_speckle_version_to_bimdataframe_with_lightbim(version):
         """A received version as a BimDataFrame with footprints and LightBIM features.
 
         Args:
@@ -1045,7 +1118,7 @@ def _(bpl, pl, shapely):
         """A model's ground floor slab: the largest slab on the lowest level, as LightBIM classifies them.
 
         Args:
-            bdf: A BimDataFrame from lightbim_dataframe.
+            bdf: A BimDataFrame from received_speckle_version_to_bimdataframe_with_lightbim.
 
         Returns:
             The slab's row, with its level's name as level and its footprint's area as area_m2.
@@ -1064,7 +1137,7 @@ def _(bpl, pl, shapely):
         lowest = slabs.sort("bottom").row(0, named=True)["footprint_ref"]
         return slabs.filter(pl.col("footprint_ref") == lowest).sort("area_m2", descending=True).row(0, named=True)
 
-    return ground_slab, lightbim_dataframe
+    return ground_slab, received_speckle_version_to_bimdataframe_with_lightbim
 
 
 @app.cell
@@ -1088,7 +1161,7 @@ def _(
         Args:
             model_name: The version's model name.
             version: A ReceivedVersion with its bundle, from speckle_server.receive.
-            bdf: The version's BimDataFrame, from lightbim_dataframe.
+            bdf: The version's BimDataFrame, from received_speckle_version_to_bimdataframe_with_lightbim.
 
         Returns:
             model_name, slab, level, area_m2, the geolocation's latitude and longitude, and the
