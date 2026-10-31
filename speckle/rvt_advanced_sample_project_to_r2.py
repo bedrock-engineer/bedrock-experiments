@@ -567,7 +567,8 @@ def _(
 
 @app.cell(hide_code=True)
 def _(ams_noord_bim, ams_noord_viewer, mo, pl):
-    selected_elements_bdf = ams_noord_bim.frame.filter(
+    # A BimDataFrame shows its CRS name once, above a table without the bim_crs column
+    selected_elements_bdf = ams_noord_bim.filter(
         pl.col("id").is_in(
             [
                 _obj["applicationId"]
@@ -667,7 +668,9 @@ def _(mo):
 
 @app.cell
 def _(ams_noord_models, mo):
-    ams_noord_str_bimtbl = mo.ui.table(ams_noord_models["rvt-advanced-sample-str"].frame)
+    ams_noord_str_bimtbl = mo.ui.table(
+        ams_noord_models["rvt-advanced-sample-str"].frame.drop("bim_crs")
+    )
     ams_noord_str_bimtbl
     return
 
@@ -696,7 +699,7 @@ def _(
 
 @app.cell
 def _(ams_noord_bim, ams_noord_str_viewer, mo, pl):
-    _sel_elements_bdf = ams_noord_bim.frame.filter(
+    _sel_elements_bdf = ams_noord_bim.filter(
         pl.col("id").is_in(
             [
                 _obj["applicationId"]

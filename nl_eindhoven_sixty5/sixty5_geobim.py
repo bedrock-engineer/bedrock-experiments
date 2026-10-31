@@ -343,8 +343,9 @@ def _(gpd, pl, shapely, sixty5):
 @app.cell(hide_code=True)
 def _(pl, sixty5):
     # Per element: its class, name, property sets, storey and LightBIM kind, without the geometry
+    # and its CRS
     element_data = sixty5.frame.filter(pl.col("mesh").is_not_null() & (pl.col("class") != "IfcOpeningElement")).drop(
-        "mesh", "bbox", "native_geom", "footprint", "lightbim", "geog"
+        "mesh", "bbox", "native_geom", "footprint", "lightbim", "geog", "bim_crs"
     )
     element_data
     return (element_data,)
@@ -450,7 +451,8 @@ def _(features_plan, geospeckle_widget):
 
 @app.cell(hide_code=True)
 def _(mo, pl, selected_ids, sixty5):
-    selected_elements_bdf = sixty5.frame.filter(
+    # A BimDataFrame shows its CRS name once, above a table without the bim_crs column
+    selected_elements_bdf = sixty5.filter(
         pl.col("id").is_in(selected_ids)
     )
     mo.vstack(
